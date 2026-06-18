@@ -32,7 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 
-.env
-
-**Coulibaly**
-/src/main/resources/.env
