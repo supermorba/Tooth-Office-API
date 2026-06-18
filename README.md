@@ -24,6 +24,11 @@ src/
     └── resources/
 ```
 
+## Coniguration niveau utilisateur base de donnée
+Creation user =create user 'admin'@'localhost' identified by 'admin';
+suppression user = drop user 'admin'@'localhost';
+privilege sur une base de donnée = grant all privileges on ToothOffice_db.* to 'admin'@'localhost';
+
 ## Controller
 
 Le dossier `Controller` contient les contrôleurs REST.
