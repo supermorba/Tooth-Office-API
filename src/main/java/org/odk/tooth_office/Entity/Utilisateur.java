@@ -9,25 +9,59 @@ import org.odk.tooth_office.Enum.RoleEnum;
 import org.odk.tooth_office.Enum.StatutCompte;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-//Lombok
-@NoArgsConstructor @AllArgsConstructor
-@Setter @Getter
-//JPA
+/**
+ * Classe de base représentant tout utilisateur du système.
+ * Stratégie d'héritage JOINED : chaque sous-classe aura sa propre table
+ * reliée à la table Utilisateur par une clé étrangère.
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "Utilisateur")
 public class Utilisateur {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id_utilisateur ;
-    private String nom ;
-    private String prenom ;
-    private String email ;
-    private String mpd ;
-    private String adresse ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_utilisateur")
+    private Long id_utilisateur;
+
+    @Column(nullable = false, length = 50)
+    private String nom;
+
+    @Column(nullable = false, length = 50)
+    private String prenom;
+
+    @Column(unique = true, nullable = false, length = 100)
+    private String email;
+
+    /** Mot de passe (à hacher en production) */
+    @Column(nullable = false, length = 100)
+    private String mpd;
+
+    @Column(length = 255)
+    private String adresse;
+
     @Enumerated(EnumType.STRING)
-    private RoleEnum role ;
-    private String telephone ;
+    private RoleEnum role;
+
+    @Column(length = 20)
+    private String telephone;
+
     @Enumerated(EnumType.STRING)
-    private StatutCompte statutCompte ;
+    private StatutCompte statutCompte;
+
     private LocalDate createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @Column(length = 100)
+    private String createdBy;
+
+    @Column(length = 100)
+    private String updatedBy;
 }
