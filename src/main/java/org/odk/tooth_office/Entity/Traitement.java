@@ -14,8 +14,14 @@ public class Traitement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_traitement;
+
+    @Column(nullable = false)
     private String type;
+
+    @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
     private int duree;
 
 }
