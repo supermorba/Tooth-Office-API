@@ -7,5 +7,9 @@ public record ConsultationDTO(
         Long id,
         String diagnostic,
         String notes,
-        Date date_consultation) {
+        Date date_consultation,
+        String patient,
+        String telPatient,
+        String dentiste
+        ) {
 }
