@@ -24,8 +24,10 @@ public class Utilisateur {
     private String email ;
     private String mpd ;
     private String adresse ;
+    @Enumerated(EnumType.STRING)
     private RoleEnum role ;
     private String telephone ;
+    @Enumerated(EnumType.STRING)
     private StatutCompte statutCompte ;
     private LocalDate createdAt;
 }
