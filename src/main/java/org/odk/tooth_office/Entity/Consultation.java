@@ -27,4 +27,7 @@ public class Consultation implements Serializable {
     @ManyToOne
     private RendezVous rendezVous;
 
+    @ManyToOne
+    private Dentiste dentiste;
+
 }

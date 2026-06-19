@@ -11,8 +11,12 @@ import java.util.List;
 
 @Repository
 public interface ConsultationRepository extends JpaRepository<Consultation, Long> {
+
     @Query("SELECT c FROM Consultation c WHERE Consultation.dossierMedical.patient.id_utilisateur =: patient")
     List<Consultation> getByPatient(@Param("patient") Long id);
+
+    @Query("SELECT c FROM Consultation c WHERE Consultation.dentiste.id_utilisateur =: dentiste")
+    List<Consultation> getByDentiste(@Param("dentiste") Long id);
 
 
 }

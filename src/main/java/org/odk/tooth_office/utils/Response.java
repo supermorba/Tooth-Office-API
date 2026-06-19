@@ -22,7 +22,7 @@ public class Response {
     }
 
     public static Response error(String message){
-        return new Response("KO", message);
+        return new Response(" ", message);
     }
 
 }
