@@ -58,8 +58,8 @@ public class RendezVous {
     private Creneau creneau;
 
     /** Consultation générée après ce rendez-vous */
-    @OneToOne(mappedBy = "rendezVous", cascade = CascadeType.ALL)
-    private Consultation consultation;
+//    @OneToOne(mappedBy = "rendezVous", cascade = CascadeType.ALL)
+//    private Consultation consultation;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
