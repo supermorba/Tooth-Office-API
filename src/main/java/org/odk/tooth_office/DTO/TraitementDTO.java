@@ -14,9 +14,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class TraitementDTO implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_traitement;
+
     private String type;
     private String description;
     private int duree;
