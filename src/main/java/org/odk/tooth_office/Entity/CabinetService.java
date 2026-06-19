@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Entité d'association représentant l'offre d'un service dans un cabinet spécifique.
+ * Entité d'association représentant l'offre d'un service dans un cabinet
+ * spécifique.
  * Porte les attributs prix et description propres à chaque affectation
  * (table ASSIGNATION_CAB_SER dans le SQL).
  */

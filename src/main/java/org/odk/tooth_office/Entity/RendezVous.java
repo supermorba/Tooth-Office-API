@@ -68,7 +68,8 @@ public class RendezVous {
     private LocalDateTime updatedAt;
 
     /**
-     * VALIDATION : Le dentiste du rendez-vous DOIT correspondre au dentiste du créneau.
+     * VALIDATION : Le dentiste du rendez-vous DOIT correspondre au dentiste du
+     * créneau.
      * Cette vérification doit être effectuée au niveau du service/repository.
      */
 }

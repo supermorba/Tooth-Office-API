@@ -29,10 +29,6 @@ public class Patient extends Utilisateur {
 
     /** Cabinets qui suivent ce patient (relation M2M) */
     @ManyToMany
-    @JoinTable(
-            name = "PATIENT_CABINET",
-            joinColumns = @JoinColumn(name = "id_patient"),
-            inverseJoinColumns = @JoinColumn(name = "id_cabinet")
-    )
+    @JoinTable(name = "PATIENT_CABINET", joinColumns = @JoinColumn(name = "id_patient"), inverseJoinColumns = @JoinColumn(name = "id_cabinet"))
     private List<Cabinet> cabinets = new ArrayList<>();
 }
