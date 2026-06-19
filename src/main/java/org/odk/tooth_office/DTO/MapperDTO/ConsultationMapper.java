@@ -5,7 +5,6 @@ package org.odk.tooth_office.DTO.MapperDTO;
 import org.mapstruct.Mapper;
 import org.odk.tooth_office.DTO.ConsultationCreateDTO;
 import org.odk.tooth_office.DTO.ConsultationDTO;
-import org.odk.tooth_office.Entity.Consultation;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")

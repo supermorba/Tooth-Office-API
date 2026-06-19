@@ -1,7 +1,6 @@
 package org.odk.tooth_office.Services.Interfaces;
 
 import org.odk.tooth_office.DTO.CabinetDTO;
-import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Entity.Secretaire;
 import java.util.List;

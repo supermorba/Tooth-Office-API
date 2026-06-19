@@ -2,7 +2,6 @@ package org.odk.tooth_office.Services.Implementations;
 
 
 import org.odk.tooth_office.DTO.CabinetDTO;
-import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Entity.Secretaire;
 import org.odk.tooth_office.Repository.CabinetRepository;
