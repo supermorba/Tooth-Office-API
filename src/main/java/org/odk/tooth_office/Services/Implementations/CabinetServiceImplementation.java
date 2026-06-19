@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CabinetServiceImpl implements ICabinetService {
+public class CabinetServiceImplementation implements CabinetService {
 
     private final CabinetRepository cabinetRepository;
 
-    public CabinetServiceImpl(CabinetRepository cabinetRepository) {
+    public CabinetServiceImplementation(CabinetRepository cabinetRepository) {
         this.cabinetRepository = cabinetRepository;
     }
 
