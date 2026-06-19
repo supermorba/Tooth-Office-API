@@ -18,6 +18,7 @@ public class Cabinet {
     private int idCabinet;
     private String nom_cabinet;
     private String tel;
+
     private String adresse;
     private String logo;
     private String description;
