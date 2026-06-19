@@ -7,12 +7,7 @@ package org.odk.tooth_office.Entity;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,4 +38,11 @@ public class Avis {
     @Column(name="create_at")
     private Date createAt;
 
+    @ManyToOne
+    @JoinColumn(name = "id_cabinet")
+    private Cabinet cabinet;
+
+    @ManyToOne
+    @JoinColumn(name = "id_patient")
+    private Patient patient;
 }
