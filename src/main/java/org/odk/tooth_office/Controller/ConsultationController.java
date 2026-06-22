@@ -1,7 +1,7 @@
 package org.odk.tooth_office.Controller;
 
 
-import lombok.RequiredArgsConstructor;a
+import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.utils.Response;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
