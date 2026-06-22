@@ -26,7 +26,7 @@ public class Consultation implements Serializable {
     private boolean isEnabled = true;
 
     @ManyToOne
-    private Dossier_medical dossierMedical;
+    private DossierMedical dossierMedical;
 
     @ManyToOne
     private RendezVous rendezVous;
