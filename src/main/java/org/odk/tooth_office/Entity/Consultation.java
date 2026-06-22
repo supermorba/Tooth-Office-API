@@ -22,7 +22,7 @@ public class Consultation implements Serializable {
     private String notes;
 
     @ManyToOne
-    private Dossier_medical dossierMedical;
+    private DossierMedical dossierMedical;
 
     @ManyToOne
     private RendezVous rendezVous;
