@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class Consultation implements Serializable {
 
     private String notes;
 
+    @JsonProperty(defaultValue = "true")
     private boolean isEnabled = true;
 
     @ManyToOne

@@ -45,9 +45,9 @@ public class Cabinet {
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Avis> avis;
 
-    @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<cabinet_service> cab_Ser;
-
-    @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ChefCabinet_cabinet> ChefCabinetCabinet;
+//    @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+//    private List<cabinet_service> cab_Ser;
+//
+//    @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+//    private List<ChefCabinet_cabinet> ChefCabinetCabinet;
 }
