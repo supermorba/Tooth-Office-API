@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface TraitementService {
     List<Traitement> getAll();
-    void delete(Traitement traitement);
-    void save(Traitement traitement);
-    void update(Traitement traitement);
-    void getById(int id);
+    void deleteById(int id);
+    Traitement save(Traitement traitement);
+    Traitement getById(int id);
 
 }

@@ -1,6 +1,7 @@
 package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.ConsultationCreateDTO;
 import org.odk.tooth_office.DTO.ConsultationDTO;
 import org.odk.tooth_office.DTO.MapperDTO.ConsultationMapper;
 import org.odk.tooth_office.Entity.Consultation;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class ConsultationService implements IConsultation {
             return Response.succes("La liste des consultations du dentiste", consultationDTOS);
         } catch (Exception e) {
             e.printStackTrace(System.out);
-           return Response.error("Erreur lors de la recuperation des consultations");
+            return Response.error("Erreur lors de la recuperation des consultations");
         }
     }
 
@@ -49,22 +51,57 @@ public class ConsultationService implements IConsultation {
     }
 
     @Override
-    public Consultation save(Consultation entity) {
-        return null;
+    public Response save(Consultation entity) {
+        try {
+            repository.save(entity);
+            return Response.succes("Consultation enregistrée avec succès !!", entity);
+        }
+        catch (Exception e){
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de l'enregistrement de la consultation");
+        }
     }
 
     @Override
-    public Consultation update(Consultation entity) {
-        return null;
+    public Response update(Consultation entity) {
+        try {
+            repository.save(entity);
+            return Response.succes("Consultation modifiée avec succès !!", entity);
+        }
+        catch (Exception e){
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la modification de la consultation");
+        }
     }
 
     @Override
-    public Consultation getById(Long id) {
-        return null;
+    public Response getById(Long id) {
+        try {
+            Optional<Consultation> consultation = repository.findById(id);
+            return consultation.map(value -> Response.succes("Consultation recuperée", consultationMapper.toConsultationDTO(value))).orElseGet(() -> Response.error("Cette consultation n'existe pas"));
+        }
+        catch (Exception e){
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation de la consultation");
+        }
+
     }
 
     @Override
-    public List<Consultation> getAll() {
-        return List.of();
+    public Response getAll() {
+        try {
+            List<Consultation> consultations = repository.findAll();
+            List<ConsultationDTO> consultationDTOS = new ArrayList<>();
+            consultations.forEach(c -> {
+                consultationDTOS.add(consultationMapper.toConsultationDTO(c));
+            });
+            return Response.succes("La liste des consultations", consultationDTOS);
+
+        }
+        catch (Exception e){
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des consultations");
+
+        }
     }
 }

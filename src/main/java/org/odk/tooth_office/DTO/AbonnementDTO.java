@@ -2,7 +2,6 @@ package org.odk.tooth_office.DTO;
 
 import org.odk.tooth_office.Enum.EtatAbonnement;
 import org.odk.tooth_office.Enum.TypePaiement;
-
 import java.time.LocalDate;
 
 public class AbonnementDTO {
@@ -13,6 +12,7 @@ public class AbonnementDTO {
         private Integer montantTotal;
         private Integer idPlan;
         private Integer idCabinet;
+
         public LocalDate getDateDebut() { return dateDebut; }
         public void setDateDebut(LocalDate dateDebut) { this.dateDebut = dateDebut; }
         public LocalDate getDateFin() { return dateFin; }
@@ -27,5 +27,4 @@ public class AbonnementDTO {
         public void setIdPlan(Integer idPlan) { this.idPlan = idPlan; }
         public Integer getIdCabinet() { return idCabinet; }
         public void setIdCabinet(Integer idCabinet) { this.idCabinet = idCabinet; }
-    }
-
+}

@@ -21,23 +21,21 @@ public class TraitementServiceImplementation implements TraitementService {
     }
 
     @Override
-    public void delete(Traitement traitement) {
-        repository.delete(traitement);
+    public void deleteById(int id) {
+        repository.deleteById(id);
     }
 
+
     @Override
-    public void save(Traitement traitement) {
-        repository.save(traitement);
+    public Traitement save(Traitement traitement) {
+        return repository.save(traitement);
     }
 
-    @Override
-    public void update(Traitement traitement) {
-        repository.save(traitement);
-    }
+
 
     @Override
-    public void getById(int id) {
-        repository.getById(id);
-
+    public Traitement getById(int id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Traitement introuvable"));
     }
 }
