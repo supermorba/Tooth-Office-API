@@ -3,10 +3,7 @@ package org.odk.tooth_office.Entity;
 import jakarta.persistence.*;
 import org.odk.tooth_office.Enum.EtatAbonnement;
 import org.odk.tooth_office.Enum.TypePaiement;
-
 import java.time.LocalDate;
-
-
 
 @Entity
 @Table(name = "abonnement")
@@ -34,23 +31,26 @@ public class Abonnement {
     @Column(name = "montant_total")
     private Integer montantTotal;
 
-    // Clés étrangères gérées par de simples IDs pour l'indépendance du code
-    @Column(name = "id_plan", nullable = false)
-    private Integer idPlan;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_plan", nullable = false)
+    private PlanAbonnement planAbonnement;
 
-    @Column(name = "id_cabinet", nullable = false)
-    private Integer idCabinet;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cabinet", nullable = false)
+    private Cabinet cabinet;
 
     public Abonnement() {}
 
-    public Abonnement(LocalDate dateDebut, LocalDate dateFin, EtatAbonnement etatAbonnement, TypePaiement typePaiement, Integer montantTotal, Integer idPlan, Integer idCabinet) {
+    public Abonnement(LocalDate dateDebut, LocalDate dateFin, EtatAbonnement etatAbonnement,
+                      TypePaiement typePaiement, Integer montantTotal,
+                      PlanAbonnement planAbonnement, Cabinet cabinet) {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.etatAbonnement = etatAbonnement;
         this.typePaiement = typePaiement;
         this.montantTotal = montantTotal;
-        this.idPlan = idPlan;
-        this.idCabinet = idCabinet;
+        this.planAbonnement = planAbonnement;
+        this.cabinet = cabinet;
     }
     public Integer getIdAbonnement() { return idAbonnement; }
     public void setIdAbonnement(Integer idAbonnement) { this.idAbonnement = idAbonnement; }
@@ -70,9 +70,9 @@ public class Abonnement {
     public Integer getMontantTotal() { return montantTotal; }
     public void setMontantTotal(Integer montantTotal) { this.montantTotal = montantTotal; }
 
-    public Integer getIdPlan() { return idPlan; }
-    public void setIdPlan(Integer idPlan) { this.idPlan = idPlan; }
+    public PlanAbonnement getPlanAbonnement() { return planAbonnement; }
+    public void setPlanAbonnement(PlanAbonnement planAbonnement) { this.planAbonnement = planAbonnement; }
 
-    public Integer getIdCabinet() { return idCabinet; }
-    public void setIdCabinet(Integer idCabinet) { this.idCabinet = idCabinet; }
+    public Cabinet getCabinet() { return cabinet; }
+    public void setCabinet(Cabinet cabinet) { this.cabinet = cabinet; }
 }
