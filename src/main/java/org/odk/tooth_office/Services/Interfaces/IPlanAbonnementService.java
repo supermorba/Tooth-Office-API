@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Services.Interfaces;
 
+import org.odk.tooth_office.DTO.PlanAbonnementDTO;
 import org.odk.tooth_office.Entity.PlanAbonnement;
 
 
@@ -7,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 public interface IPlanAbonnementService {
 
-    PlanAbonnement createPlanAbonnement(PlanAbonnement planAbonnement);
+    PlanAbonnementDTO createPlanAbonnement(PlanAbonnementDTO planAbonnement);
 
-    PlanAbonnement updatePlanAbonnement(Long id, PlanAbonnement planAbonnement);
+    PlanAbonnement updatePlanAbonnement(Long id, PlanAbonnementDTO planAbonnement);
 
     void deletePlanAbonnement(Long id);
 

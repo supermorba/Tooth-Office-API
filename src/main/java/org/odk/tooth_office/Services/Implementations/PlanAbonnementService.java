@@ -1,5 +1,7 @@
 package org.odk.tooth_office.Services.Implementations;
 
+import jakarta.validation.constraints.Null;
+import org.odk.tooth_office.DTO.PlanAbonnementDTO;
 import org.odk.tooth_office.Entity.PlanAbonnement;
 import org.odk.tooth_office.Repository.PlanAbonnementRepository;
 import org.odk.tooth_office.Services.Interfaces.IPlanAbonnementService;
@@ -18,26 +20,30 @@ public class PlanAbonnementService implements IPlanAbonnementService {
     }
 
    @Override
-    public PlanAbonnement createPlanAbonnement(PlanAbonnement planAbonnement) {
-        return repository.save(planAbonnement);
+    public PlanAbonnementDTO createPlanAbonnement(PlanAbonnementDTO planAbonnementdto) {
+        PlanAbonnement p = new PlanAbonnement();
+        p.setNom(planAbonnementdto.nom());
+        p.setDescription(planAbonnementdto.description());
+        p.setPrixAnnuel(planAbonnementdto.prixAnnuel());
+        p.setPrixMensuel(planAbonnementdto.prixMensuel());
+        p.setMaxCabinet(planAbonnementdto.maxCabinet());
+        p.setMaxDentistes(planAbonnementdto.maxDentistes());
+        PlanAbonnement plan = repository.save(p);
+        PlanAbonnementDTO dto = PlanAbonnementDTO
+                                    .builder()
+                .nom(plan.getNom())
+                .build();
+
+
+        return dto;
     }
 
     @Override
-    public PlanAbonnement updatePlanAbonnement(Long id, PlanAbonnement planAbonnement) {
-
-        PlanAbonnement existing = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plan non trouvé avec id: " + id));
-
-        existing.setNom(planAbonnement.getNom());
-        existing.setPrixMensuel(planAbonnement.getPrixMensuel());
-        existing.setPrixAnnuel(planAbonnement.getPrixAnnuel());
-        existing.setMaxCabinet(planAbonnement.getMaxCabinet());
-        existing.setMaxDentistes(planAbonnement.getMaxDentistes());
-        existing.setMaxSecretaires(planAbonnement.getMaxSecretaires());
-        existing.setDescription(planAbonnement.getDescription());
-
-        return repository.save(existing);
+    public PlanAbonnement updatePlanAbonnement(Long id, PlanAbonnementDTO planAbonnement) {
+        return null;
     }
+
+
 
     @Override
     public void deletePlanAbonnement(Long id) {

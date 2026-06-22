@@ -1,9 +1,11 @@
 package org.odk.tooth_office.DTO;
 
-import java.math.BigDecimal;
+import lombok.Builder;
 
+import java.math.BigDecimal;
+@Builder
 public record PlanAbonnementDTO(
-        Long idPlan,
+
         String nom,
         BigDecimal prixMensuel,
         BigDecimal prixAnnuel,
