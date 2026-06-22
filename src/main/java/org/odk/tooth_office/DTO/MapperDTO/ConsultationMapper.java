@@ -14,5 +14,4 @@ public interface ConsultationMapper {
     Consultation toConsultation(ConsultationCreateDTO createDTO);
     @Mapping(source= "consultation.dossierMedical.patient.prenom", target = "patient")
     ConsultationDTO toConsultationDTO(Consultation consultation);
-
 }
