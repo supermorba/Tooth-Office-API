@@ -2,9 +2,11 @@ package org.odk.tooth_office.Services.Implementations;
 
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Services.Interfaces.DentisteService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+
+@Service
 public class DentisteImplementation implements DentisteService {
     @Override
     public List<Dentiste> getAll() {
