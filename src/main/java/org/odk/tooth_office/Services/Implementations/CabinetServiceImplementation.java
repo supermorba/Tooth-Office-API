@@ -97,7 +97,8 @@ public class CabinetServiceImplementation implements CabinetService {
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
 
         return cabinet.getSecretaires().stream()
-                .filter(secretaire -> secretaire.getIdSecretaire() == idSecretaire) // Remplacez par la méthode appropriée selon votre entité Secretaire
+                .filter(secretaire -> secretaire.getIdSecretaire() != null
+                        && secretaire.getIdSecretaire().equals(idSecretaire.longValue()))
                 .findFirst();
     }
 
