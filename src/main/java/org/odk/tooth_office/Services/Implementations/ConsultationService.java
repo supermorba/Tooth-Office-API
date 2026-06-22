@@ -11,6 +11,7 @@ import org.odk.tooth_office.utils.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +66,7 @@ public class ConsultationService implements IConsultation {
     @Override
     public Response update(Consultation entity) {
         try {
+            entity.setUpdateAt(new Date());
             repository.save(entity);
             return Response.succes("Consultation modifiée avec succès !!", entity);
         }
@@ -77,7 +79,7 @@ public class ConsultationService implements IConsultation {
     @Override
     public Response getById(Long id) {
         try {
-            Optional<Consultation> consultation = repository.findById(id);
+            Optional<Consultation> consultation = repository.getConsultationById(id);
             return consultation.map(value -> Response.succes("Consultation recuperée", consultationMapper.toConsultationDTO(value))).orElseGet(() -> Response.error("Cette consultation n'existe pas"));
         }
         catch (Exception e){
@@ -96,12 +98,30 @@ public class ConsultationService implements IConsultation {
                 consultationDTOS.add(consultationMapper.toConsultationDTO(c));
             });
             return Response.succes("La liste des consultations", consultationDTOS);
-
         }
         catch (Exception e){
             e.printStackTrace(System.out);
             return Response.error("Erreur lors de la recuperation des consultations");
 
         }
+    }
+
+    @Override
+    public Response delete(Long id) {
+        try {
+            Optional<Consultation> consultationOpt = repository.getConsultationById(id);
+            if(consultationOpt.isPresent()){
+                Consultation consultation = consultationOpt.get();
+                consultation.setUpdateAt(new Date());
+                consultation.setEnabled(false);
+                repository.save(consultation);
+                return Response.succes("Consultation supprimée avec succès !!", consultation);
+            } else return Response.error("Cette consultation n'existe pas");
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la suppression de la consultation");
+
+        }
+
     }
 }

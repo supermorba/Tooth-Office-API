@@ -17,9 +17,13 @@ public class Consultation implements Serializable {
 
     private Date date_consultation;
 
+    private  Date updateAt;
+
     private String diagnostic;
 
     private String notes;
+
+    private boolean isEnabled = true;
 
     @ManyToOne
     private Dossier_medical dossierMedical;
