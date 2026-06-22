@@ -5,7 +5,7 @@
 
 package org.odk.tooth_office.Entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,13 +36,13 @@ public class Avis {
     private String description;
 
     @Column(name="create_at")
-    private Date createAt;
+    private LocalDateTime createAt;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cabinet")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_cabinet", nullable=false)
     private Cabinet cabinet;
 
-    @ManyToOne
-    @JoinColumn(name = "id_patient")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_patient", nullable=false)
     private Patient patient;
 }
