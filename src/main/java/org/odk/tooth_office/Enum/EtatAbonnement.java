@@ -1,0 +1,8 @@
+package org.odk.tooth_office.Enum;
+
+
+    public enum EtatAbonnement {
+        ACTIF, SUSPENDU, EXPIRE
+    }
+
+
