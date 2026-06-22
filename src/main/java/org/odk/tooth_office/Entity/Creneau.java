@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,5 +33,6 @@ public class Creneau {
     @JoinColumn(name = "dentiste_id", nullable = false)
     private Dentiste dentiste;
 
-    //TODO [Reverse Engineering] generate columns from DB
+   
 }
+
