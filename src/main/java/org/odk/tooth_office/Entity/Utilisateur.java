@@ -66,9 +66,5 @@ public class Utilisateur {
     @Column(length = 100)
     private String updatedBy;
 
-    public void setId(Long patientId) {
-    }
 
-    public Long getId() {
-    }
 }

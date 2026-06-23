@@ -57,7 +57,7 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
 
         if (dto.getPatientId() != null) {
             Patient patient = new Patient();
-            patient.setId(dto.getPatientId());
+            patient.setId_utilisateur(dto.getPatientId());
             existing.setPatient(patient);
         }
 
@@ -82,7 +82,7 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
 
         if (dto.getPatientId() != null) {
             Patient patient = new Patient();
-            patient.setId(dto.getPatientId());
+            patient.setId_utilisateur(dto.getPatientId());
             entity.setPatient(patient);
         }
         return entity;
@@ -96,7 +96,7 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
         dto.setHistoriques(entity.getHistoriques());
 
         if (entity.getPatient() != null) {
-            dto.setPatientId(entity.getPatient().getId());
+            dto.setPatientId(entity.getPatient().getId_utilisateur());
         }
         return dto;
     }
