@@ -11,9 +11,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ConsultationMapper {
 
+    @Mapping(target = "dossierMedical", ignore = true)
+    @Mapping(target = "dentiste", ignore = true)
+    @Mapping(target = "rendezVous", ignore = true)
     Consultation toConsultation(ConsultationCreateDTO createDTO);
-   
-    @Mapping(source= "consultation.dossierMedical.patient.prenom", target = "patient")
+
+    @Mapping(source= "consultation.dossierMedical.patient.prenom" , target = "patient")
     @Mapping(source= "consultation.dentiste.prenom", target = "dentiste")
     ConsultationDTO toConsultationDTO(Consultation consultation);
 }

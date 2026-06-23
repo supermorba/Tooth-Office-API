@@ -18,6 +18,7 @@ public class ConsultationController {
     @GetMapping("/consultation/{id}/patient")
     public Response getConsultationByPatient(@PathVariable Long id){
         try {
+            System.out.println("id patient: "+ id);
             return consultationServcice.getConsultationByPatient(id);
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -28,6 +29,7 @@ public class ConsultationController {
     @GetMapping("/consultation/{id}/dentiste")
     public Response getConsultationByDentiste(@PathVariable Long id){
         try {
+
             return consultationServcice.getConsultationByDentist(id);
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -36,8 +38,13 @@ public class ConsultationController {
     }
 
     @PostMapping("/consultation")
-    public Response saveConsultation(@RequestBody Consultation consultation){
+    public Response saveConsultation(@RequestBody ConsultationCreateDTO consultation){
+       // System.out.println("consultation info diagnostic :"+consultation.getDiagnostic() + " note :"+consultation.getNotes()+" dentiste :"+consultation.getDentiste().getId_utilisateur()+ "dossier :"+consultation.getDossierMedical().getId() + "rendez-vou :"+consultation.getRendezVous().getIdRendezVous());
+
         try {
+
+
+          //  System.out.println("consultation info diagnostic :"+consultation.getDiagnostic() + " note :"+consultation.getNotes()+" dentiste :"+consultation.getDentiste().getId_utilisateur()+ "dossier :"+consultation.getDossierMedical().getId() + "rendez-vou :"+consultation.getRendezVous().getIdRendezVous());
             return consultationServcice.save(consultation);
 
     } catch (Exception e) {
@@ -57,10 +64,10 @@ public class ConsultationController {
         }
     }
 
-    @PutMapping("/consultation")
-    public Response updateConsultation(@RequestBody Consultation consultation){
+    @PutMapping("/consultation/{id}")
+    public Response updateConsultation(@RequestBody ConsultationCreateDTO consultation, @PathVariable Long id){
         try {
-            return consultationServcice.save(consultation);
+            return consultationServcice.update(consultation, id);
 
         } catch (Exception e) {
             e.printStackTrace(System.out);

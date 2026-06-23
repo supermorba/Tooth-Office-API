@@ -1,5 +1,8 @@
 package org.odk.tooth_office.utils;
 
+import lombok.Getter;
+
+@Getter
 public class Response {
     private String statut;
     private String message;
@@ -22,7 +25,7 @@ public class Response {
     }
 
     public static Response error(String message){
-        return new Response(" ", message);
+        return new Response("KO", message);
     }
 
 }
