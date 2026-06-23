@@ -19,7 +19,7 @@ public class PrestationImplementation implements IPrestation {
 
 
     @Override
-    public PrestationDTO create(PrestationDTO dto) {
+    public Prestation create(PrestationDTO dto) {
 
         if (prestationRepository.existsByNomPrestation(dto.nom_prestation())) {
             throw new RuntimeException("Cette prestation existe déjà.");
@@ -32,7 +32,7 @@ public class PrestationImplementation implements IPrestation {
 
         prestationRepository.save(prestation);
 
-        return dto;
+        return prestation;
     }
 
 

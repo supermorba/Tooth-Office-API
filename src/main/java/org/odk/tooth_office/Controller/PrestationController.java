@@ -2,6 +2,7 @@ package org.odk.tooth_office.Controller;
 
 import lombok.AllArgsConstructor;
 import org.odk.tooth_office.DTO.PrestationDTO;
+import org.odk.tooth_office.Entity.Prestation;
 import org.odk.tooth_office.Services.Interfaces.IPrestation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,13 @@ public class PrestationController {
     private  IPrestation prestationService;
 
 
-//    @PostMapping
-//    public ResponseEntity<PrestationDTO> create(
-//            @RequestBody PrestationDTO dto) {
-//
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(prestationService.create(dto));
-//    }
+    @PostMapping
+    public ResponseEntity<Prestation> create(
+            @RequestBody PrestationDTO prestation) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(prestationService.create(prestation));
+    }
 
     @GetMapping
     public ResponseEntity<List<PrestationDTO>> getAll() {
