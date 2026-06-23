@@ -12,6 +12,9 @@ import org.mapstruct.Mapping;
 public interface ConsultationMapper {
 
     Consultation toConsultation(ConsultationCreateDTO createDTO);
-    @Mapping(source= "consultation.dossierMedical.patient.prenom", target = "patient")
+    @Mapping(
+            target = "patient",
+            expression = "java(consultation.getDossierMedical() != null && consultation.getDossierMedical().getPatient() != null ? consultation.getDossierMedical().getPatient().getPrenom() : null)"
+    )
     ConsultationDTO toConsultationDTO(Consultation consultation);
 }
