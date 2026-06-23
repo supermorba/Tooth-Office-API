@@ -117,10 +117,10 @@ VALUES
     (1, 'Consultation générale', '2026-01-01'),
     (2, 'Blanchiment', '2026-01-01'),
     (3, 'Extraction dentaire', '2026-01-01')
-ON DUPLICATE KEY UPDATE id_prestation = id_prestation;
+ON DUPLICATE KEY UPDATE id = id;
 
 INSERT INTO cabinet_prestation
-    (id, prix, description, cabinet_id_cabinet, prestation_id_prestation)
+    (id, prix, description, cabinet_id_cabinet, prestation_id)
 VALUES
     (1, 25.0, 'Consultation standard', 1, 1),
     (2, 120.0, 'Blanchiment premium', 2, 2),
