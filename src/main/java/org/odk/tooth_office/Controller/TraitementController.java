@@ -41,8 +41,8 @@ public class TraitementController {
         return traitement;
     }
 
-    @DeleteMapping
-    public void delete(@PathVariable Integer id) {
-         service.save(id);
-    }
+//    @DeleteMapping
+//    public void delete(@PathVariable Integer id) {
+//         service.save(id);
+//    }
 }
