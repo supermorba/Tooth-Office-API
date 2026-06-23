@@ -1,11 +1,13 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "plan_abonnement")
@@ -39,4 +41,14 @@ public class PlanAbonnement {
 
     @Column(name = "description", length = 1000)
     private String description;
+
+    // 🔥 RELATION 1 → N
+    @JsonIgnore
+
+    @OneToMany(
+            mappedBy = "planAbonnement",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Abonnement> abonnements;
 }
