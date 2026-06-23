@@ -12,8 +12,8 @@ import org.mapstruct.Mapping;
 public interface ConsultationMapper {
 
     Consultation toConsultation(ConsultationCreateDTO createDTO);
+   
     @Mapping(source= "consultation.dossierMedical.patient.prenom", target = "patient")
     @Mapping(source= "consultation.dentiste.prenom", target = "dentiste")
     ConsultationDTO toConsultationDTO(Consultation consultation);
-
 }
