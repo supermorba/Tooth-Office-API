@@ -49,7 +49,7 @@ public class Cabinet {
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<CabinetPrestation> cab_Ser;
 
-    @ManyToMany (mappedBy = "cabinet", fetch = FetchType.LAZY)
+    @ManyToMany (mappedBy = "cabinets", fetch = FetchType.LAZY)
     private List<ChefCabinet> ChefsCabinet;
 
 }
