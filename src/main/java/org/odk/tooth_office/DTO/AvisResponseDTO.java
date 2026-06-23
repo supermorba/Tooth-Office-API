@@ -6,7 +6,7 @@ public record AvisResponseDTO(
         Integer id,
         Integer note,
         String description,
-        Long idCabinet,
-        Long idPatient,
+        Integer idCabinet,
+        Integer idPatient,
         LocalDateTime createAt
 ){}

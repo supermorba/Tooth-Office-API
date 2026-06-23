@@ -8,6 +8,6 @@ import jakarta.validation.constraints.NotNull;
 public record AvisRequestDTO(
         @NotNull @Min(1) @Max(5) Integer note,
         @NotNull String description,
-        @NotNull Long idCabinet,
-        @NotNull Long idPatient
+        @NotNull Integer idCabinet,
+        @NotNull Integer idPatient
 ){}
