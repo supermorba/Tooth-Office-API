@@ -18,13 +18,13 @@ public class PrestationController {
     private  IPrestation prestationService;
 
 
-    @PostMapping
-    public ResponseEntity<PrestationDTO> create(
-            @RequestBody PrestationDTO dto) {
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(prestationService.create(dto));
-    }
+//    @PostMapping
+//    public ResponseEntity<PrestationDTO> create(
+//            @RequestBody PrestationDTO dto) {
+//
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(prestationService.create(dto));
+//    }
 
     @GetMapping
     public ResponseEntity<List<PrestationDTO>> getAll() {

@@ -1,20 +1,20 @@
 package org.odk.tooth_office.Services.Interfaces;
 
-import org.odk.tooth_office.Entity.DossierMedical;
+import org.odk.tooth_office.DTO.DossierMedicalDTO;
 
 import java.util.List;
 
 public interface IDossierMedical {
 
-    DossierMedical createDossierMedical(DossierMedical dossierMedical);
+    DossierMedicalDTO createDossierMedical(DossierMedicalDTO dto);
 
-    DossierMedical getDossierMedicalById(Long id);
+    DossierMedicalDTO getDossierMedicalById(Long id);
 
-    DossierMedical getDossierMedicalByPatientId(Long patientId);
+    DossierMedicalDTO getDossierMedicalByPatientId(Long patientId);
 
-    List<DossierMedical> getAllDossiersMedicaux();
+    List<DossierMedicalDTO> getAllDossiersMedicaux();
 
-    DossierMedical updateDossierMedical(Long id, DossierMedical dossierMedical);
+    DossierMedicalDTO updateDossierMedical(Long id, DossierMedicalDTO dto);
 
     void deleteDossierMedical(Long id);
 }
