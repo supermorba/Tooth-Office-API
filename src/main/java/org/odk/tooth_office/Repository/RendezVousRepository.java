@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
-    List<RendezVous> findByPatientId_utilisateur(Long patientId);
-    List<RendezVous> findByDentisteId_utilisateur(Long dentisteId);
+    /*List<RendezVous> findByPatientId(Long patientId);
+    List<RendezVous> findByDentisteId(Long dentisteId);*/
 }
