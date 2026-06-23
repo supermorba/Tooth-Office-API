@@ -5,7 +5,6 @@ import org.odk.tooth_office.Entity.DossierMedical;
 import org.odk.tooth_office.Repository.DossierMedicalRepository;
 import org.odk.tooth_office.Services.Interfaces.IDossierMedical;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -46,7 +45,6 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
 
         return dossierMedicalRepository.save(dossierExistant);
     }
-
     @Override
     public void deleteDossierMedical(Long id) {
         DossierMedical dossier = getDossierMedicalById(id);
