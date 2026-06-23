@@ -1,6 +1,7 @@
 package org.odk.tooth_office.Services.Implementations;
 
-import jakarta.validation.constraints.Null;
+
+import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.PlanAbonnementDTO;
 import org.odk.tooth_office.Entity.PlanAbonnement;
 import org.odk.tooth_office.Repository.PlanAbonnementRepository;
@@ -11,13 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PlanAbonnementService implements IPlanAbonnementService {
 
     private final PlanAbonnementRepository repository;
 
-    public PlanAbonnementService(PlanAbonnementRepository repository) {
-        this.repository = repository;
-    }
+
 
    @Override
     public PlanAbonnementDTO createPlanAbonnement(PlanAbonnementDTO planAbonnementdto) {

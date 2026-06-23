@@ -28,4 +28,10 @@ public class AvisController {
     public ResponseEntity<List<AvisDetailDTO>> listerAvis() {
         return ResponseEntity.ok(avisImplementation.getAll());
     }
+
+    @PostMapping
+    public ResponseEntity<AvisDetailDTO> modifierAvis(@RequestBody Long id, AvisRequestDTO dto){
+        AvisDetailDTO updated = avisImplementation.update(id, dto);
+        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+    }
 }

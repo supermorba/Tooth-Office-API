@@ -38,7 +38,9 @@ public class Utilisateur {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
-    /** Mot de passe (à hacher en production) */
+    /**
+     * Mot de passe (à hacher en production)
+     */
     @Column(nullable = false, length = 100)
     private String mpd;
 
@@ -63,4 +65,6 @@ public class Utilisateur {
 
     @Column(length = 100)
     private String updatedBy;
+
+
 }

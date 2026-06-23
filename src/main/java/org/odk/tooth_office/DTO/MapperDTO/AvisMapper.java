@@ -14,8 +14,8 @@ import java.util.List;
 public interface AvisMapper {
     AvisResponseDTO toResponseDTO(Avis avis);
 
-    @Mapping(target = "nomCabinet", source = "cabinet.nom_cabinet")
-    @Mapping(target = "nomPatient", source = "patient.nom_patient")
+    @Mapping(target = "nomCabinet", source = "cabinet.nomCabinet")
+    @Mapping(target = "nomPatient", source = "patient.nom")
     AvisDetailDTO toDetailDTO(Avis avis);
 
     List<AvisResponseDTO> toResponseDTOList(List<Avis> avis);

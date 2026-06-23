@@ -9,9 +9,9 @@ import java.util.List;
 public interface AvisInterface {
     AvisDetailDTO create(AvisRequestDTO dto);
     List<AvisDetailDTO> getAll();
-    void update(Avis avis);
+    AvisDetailDTO update(Long id, AvisRequestDTO dto);
     void delete(Avis avis);
-    Avis getById(int id);
-    List<Avis> findByIdCabinet(int id);
-    List<Avis> findByIdClient(int id);
+    Avis getById(Long id);
+    List<Avis> findByCabinetId(int id);
+    List<Avis> findByPatientId(int id);
 }

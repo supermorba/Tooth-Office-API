@@ -2,7 +2,6 @@ package org.odk.tooth_office.Services.Implementations;
 
 import org.odk.tooth_office.DTO.AvisDetailDTO;
 import org.odk.tooth_office.DTO.AvisRequestDTO;
-import org.odk.tooth_office.DTO.AvisResponseDTO;
 import org.odk.tooth_office.DTO.MapperDTO.AvisMapper;
 import org.odk.tooth_office.Entity.Avis;
 import org.odk.tooth_office.Entity.Cabinet;
@@ -12,10 +11,7 @@ import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.PatientRepository;
 import org.odk.tooth_office.Services.Interfaces.AvisInterface;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 public class AvisImplementation implements AvisInterface {
@@ -33,8 +29,8 @@ public class AvisImplementation implements AvisInterface {
 
     @Override
     public AvisDetailDTO create(AvisRequestDTO dto) {
-        Cabinet cabinet = cabinetRepository.findById(dto.idCabinet()).orElseThrow(() -> new IllegalArgumentException("Cabinet introuvable"));
-        Patient patient = patientRepository.findById(Long.valueOf(dto.idPatient())).orElseThrow(() -> new IllegalArgumentException("Patient Introuvable"));
+        Cabinet cabinet = cabinetRepository.findById(dto.cabinetId()).orElseThrow(() -> new IllegalArgumentException("Cabinet introuvable"));
+        Patient patient = patientRepository.findById(Long.valueOf(dto.patientId())).orElseThrow(() -> new IllegalArgumentException("Patient Introuvable"));
 
         //dto en entité
         Avis avis = mapper.toEntity(dto);
@@ -56,8 +52,20 @@ public class AvisImplementation implements AvisInterface {
     }
 
     @Override
-    public void update(Avis avis) {
-        avisRepository.save(avis);
+    public AvisDetailDTO update(Long id, AvisRequestDTO dto) {
+        Avis avis = avisRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cet avis est introuvable"));
+        Cabinet cabinet = cabinetRepository.findById(dto.cabinetId())
+                .orElseThrow(() -> new IllegalArgumentException("Cabinet introuvable"));
+        Patient patient = patientRepository.findById(Long.valueOf(dto.patientId()))
+                .orElseThrow(() -> new IllegalArgumentException("Patient Introuvable"));
+
+        avis.setCabinet(cabinet);
+        avis.setPatient(patient);
+        avis.setCreateAt(LocalDateTime.now());
+
+        Avis avisSave = avisRepository.save(avis);
+        return mapper.toDetailDTO(avisSave);
     }
 
     @Override
@@ -66,17 +74,17 @@ public class AvisImplementation implements AvisInterface {
     }
 
     @Override
-    public Avis getById(int id) {
+    public Avis getById(Long id) {
         return avisRepository.getById(id);
     }
 
     @Override
-    public List<Avis> findByIdCabinet(int id) {
-        return avisRepository.findByIdCabinet(id);
+    public List<Avis> findByCabinetId(int id) {
+        return avisRepository.findByCabinetId(id);
     }
 
     @Override
-    public List<Avis> findByIdClient(int id) {
-        return avisRepository.findByIdClient(id);
+    public List<Avis> findByPatientId(int id) {
+        return avisRepository.findByPatientId(id);
     }
 }

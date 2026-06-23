@@ -1,8 +1,10 @@
 package org.odk.tooth_office.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.PlanAbonnementDTO;
 import org.odk.tooth_office.Entity.PlanAbonnement;
-import org.odk.tooth_office.Services.Interfaces.IPlanAbonnementService;
+import org.odk.tooth_office.Services.Implementations.PlanAbonnementService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,18 +14,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlanAbonnementController {
 
-    private final IPlanAbonnementService iPlanAbonnementService;
+    private final PlanAbonnementService iPlanAbonnementService;
 
     // CREATE
-    @PostMapping
-    public PlanAbonnement create(@RequestBody PlanAbonnement planAbonnement) {
+    @PostMapping("")
+    public PlanAbonnementDTO create(@RequestBody PlanAbonnementDTO planAbonnement) {
         return iPlanAbonnementService.createPlanAbonnement(planAbonnement);
     }
 
     // UPDATE
     @PutMapping("/{id}")
     public PlanAbonnement update(@PathVariable Long id,
-                                 @RequestBody PlanAbonnement planAbonnement) {
+                                 @RequestBody PlanAbonnementDTO planAbonnement) {
         return iPlanAbonnementService.updatePlanAbonnement(id, planAbonnement);
     }
 
@@ -41,7 +43,7 @@ public class PlanAbonnementController {
     }
 
     // GET ALL
-    @GetMapping
+    @GetMapping("")
     public List<PlanAbonnement> getAll() {
         return iPlanAbonnementService.getAllPlanAbonnements();
     }
