@@ -10,5 +10,4 @@ public interface IConsultation extends IService<Consultation>{
     Response getConsultationByDentist(Long idDentiste);
     Response getConsultationByPatient(Long idPatient);
 
-
 }
