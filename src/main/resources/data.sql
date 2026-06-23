@@ -50,10 +50,10 @@ VALUES (3, 1, 1),
        (7, 2, 5)
 ON DUPLICATE KEY UPDATE id_secretaire = id_secretaire;
 
-INSERT INTO patient (id_patient, id_utilisateur, date_naissance)
-VALUES (4, 4, '1995-04-14'),
-       (8, 8, '1992-08-20'),
-       (9, 9, '1988-02-11')
+INSERT INTO patient (id_patient, date_naissance)
+VALUES (4, '1995-04-14'),
+       (8, '1992-08-20'),
+       (9, '1988-02-11')
 ON DUPLICATE KEY UPDATE id_patient = id_patient;
 
 INSERT INTO admin_system (id_admin, niveau_privilege, date_derniere_connexion)
