@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
-@Table(name = "Rendez_vous")
+@Table(name = "rendez_vous")
 public class RendezVous {
 
     @Id
@@ -49,13 +49,13 @@ public class RendezVous {
     @JoinColumn(name = "id_dentiste", nullable = false)
     private Dentiste dentiste;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_secretaire")
-    private Secretaire secretaire;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_creneau")
-    private Creneau creneau;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_secretaire")
+//    private Secretaire secretaire;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id_creneau")
+//    private Creneau creneau;
 
 
     /*@OneToOne(mappedBy = "rendezVous", cascade = CascadeType.ALL)

@@ -17,26 +17,26 @@ public class PrestationImplementation implements IPrestation {
 
     private PrestationRepository prestationRepository;
 
-    @Override
-    public PrestationDTO create(PrestationDTO dto) {
-
-        if (prestationRepository.existsByNomPrestation(dto.nom_prestation())) {
-            throw new RuntimeException("Cette prestation existe déjà.");
-        }
-
-        Prestation prestation = new Prestation();
-
-        prestation.setNom_prestation(dto.nom_prestation());
-        prestation.setDateCreation(LocalDate.now());
-
-        prestationRepository.save(prestation);
-
-        return new PrestationDTO(
-                prestation.getId_prestation(),
-                prestation.getNom_prestation(),
-                prestation.getDateCreation()
-        );
-    }
+//    @Override
+//    public PrestationDTO create(PrestationDTO dto) {
+//
+//        if (prestationRepository.existsByNomPrestation(dto.nom_prestation())) {
+//            throw new RuntimeException("Cette prestation existe déjà.");
+//        }
+//
+//        Prestation prestation = new Prestation();
+//
+//        prestation.setNom_prestation(dto.nom_prestation());
+//        prestation.setDateCreation(LocalDate.now());
+//
+//        prestationRepository.save(prestation);
+//
+//        return new PrestationDTO(
+//                prestation.getId_prestation(),
+//                prestation.getNom_prestation(),
+//                prestation.getDateCreation()
+//        );
+//    }
 
     @Override
     public PrestationDTO update(Long id, PrestationDTO dto) {

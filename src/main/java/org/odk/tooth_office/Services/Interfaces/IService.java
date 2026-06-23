@@ -9,4 +9,5 @@ public interface IService<T> {
     Response update(T entity);
     Response getById(Long id);
     Response getAll();
+    Response delete(Long id);
 }

@@ -25,11 +25,11 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
                 .orElseThrow(() -> new RuntimeException("Dossier médical introuvable avec l'ID : " + id));
     }
 
-    @Override
-    public DossierMedical getDossierMedicalByPatientId(Long patientId) {
-        return dossierMedicalRepository.findByPatientId(patientId)
-                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable pour le patient : " + patientId));
-    }
+//    @Override
+//    public DossierMedical getDossierMedicalByPatientId(Long patientId) {
+//        return dossierMedicalRepository.findByPatientId(patientId)
+//                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable pour le patient : " + patientId));
+//    }
 
     @Override
     public List<DossierMedical> getAllDossiersMedicaux() {

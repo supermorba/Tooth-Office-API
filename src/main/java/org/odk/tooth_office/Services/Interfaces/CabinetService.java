@@ -17,6 +17,6 @@ public interface CabinetService {
     List<Dentiste> afficherDentistesParCabinet(Integer idCabinet);
     List<Secretaire> afficherSecretairesParCabinet(Integer idCabinet);
     Optional<Secretaire> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire);
-    Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Integer idDentiste);
+    Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
 }
 

@@ -1,3 +1,4 @@
+
 package org.odk.tooth_office.Services.Implementations;
 
 
@@ -10,6 +11,7 @@ import org.odk.tooth_office.Services.Interfaces.CabinetService;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -103,12 +105,14 @@ public class CabinetServiceImplementation implements CabinetService {
     }
     @Override
     @Transactional
-    public Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Integer idDentiste) {
+    public Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste) {
         Cabinet cabinet = cabinetRepository.findById(idCabinet)
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
 
         return cabinet.getDentistes().stream()
                 .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste) // Remplacez par la méthode appropriée selon votre entité Dentiste
+                .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), idDentiste)) // Remplacez par la méthode appropriée selon votre entité Dentiste
                 .findFirst();
     }
 }
+
