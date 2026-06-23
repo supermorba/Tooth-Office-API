@@ -19,9 +19,9 @@ public class Prestation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id_prestation ;
+    private long id;
     @Column(nullable = false, unique = true, length = 50)
-    private String nom_prestation ;
+    private String nomPrestation ;
     private LocalDate dateCreation;
 
     @OneToMany(mappedBy = "prestation")
