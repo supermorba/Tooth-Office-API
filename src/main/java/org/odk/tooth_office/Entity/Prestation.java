@@ -18,7 +18,7 @@ import java.util.List;
 public class Prestation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false, unique = true, length = 50)
     private String nomPrestation ;
