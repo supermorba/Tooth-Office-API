@@ -17,26 +17,24 @@ public class PrestationImplementation implements IPrestation {
 
     private PrestationRepository prestationRepository;
 
-//    @Override
-//    public PrestationDTO create(PrestationDTO dto) {
-//
-//        if (prestationRepository.existsByNomPrestation(dto.nom_prestation())) {
-//            throw new RuntimeException("Cette prestation existe déjà.");
-//        }
-//
-//        Prestation prestation = new Prestation();
-//
-//        prestation.setNom_prestation(dto.nom_prestation());
-//        prestation.setDateCreation(LocalDate.now());
-//
-//        prestationRepository.save(prestation);
-//
-//        return new PrestationDTO(
-//                prestation.getId_prestation(),
-//                prestation.getNom_prestation(),
-//                prestation.getDateCreation()
-//        );
-//    }
+
+    @Override
+    public Prestation create(PrestationDTO dto) {
+
+        if (prestationRepository.existsByNomPrestation(dto.nom_prestation())) {
+            throw new RuntimeException("Cette prestation existe déjà.");
+        }
+
+        Prestation prestation = new Prestation();
+
+        prestation.setNomPrestation(dto.nom_prestation());
+        prestation.setDateCreation(LocalDate.now());
+
+        prestationRepository.save(prestation);
+
+        return prestation;
+    }
+
 
     @Override
     public PrestationDTO update(Long id, PrestationDTO dto) {
@@ -44,13 +42,13 @@ public class PrestationImplementation implements IPrestation {
         Prestation prestation = prestationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prestation introuvable."));
 
-        prestation.setNom_prestation(dto.nom_prestation());
+        prestation.setNomPrestation(dto.nom_prestation());
 
         prestationRepository.save(prestation);
 
         return new PrestationDTO(
-                prestation.getId_prestation(),
-                prestation.getNom_prestation(),
+                prestation.getId(),
+                prestation.getNomPrestation(),
                 prestation.getDateCreation()
         );
     }
@@ -62,8 +60,8 @@ public class PrestationImplementation implements IPrestation {
                 .orElseThrow(() -> new RuntimeException("Prestation introuvable."));
 
         return new PrestationDTO(
-                prestation.getId_prestation(),
-                prestation.getNom_prestation(),
+                prestation.getId(),
+                prestation.getNomPrestation(),
                 prestation.getDateCreation()
         );
     }
@@ -74,8 +72,8 @@ public class PrestationImplementation implements IPrestation {
         return prestationRepository.findAll()
                 .stream()
                 .map(prestation -> new PrestationDTO(
-                        prestation.getId_prestation(),
-                        prestation.getNom_prestation(),
+                        prestation.getId(),
+                        prestation.getNomPrestation(),
                         prestation.getDateCreation()
                 ))
                 .toList();
