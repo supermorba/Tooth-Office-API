@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import lombok.AllArgsConstructor;
 import org.odk.tooth_office.DTO.PrestationDTO;
 import org.odk.tooth_office.Services.Interfaces.IPrestation;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@RestController
+@RequestMapping("/api/prestation")
+@AllArgsConstructor
 public class PrestationController {
 
     private  IPrestation prestationService;
