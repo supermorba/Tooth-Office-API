@@ -44,7 +44,6 @@ public class PlanAbonnement {
 
     // 🔥 RELATION 1 → N
     @JsonIgnore
-
     @OneToMany(
             mappedBy = "planAbonnement",
             cascade = CascadeType.ALL,
