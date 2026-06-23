@@ -8,14 +8,18 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ConsultationRepository extends JpaRepository<Consultation, Long> {
 
-    @Query("SELECT c FROM Consultation c WHERE Consultation.dossierMedical.patient.id_utilisateur =: patient")
+    @Query("SELECT c FROM Consultation c WHERE c.id =: id AND c.isEnabled = true")
+    public Optional<Consultation> getConsultationById(@Param("id") Long id);
+
+    @Query("SELECT c FROM Consultation c WHERE c.dossierMedical.patient.id_utilisateur =: patient AND c.isEnabled= true")
     List<Consultation> getByPatient(@Param("patient") Long id);
 
-    @Query("SELECT c FROM Consultation c WHERE Consultation.dentiste.id_utilisateur =: dentiste")
+    @Query("SELECT c FROM Consultation c WHERE c.dentiste.id_utilisateur =: dentiste AND c.isEnabled= true")
     List<Consultation> getByDentiste(@Param("dentiste") Long id);
 
 
