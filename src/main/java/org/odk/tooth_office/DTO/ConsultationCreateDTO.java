@@ -15,8 +15,5 @@ public record ConsultationCreateDTO(
 
         @NotNull(message = "Identifiez le patient qui se fait consulter")
         Long idPatient
-
-
-
 ) {
 }

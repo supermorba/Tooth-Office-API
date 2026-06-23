@@ -103,7 +103,6 @@ public class CabinetServiceImplementation implements CabinetService {
                         && secretaire.getIdSecretaire().equals(idSecretaire.longValue()))
                 .findFirst();
     }
-
     @Override
     @Transactional
     public Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste) {
@@ -111,6 +110,7 @@ public class CabinetServiceImplementation implements CabinetService {
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
 
         return cabinet.getDentistes().stream()
+                .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste) // Remplacez par la méthode appropriée selon votre entité Dentiste
                 .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), idDentiste)) // Remplacez par la méthode appropriée selon votre entité Dentiste
                 .findFirst();
     }
