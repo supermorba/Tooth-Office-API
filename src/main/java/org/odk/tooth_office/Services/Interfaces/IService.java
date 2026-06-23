@@ -1,10 +1,13 @@
 package org.odk.tooth_office.Services.Interfaces;
 
+import org.odk.tooth_office.utils.Response;
+
 import java.util.List;
 
 public interface IService<T> {
-    T save(T entity);
-    T update(T entity);
-    T getById(Long id);
-    List<T> getAll();
+    Response save(T entity);
+    Response update(T entity);
+    Response getById(Long id);
+    Response getAll();
+    Response delete(Long id);
 }
