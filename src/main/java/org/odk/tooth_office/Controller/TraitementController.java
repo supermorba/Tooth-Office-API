@@ -28,7 +28,6 @@ public class TraitementController {
         return service.getById(id);
     }
 
-
     @PostMapping
     public Traitement save(@RequestBody Traitement traitement) {
         service.save(traitement);
@@ -44,7 +43,8 @@ public class TraitementController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable int id) {
-         service.deleteById(id);
+
+        service.deleteById(id);
     }
 
 }
