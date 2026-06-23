@@ -2,7 +2,10 @@ package org.odk.tooth_office.Services.Implementations;
 
 import org.odk.tooth_office.DTO.AbonnementDTO;
 import org.odk.tooth_office.Entity.Abonnement;
+import org.odk.tooth_office.Entity.Cabinet;
+import org.odk.tooth_office.Entity.PlanAbonnement;
 import org.odk.tooth_office.Enum.EtatAbonnement;
+import org.odk.tooth_office.Enum.TypePaiement;
 import org.odk.tooth_office.Repository.AbonnementRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,11 +20,22 @@ public class AbonnementService {
         this.abonnementRepository = abonnementRepository;
     }
 
-    // CORRECTION : Le type de retour est bien Abonnement, pas AbonnementService
     public Abonnement creerAbonnement(AbonnementDTO dto) {
+        PlanAbonnement plan = new PlanAbonnement();
+        // Conversion de Integer vers Long
+        if (dto.getIdPlan() != null) {
+            plan.setIdPlan(dto.getIdPlan().longValue());
+        }
+
+        Cabinet cabinet = new Cabinet();
+        // Conversion de Integer vers int
+        if (dto.getIdCabinet() != null) {
+            cabinet.setIdCabinet(dto.getIdCabinet());
+        }
+
         Abonnement abonnement = new Abonnement(
                 dto.getDateDebut(), dto.getDateFin(), dto.getEtatAbonnement(),
-                dto.getTypePaiement(), dto.getMontantTotal(), dto.getIdPlan(), dto.getIdCabinet()
+                dto.getTypePaiement(), dto.getMontantTotal(), plan, cabinet
         );
         return abonnementRepository.save(abonnement);
     }
@@ -34,12 +48,12 @@ public class AbonnementService {
         return abonnementRepository.findById(id);
     }
 
-    public List<Abonnement> recupererParCabinet(Integer idCabinet) {
-        return abonnementRepository.findByIdCabinet(idCabinet);
+    public List<Abonnement> recupererParCabinet(int idCabinet) {
+        return abonnementRepository.findByCabinet_IdCabinet(idCabinet);
     }
 
-    public List<Abonnement> recupererParPlan(Integer idPlan) {
-        return abonnementRepository.findByIdPlan(idPlan);
+    public List<Abonnement> recupererParPlan(Long idPlan) {
+        return abonnementRepository.findByPlanAbonnement_IdPlan(idPlan);
     }
 
     public Abonnement modifierAbonnement(Integer id, AbonnementDTO dto) {
@@ -49,8 +63,19 @@ public class AbonnementService {
             existing.setEtatAbonnement(dto.getEtatAbonnement());
             existing.setTypePaiement(dto.getTypePaiement());
             existing.setMontantTotal(dto.getMontantTotal());
-            existing.setIdPlan(dto.getIdPlan());
-            existing.setIdCabinet(dto.getIdCabinet());
+
+            PlanAbonnement plan = new PlanAbonnement();
+            if (dto.getIdPlan() != null) {
+                plan.setIdPlan(dto.getIdPlan().longValue());
+            }
+            existing.setPlanAbonnement(plan);
+
+            Cabinet cabinet = new Cabinet();
+            if (dto.getIdCabinet() != null) {
+                cabinet.setIdCabinet(dto.getIdCabinet());
+            }
+            existing.setCabinet(cabinet);
+
             return abonnementRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Abonnement introuvable"));
     }
