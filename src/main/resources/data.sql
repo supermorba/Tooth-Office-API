@@ -112,7 +112,7 @@ VALUES
 ON DUPLICATE KEY UPDATE id_traitement = id_traitement;
 
 INSERT INTO prestation
-    (id_prestation, nom_prestation, date_creation)
+    (id, nom_prestation, date_creation)
 VALUES
     (1, 'Consultation générale', '2026-01-01'),
     (2, 'Blanchiment', '2026-01-01'),
