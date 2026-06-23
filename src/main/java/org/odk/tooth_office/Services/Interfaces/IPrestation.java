@@ -5,7 +5,7 @@ import org.odk.tooth_office.DTO.PrestationDTO;
 import java.util.List;
 
 public interface IPrestation {
-    PrestationDTO create(PrestationDTO dto);
+    //PrestationDTO create(PrestationDTO dto);
 
     PrestationDTO update(Long id, PrestationDTO dto);
 
