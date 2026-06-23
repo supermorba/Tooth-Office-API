@@ -92,7 +92,7 @@ public class ConsultationService implements IConsultation {
     @Override
     public Response getAll() {
         try {
-            List<Consultation> consultations = repository.findAll();
+            List<Consultation> consultations = repository.getAllEnabled();
             List<ConsultationDTO> consultationDTOS = new ArrayList<>();
             consultations.forEach(c -> {
                 consultationDTOS.add(consultationMapper.toConsultationDTO(c));

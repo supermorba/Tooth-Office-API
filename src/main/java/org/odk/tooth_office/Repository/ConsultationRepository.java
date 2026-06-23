@@ -22,5 +22,8 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     @Query("SELECT c FROM Consultation c WHERE c.dentiste.id_utilisateur =: dentiste AND c.isEnabled= true")
     List<Consultation> getByDentiste(@Param("dentiste") Long id);
 
+    @Query("SELECT c FROM Consultation c WHERE c.isEnabled = true")
+    List<Consultation> getAllEnabled();
+
 
 }
