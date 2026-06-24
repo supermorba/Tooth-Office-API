@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.odk.tooth_office.Entity.Traitement;
 import org.odk.tooth_office.Services.Interfaces.TraitementService;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/traitements")
+@Tag(name = "Traitements", description = "Gestion des traitements dentaires")
 
 public class TraitementController {
     private final TraitementService service;

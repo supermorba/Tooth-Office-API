@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.SecretaireDTO;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/secretaires")
 @RequiredArgsConstructor
+@Tag(name = "Secrétaires", description = "Gestion des secrétaires du cabinet")
 public class SecretaireController {
 
     private final SecretaireService secretaireService;

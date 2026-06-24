@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.UtilisateurDTO;
 import org.odk.tooth_office.Services.Interfaces.UtilisateurService;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
+@Tag(name = "Utilisateurs", description = "Gestion des utilisateurs de la plateforme")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;

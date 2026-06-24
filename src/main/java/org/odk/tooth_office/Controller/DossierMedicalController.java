@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.DossierMedicalDTO;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/dossiers-medicaux")
 @RequiredArgsConstructor
+@Tag(name = "Dossiers médicaux", description = "Gestion des dossiers médicaux des patients")
 public class DossierMedicalController {
 
     private final IDossierMedical dossierMedicalService;

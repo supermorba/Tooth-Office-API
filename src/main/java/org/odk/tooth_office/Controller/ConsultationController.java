@@ -1,6 +1,7 @@
 package org.odk.tooth_office.Controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.ConsultationCreateDTO;
 import org.odk.tooth_office.Entity.Consultation;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Tag(name = "Consultations", description = "Gestion des consultations médicales")
 public class ConsultationController {
 
     private final IConsultation consultationServcice;
