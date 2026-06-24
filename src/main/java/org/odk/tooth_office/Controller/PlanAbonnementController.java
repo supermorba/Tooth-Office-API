@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.PlanAbonnementDTO;
 import org.odk.tooth_office.Entity.PlanAbonnement;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/plan_abonnement")
 @RequiredArgsConstructor
+@Tag(name = "Plans d'abonnement", description = "Gestion des plans d'abonnement disponibles")
 public class PlanAbonnementController {
 
     private final PlanAbonnementService iPlanAbonnementService;

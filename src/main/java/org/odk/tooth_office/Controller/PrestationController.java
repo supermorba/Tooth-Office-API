@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.odk.tooth_office.DTO.PrestationDTO;
 import org.odk.tooth_office.Entity.Prestation;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/prestation")
 @AllArgsConstructor
+@Tag(name = "Prestations", description = "Gestion des prestations proposées par le cabinet")
 public class PrestationController {
 
     private  IPrestation prestationService;
