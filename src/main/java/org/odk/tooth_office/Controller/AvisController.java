@@ -54,7 +54,7 @@ public class AvisController {
         return ResponseEntity.ok(avisInterface.findByCabinetId(id));
     }
 
-    @GetMapping("patient/{id}")
+    @GetMapping("/patient/{id}")
     public ResponseEntity<List<AvisDetailDTO>> avisDupatient(@PathVariable int id)
     {
         return ResponseEntity.ok(avisInterface.findByPatientId(id));
