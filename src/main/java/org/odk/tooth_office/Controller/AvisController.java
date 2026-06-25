@@ -2,36 +2,61 @@ package org.odk.tooth_office.Controller;
 
 import org.odk.tooth_office.DTO.AvisDetailDTO;
 import org.odk.tooth_office.DTO.AvisRequestDTO;
-import org.odk.tooth_office.Services.Implementations.AvisImplementation;
+import org.odk.tooth_office.Services.Interfaces.AvisInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/api/avis")
 public class AvisController {
-    private final AvisImplementation avisImplementation;
+    private final AvisInterface avisInterface;
 
-    public AvisController(AvisImplementation avisImplementation) {
-        this.avisImplementation = avisImplementation;
+    public AvisController(AvisInterface avisInterface) {
+        this.avisInterface = avisInterface;
     }
 
     @PostMapping
     public ResponseEntity<AvisDetailDTO> ajouterAvis(@RequestBody AvisRequestDTO dto) {
-        AvisDetailDTO created = avisImplementation.create(dto);
+        AvisDetailDTO created = avisInterface.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<AvisDetailDTO>> listerAvis() {
-        return ResponseEntity.ok(avisImplementation.getAll());
+        return ResponseEntity.ok(avisInterface.getAll());
     }
 
-    @PostMapping
-    public ResponseEntity<AvisDetailDTO> modifierAvis(@RequestBody Long id, AvisRequestDTO dto){
-        AvisDetailDTO updated = avisImplementation.update(id, dto);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+    @GetMapping("/{id}")
+    public ResponseEntity<AvisDetailDTO> getAvis(@PathVariable Long id)
+    {
+        return ResponseEntity.ok(avisInterface.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AvisDetailDTO> modifierAvis(@PathVariable Long id, @RequestBody AvisRequestDTO dto) {
+        AvisDetailDTO updated = avisInterface.update(id, dto);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> supprimerAvis(@PathVariable Long id)
+    {
+        avisInterface.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cabinet/{id}")
+    public ResponseEntity<List<AvisDetailDTO>> avisDuCabinet(@PathVariable int id)
+    {
+        return ResponseEntity.ok(avisInterface.findByCabinetId(id));
+    }
+
+    @GetMapping("patient/{id}")
+    public ResponseEntity<List<AvisDetailDTO>> avisDupatient(@PathVariable int id)
+    {
+        return ResponseEntity.ok(avisInterface.findByPatientId(id));
     }
 }

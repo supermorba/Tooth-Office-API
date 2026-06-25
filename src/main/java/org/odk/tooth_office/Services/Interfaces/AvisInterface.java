@@ -10,8 +10,8 @@ public interface AvisInterface {
     AvisDetailDTO create(AvisRequestDTO dto);
     List<AvisDetailDTO> getAll();
     AvisDetailDTO update(Long id, AvisRequestDTO dto);
-    void delete(Avis avis);
-    Avis getById(Long id);
-    List<Avis> findByCabinetId(int id);
-    List<Avis> findByPatientId(int id);
+    void delete(Long id);
+    AvisDetailDTO getById(Long id);
+    List<AvisDetailDTO> findByCabinetId(int id);
+    List<AvisDetailDTO> findByPatientId(int id);
 }

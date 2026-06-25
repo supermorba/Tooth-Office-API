@@ -16,7 +16,7 @@ public class Consultation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date date_consultation;
+    private Date date_consultation= new Date();
 
     private  Date updateAt;
 
