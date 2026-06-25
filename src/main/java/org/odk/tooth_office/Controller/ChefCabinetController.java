@@ -1,10 +1,12 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.ChefCabinetDTO;
 import org.odk.tooth_office.Services.Interfaces.ChefCabinetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chefs-cabinet")
 @RequiredArgsConstructor
+@Tag(name = "Chefs de cabinet", description = "Gestion des chefs de cabinet")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM','CHEF_CABINET')")
 public class ChefCabinetController {
 
     private final ChefCabinetService chefCabinetService;

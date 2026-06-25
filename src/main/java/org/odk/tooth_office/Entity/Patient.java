@@ -31,4 +31,7 @@ public class Patient extends Utilisateur {
     @ManyToMany
     @JoinTable(name = "PATIENT_CABINET", joinColumns = @JoinColumn(name = "id_patient"), inverseJoinColumns = @JoinColumn(name = "id_cabinet"))
     private List<Cabinet> cabinets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient")
+    private List<Avis> avis = new ArrayList<>();
 }

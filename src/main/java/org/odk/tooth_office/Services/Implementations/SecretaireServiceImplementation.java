@@ -11,6 +11,7 @@ import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.ChefCabinetRepository;
 import org.odk.tooth_office.Repository.SecretaireRepository;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class SecretaireServiceImplementation implements SecretaireService {
     private final SecretaireRepository secretaireRepository;
     private final CabinetRepository cabinetRepository;
     private final ChefCabinetRepository chefCabinetRepository;
-    private final SecretaireMapper secretaireMapper;
+    private final PasswordService passwordService;
 
     @Override
     public List<SecretaireResponseDTO> recupererTous() {
@@ -64,12 +65,33 @@ public class SecretaireServiceImplementation implements SecretaireService {
         return true;
     }
 
-    // Cette méthode gère la transformation des requêtes (DTO entrante) vers l'entité de la BDD
+    private SecretaireDTO toDto(Secretaire secretaire) {
+        SecretaireDTO dto = new SecretaireDTO();
+        dto.setId_utilisateur(secretaire.getId_utilisateur());
+        dto.setNom(secretaire.getNom());
+        dto.setPrenom(secretaire.getPrenom());
+        dto.setEmail(secretaire.getEmail());
+        dto.setAdresse(secretaire.getAdresse());
+        dto.setRole(secretaire.getRole());
+        dto.setTelephone(secretaire.getTelephone());
+        dto.setStatutCompte(secretaire.getStatutCompte());
+        dto.setCreatedAt(secretaire.getCreatedAt());
+        dto.setUpdatedAt(secretaire.getUpdatedAt());
+        dto.setCreatedBy(secretaire.getCreatedBy());
+        dto.setUpdatedBy(secretaire.getUpdatedBy());
+
+        dto.setCabinetId(secretaire.getCabinet() != null ? secretaire.getCabinet().getIdCabinet() : null);
+        dto.setChefCabinetId(secretaire.getChefCabinet() != null ? secretaire.getChefCabinet().getId_utilisateur() : null);
+        return dto;
+    }
+
     private Secretaire toEntity(SecretaireDTO dto, Secretaire secretaire) {
         secretaire.setNom(dto.getNom());
         secretaire.setPrenom(dto.getPrenom());
         secretaire.setEmail(dto.getEmail());
-        secretaire.setMpd(dto.getMpd());
+        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
+            secretaire.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        }
         secretaire.setAdresse(dto.getAdresse());
         secretaire.setRole(dto.getRole());
         secretaire.setTelephone(dto.getTelephone());

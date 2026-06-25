@@ -1,11 +1,13 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.SecretaireDTO;
 import org.odk.tooth_office.DTO.SecretaireResponseDTO;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/secretaires")
 @RequiredArgsConstructor
+@Tag(name = "Secrétaires", description = "Gestion des secrétaires du cabinet")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM','CHEF_CABINET')")
 public class SecretaireController {
 
     private final SecretaireService secretaireService;

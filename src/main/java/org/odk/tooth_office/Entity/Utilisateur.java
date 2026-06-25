@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.odk.tooth_office.Enum.RoleEnum;
 import org.odk.tooth_office.Enum.StatutCompte;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,6 +50,8 @@ public class Utilisateur {
     private String adresse;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 30)
     private RoleEnum role;
 
     @Column(length = 20)

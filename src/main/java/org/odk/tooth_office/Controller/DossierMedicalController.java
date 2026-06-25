@@ -1,11 +1,13 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.DossierMedicalDTO;
 import org.odk.tooth_office.Services.Interfaces.IDossierMedical;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/dossiers-medicaux")
 @RequiredArgsConstructor
+@Tag(name = "Dossiers médicaux", description = "Gestion des dossiers médicaux des patients")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM','CHEF_CABINET','DENTISTE')")
 public class DossierMedicalController {
 
     private final IDossierMedical dossierMedicalService;
