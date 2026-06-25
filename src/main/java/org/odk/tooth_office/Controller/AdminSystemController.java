@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.AdminSystemDTO;
 import org.odk.tooth_office.Services.Interfaces.AdminSystemService;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admins")
 @RequiredArgsConstructor
+@Tag(name = "Administrateurs système", description = "Gestion des administrateurs système")
 public class AdminSystemController {
 
     private final AdminSystemService adminSystemService;

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class CabinetPrestation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id ;
     private double prix;
     private String description ;

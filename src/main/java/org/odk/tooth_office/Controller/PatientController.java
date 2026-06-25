@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.PatientDTO;
 import org.odk.tooth_office.Services.Interfaces.PatientService;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/patients")
 @RequiredArgsConstructor
+@Tag(name = "Patients", description = "Gestion des patients du cabinet")
 public class PatientController {
 
     private final PatientService patientService;
