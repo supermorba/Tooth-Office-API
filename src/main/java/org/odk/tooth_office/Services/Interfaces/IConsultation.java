@@ -14,5 +14,4 @@ public interface IConsultation extends IService<ConsultationCreateDTO, Long>{
     Response getConsultationByPatient(Long idPatient);
     Response patchUpdate(ConsultationPatchDTO patchDTO, Long id);
 
-
 }
