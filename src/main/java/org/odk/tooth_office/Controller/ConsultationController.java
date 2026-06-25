@@ -1,8 +1,10 @@
 package org.odk.tooth_office.Controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.ConsultationCreateDTO;
+import org.odk.tooth_office.DTO.ConsultationPatchDTO;
 import org.odk.tooth_office.Entity.Consultation;
 import org.odk.tooth_office.Services.Interfaces.IConsultation;
 import org.odk.tooth_office.utils.Response;
@@ -15,7 +17,7 @@ public class ConsultationController {
 
     private final IConsultation consultationServcice;
 
-    @GetMapping("/consultation/{id}/patient")
+    @GetMapping("/consultation/patient/{id}")
     public Response getConsultationByPatient(@PathVariable Long id){
         try {
             System.out.println("id patient: "+ id);
@@ -26,7 +28,7 @@ public class ConsultationController {
         }
     }
 
-    @GetMapping("/consultation/{id}/dentiste")
+    @GetMapping("/consultation/dentiste/{id}")
     public Response getConsultationByDentiste(@PathVariable Long id){
         try {
 
@@ -38,13 +40,8 @@ public class ConsultationController {
     }
 
     @PostMapping("/consultation")
-    public Response saveConsultation(@RequestBody ConsultationCreateDTO consultation){
-       // System.out.println("consultation info diagnostic :"+consultation.getDiagnostic() + " note :"+consultation.getNotes()+" dentiste :"+consultation.getDentiste().getId_utilisateur()+ "dossier :"+consultation.getDossierMedical().getId() + "rendez-vou :"+consultation.getRendezVous().getIdRendezVous());
-
+    public Response saveConsultation(@Valid @RequestBody ConsultationCreateDTO consultation){
         try {
-
-
-          //  System.out.println("consultation info diagnostic :"+consultation.getDiagnostic() + " note :"+consultation.getNotes()+" dentiste :"+consultation.getDentiste().getId_utilisateur()+ "dossier :"+consultation.getDossierMedical().getId() + "rendez-vou :"+consultation.getRendezVous().getIdRendezVous());
             return consultationServcice.save(consultation);
 
     } catch (Exception e) {
@@ -65,8 +62,9 @@ public class ConsultationController {
     }
 
     @PutMapping("/consultation/{id}")
-    public Response updateConsultation(@RequestBody ConsultationCreateDTO consultation, @PathVariable Long id){
+    public Response updateConsultation(@Valid @RequestBody ConsultationCreateDTO consultation, @PathVariable Long id){
         try {
+            System.out.println("id a modifieer "+ id);
             return consultationServcice.update(consultation, id);
 
         } catch (Exception e) {
@@ -79,13 +77,20 @@ public class ConsultationController {
     public Response deleteConsultation(@PathVariable Long id){
         try {
             return consultationServcice.delete(id);
-
     } catch (Exception e) {
         e.printStackTrace(System.out);
         return Response.error("Erreur au niveau du serveur");
     }
     }
 
+    @PatchMapping("/consultation/{id}")
+    public Response updatePatch(@RequestBody ConsultationPatchDTO patchDTO, @PathVariable Long id){
+        try {
+            return consultationServcice.patchUpdate(patchDTO, id);
+        }
+        catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+    }
 
-
-}
+}}
