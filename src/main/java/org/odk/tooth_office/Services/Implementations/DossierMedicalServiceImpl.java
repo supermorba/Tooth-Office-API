@@ -6,13 +6,17 @@ import org.odk.tooth_office.Entity.DossierMedical;
 import org.odk.tooth_office.Entity.Patient;
 import org.odk.tooth_office.Repository.DossierMedicalRepository;
 import org.odk.tooth_office.Services.Interfaces.IDossierMedical;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-
+@Transactional(readOnly = true)
 public class DossierMedicalServiceImpl implements IDossierMedical {
 
     private final DossierMedicalRepository dossierMedicalRepository;
@@ -27,14 +31,18 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
     @Override
     public DossierMedicalDTO getDossierMedicalById(Long id) {
         DossierMedical entity = dossierMedicalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Dossier médical introuvable avec l'ID : " + id));
         return convertToDto(entity);
     }
 
     @Override
     public DossierMedicalDTO getDossierMedicalByPatientId(Long patientId) {
         DossierMedical entity = dossierMedicalRepository.findByPatientId(patientId)
-                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable pour le patient : " + patientId));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Dossier médical introuvable pour le patient ID : " + patientId));
         return convertToDto(entity);
     }
 
@@ -49,7 +57,9 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
     @Override
     public DossierMedicalDTO updateDossierMedical(Long id, DossierMedicalDTO dto) {
         DossierMedical existing = dossierMedicalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Dossier médical introuvable avec l'ID : " + id));
 
         existing.setAntecedents(dto.getAntecedents());
         existing.setAllergies(dto.getAllergies());
@@ -57,7 +67,7 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
 
         if (dto.getPatientId() != null) {
             Patient patient = new Patient();
-            patient.setId_utilisateur(dto.getPatientId());
+            patient.setId(dto.getPatientId());
             existing.setPatient(patient);
         }
 
@@ -68,11 +78,14 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
     @Override
     public void deleteDossierMedical(Long id) {
         DossierMedical dossier = dossierMedicalRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dossier médical introuvable"));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Dossier médical introuvable avec l'ID : " + id));
+
         dossierMedicalRepository.delete(dossier);
     }
 
-    // Conversions
+    // Converteurs
     private DossierMedical convertToEntity(DossierMedicalDTO dto) {
         DossierMedical entity = new DossierMedical();
         entity.setId(dto.getId());
@@ -82,7 +95,7 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
 
         if (dto.getPatientId() != null) {
             Patient patient = new Patient();
-            patient.setId_utilisateur(dto.getPatientId());
+            patient.setId(dto.getPatientId());
             entity.setPatient(patient);
         }
         return entity;
@@ -95,9 +108,10 @@ public class DossierMedicalServiceImpl implements IDossierMedical {
         dto.setAllergies(entity.getAllergies());
         dto.setHistoriques(entity.getHistoriques());
 
+
         if (entity.getPatient() != null) {
             dto.setPatientId(entity.getPatient().getId_utilisateur());
-        }
+       }
         return dto;
     }
 }

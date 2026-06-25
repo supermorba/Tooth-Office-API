@@ -67,4 +67,10 @@ public class Utilisateur {
     private String updatedBy;
 
 
+    public Long getId() {
+        return 0L;
+    }
+
+    public void setId(Long patientId) {
+    }
 }

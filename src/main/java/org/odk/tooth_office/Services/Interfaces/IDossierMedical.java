@@ -10,7 +10,7 @@ public interface IDossierMedical {
 
     DossierMedicalDTO getDossierMedicalById(Long id);
 
-    DossierMedicalDTO getDossierMedicalByPatientId(Long patientId);
+    DossierMedicalDTO getDossierMedicalByPatientId(Long utilisateurId);
 
     List<DossierMedicalDTO> getAllDossiersMedicaux();
 

@@ -53,7 +53,8 @@ ON DUPLICATE KEY UPDATE id_secretaire = id_secretaire;
 INSERT INTO patient (id_patient, date_naissance)
 VALUES (4, '1995-04-14'),
        (8, '1992-08-20'),
-       (9, '1988-02-11')
+       (9, '1988-02-11'),
+       (1, '1988-02-11')
 ON DUPLICATE KEY UPDATE id_patient = id_patient;
 
 INSERT INTO admin_system (id_admin, niveau_privilege, date_derniere_connexion)
@@ -76,6 +77,7 @@ VALUES
     (1, 'Aucun antécédent majeur', 'Aucune allergie connue', 'Première visite annuelle', 4),
     (2, 'Hypertension légère', 'Pénicilline', 'Suivi trimestriel', 8),
     (3, 'Diabète type 2', 'Aspirine', 'Contrôles réguliers', 9)
+
 ON DUPLICATE KEY UPDATE id = id;
 
 INSERT INTO rendez_vous

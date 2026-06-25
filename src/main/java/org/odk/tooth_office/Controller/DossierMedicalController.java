@@ -7,7 +7,6 @@ import org.odk.tooth_office.Services.Interfaces.IDossierMedical;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -42,7 +41,6 @@ public class DossierMedicalController {
     public ResponseEntity<DossierMedicalDTO> updateDossier(
             @PathVariable Long id,
             @Valid @RequestBody DossierMedicalDTO dto) {
-
         return ResponseEntity.ok(dossierMedicalService.updateDossierMedical(id, dto));
     }
 

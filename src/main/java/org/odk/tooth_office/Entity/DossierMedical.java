@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-@Entity @Table @Getter @Setter
+@Entity @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
+@Table(name = "Dossier_Medical")
 public class DossierMedical {
 
     @Id
@@ -27,7 +28,7 @@ public class DossierMedical {
             name = "id_patient",
             nullable = false,
             unique = true,
-            foreignKey = @ForeignKey(name = "fk_DossierMedical")
+            foreignKey = @ForeignKey(name = "fk_Dossier_Medical")
     )
     private Patient patient;
 }
