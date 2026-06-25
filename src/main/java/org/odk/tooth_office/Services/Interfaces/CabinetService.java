@@ -1,22 +1,25 @@
 package org.odk.tooth_office.Services.Interfaces;
 
 import org.odk.tooth_office.DTO.CabinetDTO;
+import org.odk.tooth_office.DTO.CabinetResponseDTO;
+import org.odk.tooth_office.DTO.DentisteResponseDTO;
+import org.odk.tooth_office.DTO.SecretaireResponseDTO;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Entity.Secretaire;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface CabinetService {
-    Cabinet creerCabinet(CabinetDTO dto);
-    List<Cabinet> recupererTous();
-    Optional<Cabinet> recupererParId(Integer id);
-    Optional<Cabinet> recupererParNom(String nomCabinet);
+    CabinetResponseDTO creerCabinet(CabinetDTO dto);
+    List<CabinetResponseDTO> recupererTous();
+    Optional<CabinetResponseDTO> recupererParId(Integer id);
+    Optional<CabinetResponseDTO> recupererParNom(String nomCabinet);
     Cabinet modifierCabinet(Integer id, CabinetDTO dto);
     void supprimerCabinet(Integer id);
-    List<Dentiste> afficherDentistesParCabinet(Integer idCabinet);
-    List<Secretaire> afficherSecretairesParCabinet(Integer idCabinet);
-    Optional<Secretaire> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire);
-    Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
+    List<DentisteResponseDTO> afficherDentistesParCabinet(Integer idCabinet);
+    List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet);
+    Optional<SecretaireResponseDTO> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire);
+    Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
 }
 

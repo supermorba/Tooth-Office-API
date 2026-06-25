@@ -1,30 +1,37 @@
-
 package org.odk.tooth_office.Services.Implementations;
 
 
-import org.odk.tooth_office.DTO.CabinetDTO;
+import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.*;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Entity.Secretaire;
+import org.odk.tooth_office.Mapper.CabinetMapper;
+import org.odk.tooth_office.Mapper.DentisteMapper;
+import org.odk.tooth_office.Mapper.SecretaireMapper;
 import org.odk.tooth_office.Repository.CabinetRepository;
+import org.odk.tooth_office.Repository.DentisteRepository;
 import org.odk.tooth_office.Services.Interfaces.CabinetService;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CabinetServiceImplementation implements CabinetService {
 
     private final CabinetRepository cabinetRepository;
+    private final CabinetMapper cabinetMapper;
+    private final SecretaireMapper secretaireMapper;
+    private final DentisteMapper dentisteMapper;
+    private final DentisteRepository dentisteRepository;
 
-    public CabinetServiceImplementation(CabinetRepository cabinetRepository) {
-        this.cabinetRepository = cabinetRepository;
-    }
 
     @Override
-    public Cabinet creerCabinet(CabinetDTO dto) {
+    public CabinetResponseDTO creerCabinet(CabinetDTO dto) {
         if (cabinetRepository.existsByTel(dto.getTel())) {
             throw new RuntimeException("Un cabinet possède déjà ce numéro de téléphone.");
         }
@@ -34,22 +41,27 @@ public class CabinetServiceImplementation implements CabinetService {
         cabinet.setAdresse(dto.getAdresse());
         cabinet.setLogo(dto.getLogo());
         cabinet.setDescription(dto.getDescription());
-        return cabinetRepository.save(cabinet);
+        return cabinetMapper.toCabinet(cabinetRepository.save(cabinet));
     }
 
     @Override
-    public List<Cabinet> recupererTous() {
-        return cabinetRepository.findAll();
+    public List<CabinetResponseDTO> recupererTous() {
+        List<CabinetResponseDTO> listCabinetDto= new ArrayList<>();
+        listCabinetDto = cabinetRepository.findAll().stream()
+                .map(cabinetMapper::toCabinet).toList();
+        return listCabinetDto;
     }
 
     @Override
-    public Optional<Cabinet> recupererParId(Integer id) {
-        return cabinetRepository.findById(id);
+    public Optional<CabinetResponseDTO> recupererParId(Integer id) {
+        return cabinetRepository.findById(id)
+                .map(cabinetMapper::toCabinet);
     }
 
     @Override
-    public Optional<Cabinet> recupererParNom(String nomCabinet) {
-        return cabinetRepository.findByNomCabinet(nomCabinet);
+    public Optional<CabinetResponseDTO> recupererParNom(String nomCabinet) {
+        return cabinetRepository.findByNomCabinet(nomCabinet)
+                .map(cabinetMapper::toCabinet);
     }
 
     @Override
@@ -72,47 +84,46 @@ public class CabinetServiceImplementation implements CabinetService {
         cabinetRepository.deleteById(id);
     }
 
-    // =========================================================================
-    // IMPLEMENTATION DES NOUVELLES METHODES
-    // =========================================================================
-
     @Override
-    @Transactional // Nécessaire pour initialiser la collection LAZY en toute sécurité
-    public List<Dentiste> afficherDentistesParCabinet(Integer idCabinet) {
+    @Transactional
+    public List<DentisteResponseDTO> afficherDentistesParCabinet(Integer idCabinet) {
         return cabinetRepository.findById(idCabinet)
-                .map(Cabinet::getDentistes)
-                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+                .map(c->c.getDentistes().stream().map(dentisteMapper::toResponseDTO))
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
     @Override
     @Transactional
-    public List<Secretaire> afficherSecretairesParCabinet(Integer idCabinet) {
+    public List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet) {
         return cabinetRepository.findById(idCabinet)
-                .map(Cabinet::getSecretaires)
-                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+                .map(e->e.getSecretaires().stream().map(secretaireMapper::toResponseDTO))
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
     @Override
     @Transactional
-    public Optional<Secretaire> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire) {
+    public Optional<SecretaireResponseDTO> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire) {
         Cabinet cabinet = cabinetRepository.findById(idCabinet)
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
 
         return cabinet.getSecretaires().stream()
                 .filter(secretaire -> secretaire.getIdSecretaire() != null
                         && secretaire.getIdSecretaire().equals(idSecretaire.longValue()))
-                .findFirst();
+                .map(secretaireMapper::toResponseDTO).findFirst();
     }
     @Override
     @Transactional
-    public Optional<Dentiste> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste) {
+    public Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste) {
         Cabinet cabinet = cabinetRepository.findById(idCabinet)
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+        Dentiste dentiste1 = dentisteRepository.findById(idDentiste)
+                .orElseThrow(() -> new RuntimeException("Dentiste introuvable avec l'ID : " + idDentiste));
 
         return cabinet.getDentistes().stream()
-                .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste) // Remplacez par la méthode appropriée selon votre entité Dentiste
-                .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), idDentiste)) // Remplacez par la méthode appropriée selon votre entité Dentiste
-                .findFirst();
+                .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste)
+                .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), dentiste1.getId_utilisateur()))
+                .map(dentisteMapper::toResponseDTO).findFirst();
     }
 }
+
 
