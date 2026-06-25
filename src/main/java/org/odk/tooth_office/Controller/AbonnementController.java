@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.odk.tooth_office.DTO.AbonnementDTO;
 import org.odk.tooth_office.Entity.Abonnement;
 import org.odk.tooth_office.Enum.EtatAbonnement;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/abonnements")
+@Tag(name = "Abonnements", description = "Gestion des abonnements des cabinets dentaires")
 public class AbonnementController {
 
     private final AbonnementService abonnementService;
