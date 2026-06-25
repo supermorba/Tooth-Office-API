@@ -4,10 +4,10 @@ import org.odk.tooth_office.utils.Response;
 
 import java.util.List;
 
-public interface IService<T> {
-    Response save(T entity);
-    Response update(T entity);
-    Response getById(Long id);
+public interface IService<REQUEST, ID> {
+    Response save(REQUEST entity);
+    Response update(REQUEST entity, ID id);
+    Response getById(ID id);
     Response getAll();
-    Response delete(Long id);
+    Response delete(ID id);
 }
