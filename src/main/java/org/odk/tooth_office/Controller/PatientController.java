@@ -6,6 +6,7 @@ import org.odk.tooth_office.DTO.PatientDTO;
 import org.odk.tooth_office.Services.Interfaces.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/patients")
 @RequiredArgsConstructor
 @Tag(name = "Patients", description = "Gestion des patients du cabinet")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM','CHEF_CABINET','SECRETAIRE','DENTISTE')")
 public class PatientController {
 
     private final PatientService patientService;

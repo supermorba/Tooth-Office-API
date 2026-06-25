@@ -6,6 +6,7 @@ import org.odk.tooth_office.DTO.AdminSystemDTO;
 import org.odk.tooth_office.Services.Interfaces.AdminSystemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/admins")
 @RequiredArgsConstructor
 @Tag(name = "Administrateurs système", description = "Gestion des administrateurs système")
+@PreAuthorize("hasRole('ADMIN_SYSTEM')")
 public class AdminSystemController {
 
     private final AdminSystemService adminSystemService;
