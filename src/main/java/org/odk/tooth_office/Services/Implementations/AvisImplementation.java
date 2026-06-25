@@ -10,10 +10,12 @@ import org.odk.tooth_office.Repository.AvisRepository;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.PatientRepository;
 import org.odk.tooth_office.Services.Interfaces.AvisInterface;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class AvisImplementation implements AvisInterface {
     private final AvisRepository avisRepository;
     private final CabinetRepository cabinetRepository;
@@ -60,31 +62,42 @@ public class AvisImplementation implements AvisInterface {
         Patient patient = patientRepository.findById(Long.valueOf(dto.patientId()))
                 .orElseThrow(() -> new IllegalArgumentException("Patient Introuvable"));
 
+        // Modifier directement l'entité existante (conserve l'ID → JPA fait un UPDATE)
+        avis.setNote(dto.note());
+        avis.setDescription(dto.description());
         avis.setCabinet(cabinet);
         avis.setPatient(patient);
-        avis.setCreateAt(LocalDateTime.now());
 
         Avis avisSave = avisRepository.save(avis);
         return mapper.toDetailDTO(avisSave);
     }
 
     @Override
-    public void delete(Avis avis) {
+    public void delete(Long id) {
+        Avis avis = avisRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Avis non trouvé"));
         avisRepository.delete(avis);
     }
 
     @Override
-    public Avis getById(Long id) {
-        return avisRepository.getById(id);
+    public AvisDetailDTO getById(Long id) {
+        Avis avis = avisRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Avis non trouvé"));
+        return mapper.toDetailDTO(avis);
     }
 
     @Override
-    public List<Avis> findByCabinetId(int id) {
-        return avisRepository.findByCabinetId(id);
+    public List<AvisDetailDTO> findByCabinetId(int id) {
+        return avisRepository.findByCabinetId(id).stream()
+                .map(mapper::toDetailDTO)
+                .toList();
     }
 
     @Override
-    public List<Avis> findByPatientId(int id) {
-        return avisRepository.findByPatientId(id);
+    public List<AvisDetailDTO> findByPatientId(int id) {
+
+        return avisRepository.findByPatientId(id).stream()
+                .map(mapper::toDetailDTO)
+                .toList();
     }
 }
