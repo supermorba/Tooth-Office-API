@@ -3,7 +3,6 @@ package org.odk.tooth_office.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.SecretaireDTO;
-import org.odk.tooth_office.DTO.SecretaireResponseDTO;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +21,24 @@ public class SecretaireController {
     private final SecretaireService secretaireService;
 
     @GetMapping
-    public ResponseEntity<List<SecretaireResponseDTO>> getAll() {
-        return ResponseEntity.ok(secretaireService.recupererTous());
+    public ResponseEntity<List<SecretaireDTO>> getAll() {
+        return ResponseEntity.ok(secretaireService.getAll());
     }
 
     @GetMapping("/{id}")
-    public SecretaireResponseDTO getById(@PathVariable Long id) {
+    public ResponseEntity<SecretaireDTO> getById(@PathVariable Long id) {
         return secretaireService.getById(id)
-                .orElseThrow(() -> new RuntimeException("La secrétaire n'existe pas avec l'ID : " + id));
-
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<SecretaireResponseDTO> create(@RequestBody SecretaireDTO dto) {
+    public ResponseEntity<SecretaireDTO> create(@RequestBody SecretaireDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(secretaireService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SecretaireResponseDTO> update(@PathVariable Long id, @RequestBody SecretaireDTO dto) {
+    public ResponseEntity<SecretaireDTO> update(@PathVariable Long id, @RequestBody SecretaireDTO dto) {
         return secretaireService.update(id, dto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
