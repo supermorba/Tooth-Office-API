@@ -1,4 +1,4 @@
-/*package org.odk.tooth_office.Services.Implementations;
+package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.SecretaireDTO;
@@ -105,4 +105,3 @@ public class SecretaireServiceImplementation implements SecretaireService {
         return secretaire;
     }
 }
-*/

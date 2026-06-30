@@ -1,4 +1,4 @@
-/*package org.odk.tooth_office.Controller;
+package org.odk.tooth_office.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
