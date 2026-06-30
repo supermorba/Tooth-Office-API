@@ -96,7 +96,7 @@ public class CabinetServiceImplementation implements CabinetService {
     @Transactional
     public List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet) {
         return cabinetRepository.findById(idCabinet)
-                .map(e->e.getSecretaires().stream().map(secretaireMapper::toResponseDTO))
+                .map(e->e.getSecretaires().stream().map(SecretaireMapper::toResponseDTO))
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
@@ -109,7 +109,7 @@ public class CabinetServiceImplementation implements CabinetService {
         return cabinet.getSecretaires().stream()
                 .filter(secretaire -> secretaire.getIdSecretaire() != null
                         && secretaire.getIdSecretaire().equals(idSecretaire.longValue()))
-                .map(secretaireMapper::toResponseDTO).findFirst();
+                .map(SecretaireMapper::toResponseDTO).findFirst();
     }
     @Override
     @Transactional

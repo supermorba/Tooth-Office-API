@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 public class SecretaireServiceImplementation implements SecretaireService {
@@ -29,21 +31,21 @@ public class SecretaireServiceImplementation implements SecretaireService {
     @Override
     public List<SecretaireResponseDTO> recupererTous() {
         return secretaireRepository.findAll().stream()
-                .map(secretaireMapper::toResponseDTO)
+                .map(SecretaireMapper::toResponseDTO)
                 .toList();
     }
 
     @Override
     public Optional<SecretaireResponseDTO> getById(Long id) {
         return secretaireRepository.findById(id)
-                .map(secretaireMapper::toResponseDTO);
+                .map(SecretaireMapper::toResponseDTO);
     }
 
     @Override
     public SecretaireResponseDTO create(SecretaireDTO dto) {
         Secretaire secretaire = toEntity(dto, new Secretaire());
         Secretaire saved = secretaireRepository.save(secretaire);
-        return secretaireMapper.toResponseDTO(saved);
+        return SecretaireMapper.toResponseDTO(saved);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class SecretaireServiceImplementation implements SecretaireService {
             Secretaire updated = toEntity(dto, existing);
             updated.setId_utilisateur(id);
             Secretaire saved = secretaireRepository.save(updated);
-            return secretaireMapper.toResponseDTO(saved);
+            return SecretaireMapper.toResponseDTO(saved);
         });
     }
 

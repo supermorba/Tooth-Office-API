@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecretaireMapper {
 
-    public SecretaireResponseDTO toResponseDTO(Secretaire secretaire) {
+    public static SecretaireResponseDTO toResponseDTO(Secretaire secretaire) {
         if (secretaire == null) {
             return null;
         }
