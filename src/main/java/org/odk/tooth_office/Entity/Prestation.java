@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Prestation {
     private LocalDate dateCreation;
 
     @OneToMany(mappedBy = "prestation")
+    @JsonIgnoreProperties("prestation")
     private List<CabinetPrestation> cabinetPrestations = new ArrayList<>();
 
 
