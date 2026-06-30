@@ -1,6 +1,10 @@
 -- Jeu de données initial pour Tooth Office
 -- Idempotent: relancer le script ne doit pas dupliquer les enregistrements clés.
 
+-- Compatibilité avec une base déjà créée avant l'ajout du rôle ADMIN_SYSTEM.
+-- On force ici une colonne texte plutôt qu'un ENUM MySQL trop rigide.
+ALTER TABLE utilisateur MODIFY COLUMN role VARCHAR(30);
+
 -- 1) Plans d'abonnement
 INSERT INTO plan_abonnement
     (id_plan, nom, prix_mensuel, prix_annuel, max_cabinet, max_dentistes, max_secretaires, description)
@@ -32,7 +36,7 @@ VALUES
     (7, 'Banza', 'Ruth', 'secretaire2@toothoffice.cd', 'pass123', 'Kinshasa', 'SECRETAIRE', '243970000007', 'VALIDE', '2026-01-02', '2026-01-02 10:10:00', 'seed', 'seed'),
     (8, 'Mpiana', 'Grace', 'patient2@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000008', 'VALIDE', '2026-01-02', '2026-01-02 10:15:00', 'seed', 'seed'),
     (9, 'Kimpa', 'Roger', 'patient3@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000009', 'VALIDE', '2026-01-02', '2026-01-02 10:20:00', 'seed', 'seed'),
-    (10, 'Admin', 'Systeme', 'admin@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000010', 'VALIDE', '2026-01-02', '2026-01-02 10:25:00', 'seed', 'seed')
+    (10, 'Admin', 'Systeme', 'admin@toothoffice.cd', 'pass123', 'Kinshasa', 'ADMIN_SYSTEM', '243970000010', 'VALIDE', '2026-01-02', '2026-01-02 10:25:00', 'seed', 'seed')
 ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
 -- 4) Tables d'héritage JOINED

@@ -9,6 +9,7 @@ import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.ChefCabinetRepository;
 import org.odk.tooth_office.Repository.SecretaireRepository;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class SecretaireServiceImplementation implements SecretaireService {
     private final SecretaireRepository secretaireRepository;
     private final CabinetRepository cabinetRepository;
     private final ChefCabinetRepository chefCabinetRepository;
+    private final PasswordService passwordService;
 
     @Override
     public List<SecretaireDTO> getAll() {
@@ -63,7 +65,6 @@ public class SecretaireServiceImplementation implements SecretaireService {
         dto.setNom(secretaire.getNom());
         dto.setPrenom(secretaire.getPrenom());
         dto.setEmail(secretaire.getEmail());
-        dto.setMpd(secretaire.getMpd());
         dto.setAdresse(secretaire.getAdresse());
         dto.setRole(secretaire.getRole());
         dto.setTelephone(secretaire.getTelephone());
@@ -82,7 +83,9 @@ public class SecretaireServiceImplementation implements SecretaireService {
         secretaire.setNom(dto.getNom());
         secretaire.setPrenom(dto.getPrenom());
         secretaire.setEmail(dto.getEmail());
-        secretaire.setMpd(dto.getMpd());
+        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
+            secretaire.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        }
         secretaire.setAdresse(dto.getAdresse());
         secretaire.setRole(dto.getRole());
         secretaire.setTelephone(dto.getTelephone());

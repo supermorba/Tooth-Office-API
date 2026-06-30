@@ -7,6 +7,7 @@ import org.odk.tooth_office.Entity.Patient;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.PatientRepository;
 import org.odk.tooth_office.Services.Interfaces.PatientService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class PatientServiceImplementation implements PatientService {
 
     private final PatientRepository patientRepository;
     private final CabinetRepository cabinetRepository;
+    private final PasswordService passwordService;
 
     @Override
     public List<PatientDTO> getAll() {
@@ -61,7 +63,6 @@ public class PatientServiceImplementation implements PatientService {
         dto.setNom(patient.getNom());
         dto.setPrenom(patient.getPrenom());
         dto.setEmail(patient.getEmail());
-        dto.setMpd(patient.getMpd());
         dto.setAdresse(patient.getAdresse());
         dto.setRole(patient.getRole());
         dto.setTelephone(patient.getTelephone());
@@ -81,7 +82,9 @@ public class PatientServiceImplementation implements PatientService {
         patient.setNom(dto.getNom());
         patient.setPrenom(dto.getPrenom());
         patient.setEmail(dto.getEmail());
-        patient.setMpd(dto.getMpd());
+        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
+            patient.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        }
         patient.setAdresse(dto.getAdresse());
         patient.setRole(dto.getRole());
         patient.setTelephone(dto.getTelephone());

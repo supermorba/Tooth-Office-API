@@ -5,6 +5,7 @@ import org.odk.tooth_office.DTO.AdminSystemDTO;
 import org.odk.tooth_office.Entity.AdminSystem;
 import org.odk.tooth_office.Repository.AdminSystemRepository;
 import org.odk.tooth_office.Services.Interfaces.AdminSystemService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class AdminSystemServiceImplementation implements AdminSystemService {
 
     private final AdminSystemRepository adminSystemRepository;
+    private final PasswordService passwordService;
 
     @Override
     public List<AdminSystemDTO> getAll() {
@@ -59,7 +61,6 @@ public class AdminSystemServiceImplementation implements AdminSystemService {
         dto.setNom(adminSystem.getNom());
         dto.setPrenom(adminSystem.getPrenom());
         dto.setEmail(adminSystem.getEmail());
-        dto.setMpd(adminSystem.getMpd());
         dto.setAdresse(adminSystem.getAdresse());
         dto.setRole(adminSystem.getRole());
         dto.setTelephone(adminSystem.getTelephone());
@@ -77,7 +78,9 @@ public class AdminSystemServiceImplementation implements AdminSystemService {
         adminSystem.setNom(dto.getNom());
         adminSystem.setPrenom(dto.getPrenom());
         adminSystem.setEmail(dto.getEmail());
-        adminSystem.setMpd(dto.getMpd());
+        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
+            adminSystem.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        }
         adminSystem.setAdresse(dto.getAdresse());
         adminSystem.setRole(dto.getRole());
         adminSystem.setTelephone(dto.getTelephone());
