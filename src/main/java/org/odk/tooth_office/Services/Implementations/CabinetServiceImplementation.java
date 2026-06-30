@@ -65,8 +65,8 @@ public class CabinetServiceImplementation implements CabinetService {
     }
 
     @Override
-    public Cabinet modifierCabinet(Integer id, CabinetDTO dto) {
-        return cabinetRepository.findById(id).map(existing -> {
+    public CabinetResponseDTO modifierCabinet(Integer id, CabinetDTO dto) {
+        Cabinet cabinetSauvegarde = cabinetRepository.findById(id).map(existing -> {
             existing.setNomCabinet(dto.getNomCabinet());
             existing.setTel(dto.getTel());
             existing.setAdresse(dto.getAdresse());
@@ -74,7 +74,21 @@ public class CabinetServiceImplementation implements CabinetService {
             existing.setDescription(dto.getDescription());
             return cabinetRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + id));
+
+        // Conversion de l'entité vers CabinetResponseDTO
+        CabinetResponseDTO response = new CabinetResponseDTO();
+        response.setIdCabinet(cabinetSauvegarde.getIdCabinet());
+        response.setNomCabinet(cabinetSauvegarde.getNomCabinet());
+        response.setTel(cabinetSauvegarde.getTel());
+        response.setAdresse(cabinetSauvegarde.getAdresse());
+        response.setLogo(cabinetSauvegarde.getLogo());
+        response.setDescription(cabinetSauvegarde.getDescription());
+        // Ajoutez ici les autres champs de CabinetResponseDTO si nécessaire (listes, etc.)
+
+        return response;
     }
+
+
 
     @Override
     public void supprimerCabinet(Integer id) {

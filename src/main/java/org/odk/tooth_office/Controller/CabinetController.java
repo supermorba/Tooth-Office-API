@@ -50,9 +50,10 @@ public class CabinetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cabinet> modifierCabinet(@PathVariable Integer id, @RequestBody CabinetDTO dto) {
+    public ResponseEntity<CabinetResponseDTO> modifierCabinet(@PathVariable Integer id, @RequestBody CabinetDTO dto) {
         return ResponseEntity.ok(cabinetService.modifierCabinet(id, dto));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimerCabinet(@PathVariable Integer id) {
