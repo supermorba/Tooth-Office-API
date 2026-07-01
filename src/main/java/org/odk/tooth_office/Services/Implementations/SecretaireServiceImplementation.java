@@ -29,7 +29,7 @@ public class SecretaireServiceImplementation implements SecretaireService {
     private final PasswordService passwordService;
 
     @Override
-    public List<SecretaireResponseDTO> recupererTous() {
+    public List<SecretaireResponseDTO> getAll() {
         return secretaireRepository.findAll().stream()
                 .map(SecretaireMapper::toResponseDTO)
                 .toList();
