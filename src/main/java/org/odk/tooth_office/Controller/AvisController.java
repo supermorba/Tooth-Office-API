@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Controller;
 
+import jakarta.validation.Valid;
 import org.odk.tooth_office.DTO.AvisDetailDTO;
 import org.odk.tooth_office.DTO.AvisRequestDTO;
 import org.odk.tooth_office.Services.Interfaces.AvisInterface;
@@ -19,7 +20,7 @@ public class AvisController {
     }
 
     @PostMapping
-    public ResponseEntity<AvisDetailDTO> ajouterAvis(@RequestBody AvisRequestDTO dto) {
+    public ResponseEntity<AvisDetailDTO> ajouterAvis(@RequestBody @Valid AvisRequestDTO dto) {
         AvisDetailDTO created = avisInterface.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -36,7 +37,7 @@ public class AvisController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AvisDetailDTO> modifierAvis(@PathVariable Long id, @RequestBody AvisRequestDTO dto) {
+    public ResponseEntity<AvisDetailDTO> modifierAvis(@PathVariable Long id, @RequestBody @Valid AvisRequestDTO dto) {
         AvisDetailDTO updated = avisInterface.update(id, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
