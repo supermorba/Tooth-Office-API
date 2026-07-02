@@ -45,7 +45,6 @@ public class Cabinet {
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<Avis> avis;
 
-
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<CabinetPrestation> cab_Ser;
 
