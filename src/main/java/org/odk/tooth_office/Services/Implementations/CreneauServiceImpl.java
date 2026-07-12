@@ -1,104 +1,143 @@
 package org.odk.tooth_office.Services.Implementations;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.odk.tooth_office.DTO.CreneauDTO;
 import org.odk.tooth_office.Entity.Creneau;
 import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Services.Interfaces.CreneauService;
 import org.odk.tooth_office.Repository.CreneauRepository;
 import org.odk.tooth_office.Repository.DentisteRepository;
+import org.odk.tooth_office.Services.Interfaces.CreneauService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class CreneauServiceImpl implements CreneauService {
 
     private final CreneauRepository creneauRepository;
     private final DentisteRepository dentisteRepository;
 
-    // Injection des repositories par constructeur
-    public CreneauServiceImpl(CreneauRepository creneauRepository, DentisteRepository dentisteRepository) {
-        this.creneauRepository = creneauRepository;
-        this.dentisteRepository = dentisteRepository;
-    }
-
+    /**
+     * Génère les créneaux pour une journée donnée pour un dentiste
+     */
     @Override
-    @Transactional
     public List<CreneauDTO> genererCreneauxPourJournee(LocalDate date, Long dentisteId) {
+        log.info("Génération des créneaux pour le dentiste {} à la date {}", dentisteId, date);
+
         Dentiste dentiste = dentisteRepository.findById(dentisteId)
-                .orElseThrow(() -> new RuntimeException("Dentiste introuvable avec l'ID : " + dentisteId));
+                .orElseThrow(() -> new RuntimeException("Dentiste non trouvé avec l'ID: " + dentisteId));
 
-        // Exemple de configuration d'une journée type : 08:00 à 17:00 avec 30 minutes par patient
-        LocalTime heureDebutJournee = LocalTime.of(8, 0);
-        LocalTime heureFinJournee = LocalTime.of(17, 0);
-        int dureeCreneauMinutes = 30;
+        List<Creneau> creneauxExistants = creneauRepository.findCreneauxByDentisteAndDate(dentisteId, date);
+        if (!creneauxExistants.isEmpty()) {
+            log.warn("Les créneaux existent déjà pour le dentiste {} à la date {}", dentisteId, date);
+            return creneauxExistants.stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+        }
 
-        List<Creneau> creneauxGeneres = new ArrayList<>();
-        LocalTime courant = heureDebutJournee;
+        // Créer les créneaux par défaut (9h à 17h, créneaux de 30 minutes)
+        LocalTime debut = LocalTime.of(9, 0);
+        LocalTime fin = LocalTime.of(17, 0);
 
-        while (courant.isBefore(heureFinJournee)) {
-            LocalTime suivant = courant.plusMinutes(dureeCreneauMinutes);
+        List<Creneau> creneaux = new java.util.ArrayList<>();
+        LocalTime currentStart = debut;
+
+        while (currentStart.isBefore(fin)) {
+            LocalTime currentEnd = currentStart.plusMinutes(30);
+            if (currentEnd.isAfter(fin)) {
+                break;
+            }
 
             Creneau creneau = new Creneau();
             creneau.setDate(date);
-            creneau.setHeureDebut(courant);
-            creneau.setHeureFin(suivant);
+            creneau.setHeureDebut(currentStart);
+            creneau.setHeureFin(currentEnd);
             creneau.setDisponible(true);
             creneau.setDentiste(dentiste);
 
-            creneauxGeneres.add(creneau);
-            courant = suivant;
+            creneaux.add(creneau);
+            currentStart = currentEnd;
         }
 
-        // Sauvegarde groupée en Base de données
-        List<Creneau> savedCreneaux = creneauRepository.saveAll(creneauxGeneres);
+        List<Creneau> creneauxSauvegardes = creneauRepository.saveAll(creneaux);
+        log.info("{} créneaux générés pour le dentiste {}", creneauxSauvegardes.size(), dentisteId);
 
-        // Transformation de la liste d'entités en liste de DTOs pour le retour
-        return savedCreneaux.stream()
+        return creneauxSauvegardes.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Récupère les créneaux disponibles pour un dentiste
+     */
     @Override
     @Transactional(readOnly = true)
     public List<CreneauDTO> obtenirCreneauxDisponiblesParDentiste(Long dentisteId) {
-        // Attention : on utilise ici la méthode adaptée avec l'underscore (Id_utilisateur) liée à votre modèle
-        return creneauRepository.findByDentisteId_utilisateurAndDisponibleTrue(dentisteId).stream()
+        log.info("Récupération des créneaux disponibles pour le dentiste {}", dentisteId);
+
+        dentisteRepository.findById(dentisteId)
+                .orElseThrow(() -> new RuntimeException("Dentiste non trouvé avec l'ID: " + dentisteId));
+
+        List<Creneau> creneaux = creneauRepository.findCreneauxDisponiblesFromDate(
+                dentisteId,
+                LocalDate.now()
+        );
+
+        return creneaux.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Bloque un créneau (le rend indisponible)
+     */
     @Override
-    @Transactional
     public void bloquerCreneau(Long idCreneau) {
+        log.info("Blocage du créneau {}", idCreneau);
+
         Creneau creneau = creneauRepository.findById(idCreneau)
-                .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + idCreneau));
+                .orElseThrow(() -> new RuntimeException("Créneau non trouvé avec l'ID: " + idCreneau));
 
         if (!creneau.isDisponible()) {
-            throw new IllegalStateException("Ce créneau est déjà occupé ou bloqué.");
+            log.warn("Le créneau {} est déjà bloqué", idCreneau);
+            return;
         }
 
         creneau.setDisponible(false);
         creneauRepository.save(creneau);
-    }
-
-    @Override
-    @Transactional
-    public void libererCreneau(Long idCreneau) {
-        Creneau creneau = creneauRepository.findById(idCreneau)
-                .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + idCreneau));
-
-        creneau.setDisponible(true);
-        creneauRepository.save(creneau);
+        log.info("Créneau {} bloqué avec succès", idCreneau);
     }
 
     /**
-     * Méthode utilitaire (Mapper) pour convertir une entité Creneau en CreneauDTO.
+     * Libère un créneau (le rend disponible)
+     */
+    @Override
+    public void libererCreneau(Long idCreneau) {
+        log.info("Libération du créneau {}", idCreneau);
+
+        Creneau creneau = creneauRepository.findById(idCreneau)
+                .orElseThrow(() -> new RuntimeException("Créneau non trouvé avec l'ID: " + idCreneau));
+
+        if (creneau.isDisponible()) {
+            log.warn("Le créneau {} est déjà disponible", idCreneau);
+            return;
+        }
+
+        creneau.setDisponible(true);
+        creneauRepository.save(creneau);
+        log.info("Créneau {} libéré avec succès", idCreneau);
+    }
+
+    /**
+     * Mappe une entité Creneau vers un DTO
      */
     private CreneauDTO mapToDTO(Creneau creneau) {
         CreneauDTO dto = new CreneauDTO();
@@ -107,13 +146,8 @@ public class CreneauServiceImpl implements CreneauService {
         dto.setHeureDebut(creneau.getHeureDebut());
         dto.setHeureFin(creneau.getHeureFin());
         dto.setDisponible(creneau.isDisponible());
-
-        // Données du dentiste lié
-        if (creneau.getDentiste() != null) {
-            dto.setDentisteId(creneau.getDentiste().getId_utilisateur()); // Votre clé primaire héritée
-            dto.setDentisteNom("Dr. " + creneau.getDentiste().getNom());
-        }
-
+        dto.setDentisteId(creneau.getDentiste().getId_utilisateur());
+        dto.setDentisteNom(creneau.getDentiste().getNom() + " " + creneau.getDentiste().getPrenom());
         return dto;
     }
 }
