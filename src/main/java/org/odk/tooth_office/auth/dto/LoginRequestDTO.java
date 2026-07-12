@@ -9,9 +9,14 @@ import lombok.Setter;
 @Setter
 public class LoginRequestDTO {
 
-    @Email(message = "L'email doit être valide")
-    @NotBlank(message = "L'email est obligatoire")
+    /**
+     * Identifiant de connexion : email ou numéro de téléphone.
+     * L'un des deux doit être fourni, mais pas forcément les deux.
+     */
+    @Email(message = "L'email doit être valide si fourni")
     private String email;
+
+    private String telephone;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
     private String motDePasse;
