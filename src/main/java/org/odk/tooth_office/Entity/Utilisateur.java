@@ -37,7 +37,7 @@ public class Utilisateur {
     @Column(nullable = false, length = 50)
     private String prenom;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = true, length = 100)
     private String email;
 
     /**
@@ -54,7 +54,7 @@ public class Utilisateur {
     @Column(length = 30)
     private RoleEnum role;
 
-    @Column(length = 20)
+    @Column(unique = true, nullable = false, length = 20)
     private String telephone;
 
     @Enumerated(EnumType.STRING)
