@@ -30,12 +30,7 @@ public class Consultation implements Serializable {
     @ManyToOne
     private DossierMedical dossierMedical;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "id_rendez_vous",
-            columnDefinition = "BIGINT",
-            nullable = false
-    )
+    @ManyToOne
     private RendezVous rendezVous;
 
     @ManyToOne
