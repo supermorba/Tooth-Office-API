@@ -2,6 +2,7 @@ package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.odk.tooth_office.DTO.CreneauDtoSurplace;
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
 import org.odk.tooth_office.Entity.Creneau;
@@ -33,69 +34,71 @@ public class RendezVousServiceImpl implements RendezVousService {
     private final PatientRepository patientRepository;
     private final DentisteRepository dentisteRepository;
     private final CreneauRepository creneauRepository;
+    private CreneauServiceImpl creneauService;
     private final SecretaireRepository secretaireRepository;
 
     /**
      * Prendre un rendez-vous
      */
     @Override
+    @Transactional
     public RendezVousResponseDTO prendreRendezVous(RendezVousRequestDTO dto) {
-        log.info("Prise de rendez-vous pour le patient {} avec le dentiste {}",
-                dto.getPatientId(), dto.getDentisteId());
 
-        validateRendezVousRequest(dto);
 
         Patient patient = patientRepository.findById(dto.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient non trouvé avec l'ID: " + dto.getPatientId()));
+                .orElseThrow(() -> new RuntimeException("Patient introuvable avec l'ID : " + dto.getPatientId()));
 
         Dentiste dentiste = dentisteRepository.findById(dto.getDentisteId())
-                .orElseThrow(() -> new RuntimeException("Dentiste non trouvé avec l'ID: " + dto.getDentisteId()));
+                .orElseThrow(() -> new RuntimeException("Dentiste introuvable avec l'ID : " + dto.getDentisteId()));
 
-        Creneau creneau = null;
-        if (dto.getCreneauId() != null) {
-            creneau = creneauRepository.findById(dto.getCreneauId())
-                    .orElseThrow(() -> new RuntimeException("Créneau non trouvé avec l'ID: " + dto.getCreneauId()));
+        Creneau creneau;
+        TypeRdv typeRdv = TypeRdv.valueOf(dto.getTypeRdv());
 
-            if (!creneau.getDentiste().getId_utilisateur().equals(dentiste.getId_utilisateur())) {
-                throw new RuntimeException("Le créneau n'appartient pas au dentiste spécifié");
+        // Cas d'un rendez-vous SUR PLACE
+        if (typeRdv == TypeRdv.SURPLACE && dto.getCreneauId() == null) {
+
+            CreneauDtoSurplace creneauDto = new CreneauDtoSurplace(
+                    dto.getDateRdv().toLocalDate(),
+                    dto.getDateRdv().toLocalTime(),
+                    dto.getDateRdv().toLocalTime().plusMinutes(40),
+                    false,
+                    dto.getDentisteId()
+            );
+            if(creneauRepository.existsCreneauAtDateTimeForDentiste(creneauDto.dentisteId(), creneauDto.date(), creneauDto.heureDebut())){
+                throw new RuntimeException("Ce creneau est deja reservé !!!!");
             }
+
+            creneau = creneauService.creerCreneauSurplace(creneauDto);
+
+        } else {
+
+            // Cas classique : réservation d'un créneau existant
+            creneau = creneauRepository.findById(dto.getCreneauId())
+                    .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + dto.getCreneauId()));
 
             if (!creneau.isDisponible()) {
-                throw new RuntimeException("Le créneau n'est pas disponible");
+                throw new IllegalStateException("Ce créneau horaire est déjà réservé.");
             }
-        }
 
-        if (rendezVousRepository.existsRendezVousAMemeHeure(dto.getPatientId(), dto.getDateRdv())) {
-            throw new RuntimeException("Le patient a déjà un rendez-vous à cette heure");
-        }
-
-        RendezVous rendezVous = new RendezVous();
-        rendezVous.setDateRdv(dto.getDateRdv());
-        rendezVous.setNotes(dto.getNotes());
-        rendezVous.setMotif(dto.getNotes());
-        rendezVous.setPatient(patient);
-        rendezVous.setDentiste(dentiste);
-        rendezVous.setCreneau(creneau);
-        rendezVous.setEtatRdv(EtatRdv.EN_ATTENTE);
-
-        try {
-            rendezVous.setTypeRdv(TypeRdv.valueOf(dto.getTypeRdv().toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            rendezVous.setTypeRdv(TypeRdv.ENLIGNE);
-        }
-
-        rendezVous.setCreatedAt(LocalDateTime.now());
-        rendezVous.setUpdatedAt(LocalDateTime.now());
-
-        RendezVous rdvSauvegarde = rendezVousRepository.save(rendezVous);
-
-        if (creneau != null) {
             creneau.setDisponible(false);
             creneauRepository.save(creneau);
         }
 
-        log.info("Rendez-vous créé avec l'ID: {}", rdvSauvegarde.getIdRendezVous());
-        return mapToResponseDTO(rdvSauvegarde);
+        // Création du rendez-vous
+        RendezVous rdv = new RendezVous();
+        rdv.setDateRdv(dto.getDateRdv());
+        rdv.setNotes(dto.getNotes());
+        rdv.setTypeRdv(TypeRdv.valueOf(dto.getTypeRdv()));
+        rdv.setEtatRdv(EtatRdv.EN_ATTENTE);
+        rdv.setPatient(patient);
+        rdv.setDentiste(dentiste);
+
+        // Association du créneau
+        rdv.setCreneau(creneau);
+
+        RendezVous savedRdv = rendezVousRepository.save(rdv);
+
+        return mapToResponseDTO(savedRdv);
     }
 
     /**
