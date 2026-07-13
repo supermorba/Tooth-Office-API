@@ -20,4 +20,6 @@ public interface RendezVousService {
 
     // Pour le Dentiste et la Secrétaire : Consulter le planning du jour d'un praticien
     List<RendezVousResponseDTO> obtenirRdvParDentiste(Long dentisteId);
+    List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id);
+
 }

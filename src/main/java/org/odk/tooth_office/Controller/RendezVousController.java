@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
+import org.odk.tooth_office.utils.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,5 +108,18 @@ public class RendezVousController {
             @Parameter(description = "ID du dentiste") @PathVariable Long dentisteId) {
         List<RendezVousResponseDTO> response = rendezVousService.obtenirRdvParDentiste(dentisteId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/cabinet/{id}")
+    public Response getAllRdvCabinet(@PathVariable Long id){
+        try{
+            List<RendezVousResponseDTO> liste = rendezVousService.findAllRdvOfCabinet(id);
+            return Response.succes("La liste des rdv du cabinet", liste);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+
+
     }
 }

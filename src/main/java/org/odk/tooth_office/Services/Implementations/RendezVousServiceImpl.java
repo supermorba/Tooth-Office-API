@@ -186,6 +186,16 @@ public class RendezVousServiceImpl implements RendezVousService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id) {
+        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet(id);
+
+
+        return rendezVous.stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Valide les données du DTO
      */
