@@ -3,9 +3,11 @@ package org.odk.tooth_office.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.SecretaireDTO;
+import org.odk.tooth_office.DTO.SecretaireResponseDTO;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,29 +16,30 @@ import java.util.List;
 @RequestMapping("/api/secretaires")
 @RequiredArgsConstructor
 @Tag(name = "Secrétaires", description = "Gestion des secrétaires du cabinet")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM','CHEF_CABINET')")
 public class SecretaireController {
 
     private final SecretaireService secretaireService;
 
     @GetMapping
-    public ResponseEntity<List<SecretaireDTO>> getAll() {
+    public ResponseEntity<List<SecretaireResponseDTO>> getAll() {
         return ResponseEntity.ok(secretaireService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SecretaireDTO> getById(@PathVariable Long id) {
+    public ResponseEntity<SecretaireResponseDTO> getById(@PathVariable Long id) {
         return secretaireService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<SecretaireDTO> create(@RequestBody SecretaireDTO dto) {
+    public ResponseEntity<SecretaireResponseDTO> create(@RequestBody SecretaireDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(secretaireService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SecretaireDTO> update(@PathVariable Long id, @RequestBody SecretaireDTO dto) {
+    public ResponseEntity<SecretaireResponseDTO> update(@PathVariable Long id, @RequestBody SecretaireDTO dto) {
         return secretaireService.update(id, dto)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

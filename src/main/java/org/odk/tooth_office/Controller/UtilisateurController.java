@@ -6,6 +6,7 @@ import org.odk.tooth_office.DTO.UtilisateurDTO;
 import org.odk.tooth_office.Services.Interfaces.UtilisateurService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
 @Tag(name = "Utilisateurs", description = "Gestion des utilisateurs de la plateforme")
+@PreAuthorize("hasRole('ADMIN_SYSTEM')")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;

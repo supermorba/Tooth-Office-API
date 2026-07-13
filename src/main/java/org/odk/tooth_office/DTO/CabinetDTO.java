@@ -1,10 +1,12 @@
 package org.odk.tooth_office.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CabinetDTO {
     @Schema(description = "Nom du cabinet dentaire", example = "Cabinet Smile Plus")
     private String nomCabinet;
