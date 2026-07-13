@@ -22,7 +22,7 @@ public class RendezVous {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rendez_vous")
-    private Integer idRendezVous;
+    private Long idRendezVous;
 
     @Column(name = "date_rdv", nullable = false)
     private LocalDateTime dateRdv;
@@ -49,13 +49,13 @@ public class RendezVous {
     @JoinColumn(name = "id_dentiste", nullable = false)
     private Dentiste dentiste;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id_secretaire")
-//    private Secretaire secretaire;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_secretaire")
+    private Secretaire secretaire;
 //
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id_creneau")
-//    private Creneau creneau;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_creneau")
+    private Creneau creneau;
 
 
     /*@OneToOne(mappedBy = "rendezVous", cascade = CascadeType.ALL)

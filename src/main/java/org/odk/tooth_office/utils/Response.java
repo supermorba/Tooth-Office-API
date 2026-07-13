@@ -25,7 +25,7 @@ public class Response {
     }
 
     public static Response succes(String message, Object data){
-        return new Response(HttpStatus.OK.value() + "", message, data);
+        return new Response( "OK", message, data);
     }
 
     public static Response error(String message){

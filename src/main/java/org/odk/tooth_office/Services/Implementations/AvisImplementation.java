@@ -13,6 +13,7 @@ import org.odk.tooth_office.Services.Interfaces.AvisInterface;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,6 +89,10 @@ public class AvisImplementation implements AvisInterface {
 
     @Override
     public List<AvisDetailDTO> findByCabinetId(int id) {
+        List<Avis> listAvisCabinet = avisRepository.findByCabinetId(id);
+        if (listAvisCabinet.isEmpty()){
+            throw new IllegalArgumentException("Aucun avis trouvé pour le cabinet avec l'ID : " + id);
+        }
         return avisRepository.findByCabinetId(id).stream()
                 .map(mapper::toDetailDTO)
                 .toList();
@@ -95,7 +100,10 @@ public class AvisImplementation implements AvisInterface {
 
     @Override
     public List<AvisDetailDTO> findByPatientId(int id) {
-
+        List<Avis> listAvisPatient = avisRepository.findByPatientId(id);
+        if (listAvisPatient.isEmpty()){
+            throw new IllegalArgumentException("Aucun avis trouvé pour le patient avec l'ID : " + id);
+        }
         return avisRepository.findByPatientId(id).stream()
                 .map(mapper::toDetailDTO)
                 .toList();

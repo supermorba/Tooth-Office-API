@@ -6,7 +6,6 @@ import org.odk.tooth_office.DTO.DentisteResponseDTO;
 import org.odk.tooth_office.DTO.SecretaireResponseDTO;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.DTO.AvisResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +21,5 @@ public interface CabinetService {
     List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet);
     Optional<SecretaireResponseDTO> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire);
     Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
-    List<AvisResponseDTO> afficherLesAvisParCabinet(Integer idCabinet);
-    Optional<AvisResponseDTO> afficherUnAvisParCabinet(Integer idCabinet, Long idAvis
-    );
 }
 

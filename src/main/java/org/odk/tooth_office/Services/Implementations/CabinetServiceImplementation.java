@@ -3,7 +3,6 @@ package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.*;
-import org.odk.tooth_office.DTO.MapperDTO.AvisMapper;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Mapper.CabinetMapper;
@@ -14,7 +13,6 @@ import org.odk.tooth_office.Repository.DentisteRepository;
 import org.odk.tooth_office.Services.Interfaces.CabinetService;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,6 @@ public class CabinetServiceImplementation implements CabinetService {
     private final SecretaireMapper secretaireMapper;
     private final DentisteMapper dentisteMapper;
     private final DentisteRepository dentisteRepository;
-    private final AvisMapper avisMapper;
 
 
     @Override
@@ -140,50 +137,6 @@ public class CabinetServiceImplementation implements CabinetService {
                 .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste)
                 .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), dentiste1.getId_utilisateur()))
                 .map(dentisteMapper::toResponseDTO).findFirst();
-    }
-
-    @Override
-    @Transactional
-    public List<AvisResponseDTO> afficherLesAvisParCabinet(Integer idCabinet) {
-
-
-        Cabinet cabinet = cabinetRepository.findById(idCabinet)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Cabinet introuvable avec l'ID : " + idCabinet
-                        )
-                );
-
-
-        return cabinet.getAvis()
-                .stream()
-                .map(avisMapper::toResponseDTO)
-                .toList();
-    }
-
-    @Override
-    @Transactional
-    public Optional<AvisResponseDTO> afficherUnAvisParCabinet(
-            Integer idCabinet,
-            Long idAvis
-    ) {
-
-
-        Cabinet cabinet = cabinetRepository.findById(idCabinet)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Cabinet introuvable avec l'ID : " + idCabinet
-                        )
-                );
-
-
-        return cabinet.getAvis()
-                .stream()
-                .filter(avis ->
-                        avis.getId().equals(idAvis)
-                )
-                .map(avisMapper::toResponseDTO)
-                .findFirst();
     }
 }
 

@@ -13,7 +13,6 @@ import org.odk.tooth_office.Services.Interfaces.CabinetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.odk.tooth_office.DTO.AvisResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,31 +86,5 @@ public class CabinetController {
             @PathVariable Long idDentiste) {
         return ResponseEntity.ok( cabinetService.afficherUnDentisteParCabinet(idCabinet,idDentiste));
 
-    }
-
-    @GetMapping("/{idCabinet}/avis")
-    public ResponseEntity<List<AvisResponseDTO>> afficherAvisParCabinet(
-            @PathVariable Integer id
-    ){
-
-        return ResponseEntity.ok(
-                cabinetService.afficherLesAvisParCabinet(id)
-        );
-    }
-
-    @GetMapping("/{idCabinet}/avis/{idAvis}")
-    public ResponseEntity<AvisResponseDTO> afficherUnAvisParCabinet(
-            @PathVariable Integer idCabinet,
-            @PathVariable Long idAvis
-    ){
-
-        return cabinetService
-                .afficherUnAvisParCabinet(idCabinet,idAvis)
-
-                .map(ResponseEntity::ok)
-
-                .orElseGet(() ->
-                        ResponseEntity.notFound().build()
-                );
     }
 }

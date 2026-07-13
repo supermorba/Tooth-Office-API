@@ -26,6 +26,17 @@ public class GlobalExceptionHandler {
         ));
     }
 
+    // Intercepte les conflits de téléphone
+    @ExceptionHandler(TelephoneDejaUtiliseException.class)
+    public ResponseEntity<Map<String, Object>> handleTelephoneDejaUtilise(TelephoneDejaUtiliseException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "status", 409,
+                "error", "Conflict",
+                "message", ex.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
+        ));
+    }
+
     // Intercepte les erreurs d'authentification
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
