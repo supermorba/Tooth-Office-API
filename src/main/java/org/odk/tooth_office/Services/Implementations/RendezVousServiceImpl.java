@@ -102,8 +102,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     @Override
     @Transactional(readOnly = true)
     public List<RendezVousResponseDTO> obtenirRdvParPatient(Long patientId) {
-        // Utilise la méthode corrigée suite au nommage de votre clé primaire (id_utilisateur)
-        return rdvRepository.findByPatientId_utilisateur(patientId).stream()
+        return rdvRepository.findByPatientId(patientId).stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -111,8 +110,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     @Override
     @Transactional(readOnly = true)
     public List<RendezVousResponseDTO> obtenirRdvParDentiste(Long dentisteId) {
-        // Utilise la méthode corrigée suite au nommage de votre clé primaire (id_utilisateur)
-        return rdvRepository.findByDentisteId_utilisateur(dentisteId).stream()
+        return rdvRepository.findByDentisteId(dentisteId).stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
