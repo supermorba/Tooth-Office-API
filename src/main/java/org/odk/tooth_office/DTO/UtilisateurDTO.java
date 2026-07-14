@@ -21,7 +21,7 @@ public class UtilisateurDTO {
     @Schema(description = "Adresse email de l'utilisateur", example = "jean.dupont@tooth-office.com")
     private String email;
     @Schema(description = "Mot de passe de l'utilisateur", example = "MotDePasse123!")
-    private String mpd;
+    private String mdp;
     @Schema(description = "Adresse postale de l'utilisateur", example = "12 rue des Lilas, Dakar")
     private String adresse;
     @Schema(description = "Rôle attribué à l'utilisateur", example = "PATIENT")

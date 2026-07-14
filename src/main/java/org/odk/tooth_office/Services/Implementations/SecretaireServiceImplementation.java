@@ -91,8 +91,8 @@ public class SecretaireServiceImplementation implements SecretaireService {
         secretaire.setNom(dto.getNom());
         secretaire.setPrenom(dto.getPrenom());
         secretaire.setEmail(dto.getEmail());
-        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
-            secretaire.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            secretaire.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
         }
         secretaire.setAdresse(dto.getAdresse());
         secretaire.setRole(dto.getRole());

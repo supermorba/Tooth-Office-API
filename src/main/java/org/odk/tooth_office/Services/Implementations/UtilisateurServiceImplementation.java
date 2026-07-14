@@ -76,8 +76,8 @@ public class UtilisateurServiceImplementation implements UtilisateurService {
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
         utilisateur.setEmail(dto.getEmail());
-        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
-            utilisateur.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            utilisateur.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
         }
         utilisateur.setAdresse(dto.getAdresse());
         utilisateur.setRole(dto.getRole());

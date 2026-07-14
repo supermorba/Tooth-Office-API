@@ -82,8 +82,8 @@ public class PatientServiceImplementation implements PatientService {
         patient.setNom(dto.getNom());
         patient.setPrenom(dto.getPrenom());
         patient.setEmail(dto.getEmail());
-        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
-            patient.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            patient.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
         }
         patient.setAdresse(dto.getAdresse());
         patient.setRole(dto.getRole());

@@ -69,13 +69,13 @@ public class AuthServiceImplementation implements AuthService {
             throw new BadCredentialsException("Ce compte n'est pas actif");
         }
 
-        if (!passwordService.matches(request.getMotDePasse(), utilisateur.getMpd())) {
+        if (!passwordService.matches(request.getMotDePasse(), utilisateur.getMdp())) {
             String identifiant = hasEmail ? "Email" : "Téléphone";
             throw new BadCredentialsException(identifiant + " ou mot de passe invalide");
         }
 
-        if (passwordService.needsRehash(utilisateur.getMpd())) {
-            utilisateur.setMpd(passwordService.encodeIfNeeded(request.getMotDePasse()));
+        if (passwordService.needsRehash(utilisateur.getMdp())) {
+            utilisateur.setMdp(passwordService.encodeIfNeeded(request.getMotDePasse()));
             utilisateurRepository.save(utilisateur);
         }
 
@@ -97,10 +97,6 @@ public class AuthServiceImplementation implements AuthService {
     @Override
     public LoginResponseDTO register(RegisterRequestDTO request) {
         // 1. Vérifier si les mots de passe correspondent
-        if (!request.getMotDePasse().equals(request.getConfirmationMotDePasse())) {
-            throw new IllegalArgumentException("La confirmation du mot de passe ne correspond pas");
-        }
-
         // 2. Vérifier si le rôle est autorisé pour l'inscription publique
         if (request.getRole() != RoleEnum.PATIENT && request.getRole() != RoleEnum.CHEF_CABINET) {
             throw new IllegalArgumentException("Rôle non autorisé pour l'inscription publique. Seuls les Patients et Chefs de cabinet peuvent s'inscrire.");
@@ -180,11 +176,11 @@ public class AuthServiceImplementation implements AuthService {
             throw new IllegalArgumentException("La confirmation du mot de passe ne correspond pas");
         }
 
-        if (!passwordService.matches(request.getAncienMotDePasse(), utilisateur.getMpd())) {
+        if (!passwordService.matches(request.getAncienMotDePasse(), utilisateur.getMdp())) {
             throw new BadCredentialsException("L'ancien mot de passe est incorrect");
         }
 
-        utilisateur.setMpd(passwordService.encodeIfNeeded(request.getNouveauMotDePasse()));
+        utilisateur.setMdp(passwordService.encodeIfNeeded(request.getNouveauMotDePasse()));
         utilisateurRepository.save(utilisateur);
     }
 
@@ -199,7 +195,7 @@ public class AuthServiceImplementation implements AuthService {
         utilisateur.setNom(request.getNom());
         utilisateur.setPrenom(request.getPrenom());
         utilisateur.setEmail(request.getEmail() != null && !request.getEmail().isBlank() ? request.getEmail() : null);
-        utilisateur.setMpd(passwordService.encodeIfNeeded(request.getMotDePasse()));
+        utilisateur.setMdp(passwordService.encodeIfNeeded(request.getMotDePasse()));
         utilisateur.setAdresse(request.getAdresse());
         utilisateur.setTelephone(request.getTelephone());
         utilisateur.setRole(request.getRole());
