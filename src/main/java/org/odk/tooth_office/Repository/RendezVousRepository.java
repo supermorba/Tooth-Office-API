@@ -98,4 +98,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
             @Param("patientId") Long patientId,
             @Param("dateActuelle") LocalDateTime dateActuelle
     );
+
+    @Query("SELECT r from RendezVous r WHERE r.dentiste.cabinet.idCabinet=:idCabinet")
+    List<RendezVous> findRdvByCabinet(@Param("idCabinet") Long idCabinet);
 }
