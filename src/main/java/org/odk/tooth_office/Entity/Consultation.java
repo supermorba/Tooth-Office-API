@@ -28,12 +28,15 @@ public class Consultation implements Serializable {
     private boolean isEnabled = true;
 
     @ManyToOne
+    @JoinColumn(name = "dossier_medical_id")
     private DossierMedical dossierMedical;
 
     @ManyToOne
+    @JoinColumn(name = "rendez_vous_id")
     private RendezVous rendezVous;
 
     @ManyToOne
+    @JoinColumn(name = "dentiste_id")
     private Dentiste dentiste;
 
 }

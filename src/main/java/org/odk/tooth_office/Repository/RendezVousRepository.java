@@ -17,19 +17,19 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     /**
      * Récupère tous les rendez-vous d'un patient
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.patient.id_utilisateur = :patientId ORDER BY r.dateRdv DESC")
+    @Query("SELECT r FROM RendezVous r WHERE r.patient.id = :patientId ORDER BY r.dateRdv DESC")
     List<RendezVous> findByPatientId(@Param("patientId") Long patientId);
 
     /**
      * Récupère tous les rendez-vous d'un dentiste
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id_utilisateur = :dentisteId ORDER BY r.dateRdv DESC")
+    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id = :dentisteId ORDER BY r.dateRdv DESC")
     List<RendezVous> findByDentisteId(@Param("dentisteId") Long dentisteId);
 
     /**
      * Récupère les rendez-vous d'un dentiste pour une période donnée
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id_utilisateur = :dentisteId " +
+    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id = :dentisteId " +
             "AND r.dateRdv BETWEEN :debut AND :fin " +
             "ORDER BY r.dateRdv ASC")
     List<RendezVous> findRdvParDentisteEtPeriode(
@@ -41,7 +41,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     /**
      * Récupère les rendez-vous d'un patient pour une période donnée
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.patient.id_utilisateur = :patientId " +
+    @Query("SELECT r FROM RendezVous r WHERE r.patient.id = :patientId " +
             "AND r.dateRdv BETWEEN :debut AND :fin " +
             "ORDER BY r.dateRdv ASC")
     List<RendezVous> findRdvParPatientEtPeriode(
@@ -59,7 +59,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     /**
      * Vérifie si un patient a un rendez-vous à une date/heure donnée
      */
-    @Query("SELECT COUNT(r) > 0 FROM RendezVous r WHERE r.patient.id_utilisateur = :patientId " +
+    @Query("SELECT COUNT(r) > 0 FROM RendezVous r WHERE r.patient.id = :patientId " +
             "AND r.dateRdv = :dateRdv AND r.etatRdv != 'ANNULE'")
     boolean existsRendezVousAMemeHeure(
             @Param("patientId") Long patientId,
@@ -75,13 +75,13 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     /**
      * Récupère les rendez-vous d'une secrétaire
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.secretaire.id_utilisateur = :secretaireId ORDER BY r.dateRdv DESC")
+    @Query("SELECT r FROM RendezVous r WHERE r.secretaire.id = :secretaireId ORDER BY r.dateRdv DESC")
     List<RendezVous> findBySecretaireId(@Param("secretaireId") Long secretaireId);
 
     /**
      * Récupère les rendez-vous à venir pour un dentiste (à partir d'aujourd'hui)
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id_utilisateur = :dentisteId " +
+    @Query("SELECT r FROM RendezVous r WHERE r.dentiste.id = :dentisteId " +
             "AND r.dateRdv >= :dateActuelle AND r.etatRdv != 'ANNULE' " +
             "ORDER BY r.dateRdv ASC")
     List<RendezVous> findUpcomingRdvForDentiste(
@@ -92,7 +92,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     /**
      * Récupère les rendez-vous passés d'un patient
      */
-    @Query("SELECT r FROM RendezVous r WHERE r.patient.id_utilisateur = :patientId " +
+    @Query("SELECT r FROM RendezVous r WHERE r.patient.id = :patientId " +
             "AND r.dateRdv < :dateActuelle ORDER BY r.dateRdv DESC")
     List<RendezVous> findPastRdvForPatient(
             @Param("patientId") Long patientId,

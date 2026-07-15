@@ -25,7 +25,7 @@ ON DUPLICATE KEY UPDATE id_cabinet = id_cabinet;
 
 -- 3) Utilisateurs (table mère)
 INSERT INTO utilisateur
-(id_utilisateur, nom, prenom, email, mpd, adresse, role, telephone, statut_compte, created_at, updated_at, created_by, updated_by)
+(id_utilisateur, nom, prenom, email, mdp, adresse, role, telephone, statut_compte, created_at, updated_at, created_by, updated_by)
 VALUES
     (1, 'Mukendi', 'Sarah', 'chef@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000001', 'VALIDE', '2026-01-01', '2026-01-01 09:00:00', 'seed', 'seed'),
     (2, 'Kabasele', 'Jean', 'dentiste@toothoffice.cd', 'pass123', 'Kinshasa', 'DENTISTE', '243970000002', 'VALIDE', '2026-01-01', '2026-01-01 09:05:00', 'seed', 'seed'),
@@ -40,29 +40,29 @@ VALUES
 ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
 -- 4) Tables d'héritage JOINED
-INSERT INTO chef_cabinet (id_chef_cabinet)
+INSERT INTO chef_cabinet (id_utilisateur)
 VALUES (1), (5)
-ON DUPLICATE KEY UPDATE id_chef_cabinet = id_chef_cabinet;
+ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
-INSERT INTO dentiste (id_dentiste, specialite, id_cabinet)
+INSERT INTO dentiste (id_utilisateur, specialite, id_cabinet)
 VALUES (2, 'Orthodontie', 1),
        (6, 'Endodontie', 2)
-ON DUPLICATE KEY UPDATE id_dentiste = id_dentiste;
+ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
-INSERT INTO secretaire (id_secretaire, id_cabinet, id_chef_cabinet)
+INSERT INTO secretaire (id_utilisateur, id_cabinet, id_chef_cabinet)
 VALUES (3, 1, 1),
        (7, 2, 5)
-ON DUPLICATE KEY UPDATE id_secretaire = id_secretaire;
+ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
-INSERT INTO patient (id_patient, date_naissance)
+INSERT INTO patient (id_utilisateur, date_naissance)
 VALUES (4, '1995-04-14'),
        (8, '1992-08-20'),
        (9, '1988-02-11')
-ON DUPLICATE KEY UPDATE id_patient = id_patient;
+ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
-INSERT INTO admin_system (id_admin, niveau_privilege, date_derniere_connexion)
+INSERT INTO admin_system (id_utilisateur, niveau_privilege, date_derniere_connexion)
 VALUES (10, 'SUPER_ADMIN', '2026-06-20 18:30:00')
-ON DUPLICATE KEY UPDATE id_admin = id_admin;
+ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
 -- 5) Relations M:N de gestion de cabinet
 INSERT INTO chefcabinet_cabinet (id_chef_cabinet, id_cabinet)
@@ -100,7 +100,7 @@ VALUES
 ON DUPLICATE KEY UPDATE id_creneau = id_creneau;
 
 INSERT INTO consultation
-(id, date_consultation, update_at, diagnostic, notes, is_enabled, dossier_medical_id, rendez_vous_id_rendez_vous, dentiste_id_dentiste)
+(id, date_consultation, update_at, diagnostic, notes, is_enabled, dossier_medical_id, rendez_vous_id, dentiste_id)
 VALUES
     (1, '2026-06-20 10:20:00', '2026-06-20 10:45:00', 'RAS', 'Contrôle correct, hygiène recommandée', true, 1, 1, 2),
     (2, '2026-06-21 11:50:00', '2026-06-21 12:10:00', 'Tartre léger', 'Planifier un contrôle dans 6 mois', true, 2, 2, 2),
