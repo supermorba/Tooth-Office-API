@@ -30,6 +30,9 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     @Query("SELECT COUNT(c) > 0 FROM Consultation c WHERE c.dentiste.id = :dentiste ")
     boolean dentisteHadConsultation(@Param("dentiste") Long dentiste);
 
+    @Query("SELECT COUNT(c)>0 FROM Consultation c WHERE c.rendezVous.idRendezVous=:id")
+    public boolean isConsultationExistByRdv(@Param("id") Long id);
+
 
 
 }

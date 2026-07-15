@@ -2,6 +2,7 @@ package org.odk.tooth_office.Services.Interfaces;
 
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
+import org.odk.tooth_office.utils.Response;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface RendezVousService {
     // Pour le Dentiste et la Secrétaire : Consulter le planning du jour d'un praticien
     List<RendezVousResponseDTO> obtenirRdvParDentiste(Long dentisteId);
     List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id);
-
+    Response deleteRdv(Long idRdv);
 }

@@ -11,12 +11,9 @@ import org.odk.tooth_office.Entity.Patient;
 import org.odk.tooth_office.Entity.RendezVous;
 import org.odk.tooth_office.Enum.EtatRdv;
 import org.odk.tooth_office.Enum.TypeRdv;
-import org.odk.tooth_office.Repository.CreneauRepository;
-import org.odk.tooth_office.Repository.DentisteRepository;
-import org.odk.tooth_office.Repository.PatientRepository;
-import org.odk.tooth_office.Repository.RendezVousRepository;
-import org.odk.tooth_office.Repository.SecretaireRepository;
+import org.odk.tooth_office.Repository.*;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
+import org.odk.tooth_office.utils.Response;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +33,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     private final CreneauRepository creneauRepository;
     private CreneauServiceImpl creneauService;
     private final SecretaireRepository secretaireRepository;
+    private final ConsultationRepository consultationRepository;
 
     /**
      * Prendre un rendez-vous
@@ -197,6 +195,27 @@ public class RendezVousServiceImpl implements RendezVousService {
         return rendezVous.stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Response deleteRdv(Long idRdv) {
+        try {
+
+            if (!rendezVousRepository.existsById(idRdv)) {
+                return Response.error("Ce rendez-vous n'existe pas.");
+            }
+            if(consultationRepository.isConsultationExistByRdv(idRdv)){
+                return Response.error("Impossible!!!! Ce rendez-vous possède deja une consultation .");
+            }
+
+            rendezVousRepository.deleteById(idRdv);
+
+            return Response.succes("Rendez-vous supprimé avec succès.", true);
+
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la suppression du rendez-vous.");
+        }
     }
 
     /**
