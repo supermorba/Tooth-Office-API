@@ -5,11 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.odk.tooth_office.DTO.CreneauDtoSurplace;
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
-import org.odk.tooth_office.Entity.Creneau;
-import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Entity.Patient;
-import org.odk.tooth_office.Entity.RendezVous;
+import org.odk.tooth_office.Entity.*;
 import org.odk.tooth_office.Enum.EtatRdv;
+import org.odk.tooth_office.Enum.RoleEnum;
 import org.odk.tooth_office.Enum.TypeRdv;
 import org.odk.tooth_office.Repository.*;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
@@ -19,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,6 +33,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     private CreneauServiceImpl creneauService;
     private final SecretaireRepository secretaireRepository;
     private final ConsultationRepository consultationRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
     /**
      * Prendre un rendez-vous
@@ -189,8 +189,22 @@ public class RendezVousServiceImpl implements RendezVousService {
 
     @Override
     public List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id) {
-        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet(id);
+        Optional<Utilisateur> utilisateurOpt= utilisateurRepository.findById(id);
+        if(utilisateurOpt.isEmpty()){
+            throw new RuntimeException("Cet utilisateur n'existe pas !!!!");
+        }
+        Utilisateur utilisateur = utilisateurOpt.get();
 
+        if(utilisateur.getRole() != RoleEnum.SECRETAIRE){
+            throw new RuntimeException("Vous n'êtes pas autorisé à voir ces infos !!!!");
+        }
+        Optional<Secretaire> secretaireOpt = secretaireRepository.findById(utilisateur.getId_utilisateur());
+        if(secretaireOpt.isEmpty()){
+            throw new RuntimeException("Cet secretaire n'existe pas !!!!");
+        }
+        Secretaire secretaire = secretaireOpt.get();
+
+        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet((long) secretaire.getCabinet().getIdCabinet());
 
         return rendezVous.stream()
                 .map(this::mapToResponseDTO)
