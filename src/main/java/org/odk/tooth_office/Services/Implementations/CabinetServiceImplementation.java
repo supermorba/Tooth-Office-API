@@ -47,6 +47,7 @@ public class CabinetServiceImplementation implements CabinetService {
     }
 
     @Override
+    @Transactional
     public List<CabinetResponseDTO> recupererTous() {
         List<CabinetResponseDTO> listCabinetDto= new ArrayList<>();
         listCabinetDto = cabinetRepository.findAll().stream()
@@ -55,18 +56,21 @@ public class CabinetServiceImplementation implements CabinetService {
     }
 
     @Override
+    @Transactional
     public Optional<CabinetResponseDTO> recupererParId(Integer id) {
         return cabinetRepository.findById(id)
                 .map(cabinetMapper::toCabinet);
     }
 
     @Override
+    @Transactional
     public Optional<CabinetResponseDTO> recupererParNom(String nomCabinet) {
         return cabinetRepository.findByNomCabinet(nomCabinet)
                 .map(cabinetMapper::toCabinet);
     }
 
     @Override
+    @Transactional
     public CabinetResponseDTO modifierCabinet(Integer id, CabinetDTO dto) {
         Cabinet cabinetSauvegarde = cabinetRepository.findById(id).map(existing -> {
             existing.setNomCabinet(dto.getNomCabinet());
@@ -77,15 +81,7 @@ public class CabinetServiceImplementation implements CabinetService {
             return cabinetRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + id));
 
-        CabinetResponseDTO response = new CabinetResponseDTO();
-        response.setIdCabinet(cabinetSauvegarde.getIdCabinet());
-        response.setNomCabinet(cabinetSauvegarde.getNomCabinet());
-        response.setTel(cabinetSauvegarde.getTel());
-        response.setAdresse(cabinetSauvegarde.getAdresse());
-        response.setLogo(cabinetSauvegarde.getLogo());
-        response.setDescription(cabinetSauvegarde.getDescription());
-
-        return response;
+        return cabinetMapper.toCabinet(cabinetSauvegarde);
     }
 
 
@@ -104,7 +100,7 @@ public class CabinetServiceImplementation implements CabinetService {
     @Transactional
     public List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet) {
         return cabinetRepository.findById(idCabinet)
-                .map(e->e.getSecretaires().stream().map(secretaireMapper::toResponseDTO))
+                .map(e->e.getSecretaires().stream().map(SecretaireMapper::toResponseDTO))
                 .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
@@ -117,7 +113,7 @@ public class CabinetServiceImplementation implements CabinetService {
         return cabinet.getSecretaires().stream()
                 .filter(secretaire -> secretaire.getIdSecretaire() != null
                         && secretaire.getIdSecretaire().equals(idSecretaire.longValue()))
-                .map(secretaireMapper::toResponseDTO).findFirst();
+                .map(SecretaireMapper::toResponseDTO).findFirst();
     }
     @Override
     @Transactional

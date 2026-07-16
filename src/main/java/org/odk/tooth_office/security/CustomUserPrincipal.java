@@ -29,12 +29,14 @@ public class CustomUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return utilisateur.getMpd();
+        return utilisateur.getMdp();
     }
 
     @Override
     public String getUsername() {
-        return utilisateur.getEmail();
+        // L'email peut être null depuis la modification de l'inscription.
+        // On retourne le téléphone en fallback car il est toujours présent.
+        return utilisateur.getEmail() != null ? utilisateur.getEmail() : utilisateur.getTelephone();
     }
 
     @Override
