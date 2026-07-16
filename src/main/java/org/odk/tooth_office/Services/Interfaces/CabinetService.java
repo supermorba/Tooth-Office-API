@@ -18,7 +18,6 @@ public interface CabinetService {
     Optional<CabinetResponseDTO> recupererParNom(String nomCabinet);
     CabinetResponseDTO modifierCabinet(Integer id, CabinetDTO dto);
     void supprimerCabinet(Integer id);
-    List<DentisteResponseDTO> afficherDentistesParCabinet(Integer idCabinet);
     List<SecretaireResponseDTO> afficherSecretairesParCabinet(Integer idCabinet);
     Optional<SecretaireResponseDTO> afficherUnSecretaireParCabinet(Integer idCabinet, Integer idSecretaire);
     Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);

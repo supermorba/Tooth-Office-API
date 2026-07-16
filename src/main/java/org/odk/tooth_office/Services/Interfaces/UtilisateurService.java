@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Services.Interfaces;
 
+import org.odk.tooth_office.DTO.DentisteResponseDTO;
 import org.odk.tooth_office.DTO.UtilisateurDTO;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface UtilisateurService {
     UtilisateurDTO create(UtilisateurDTO dto);
     Optional<UtilisateurDTO> update(Long id, UtilisateurDTO dto);
     boolean delete(Long id);
+
+
 }

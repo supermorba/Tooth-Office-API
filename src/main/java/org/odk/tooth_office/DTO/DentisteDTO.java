@@ -5,3 +5,4 @@ public class DentisteDTO extends  UtilisateurDTO {
     private String specialite;
 
 }
+

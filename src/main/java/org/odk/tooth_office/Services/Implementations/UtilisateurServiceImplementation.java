@@ -1,8 +1,10 @@
 package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.DentisteResponseDTO;
 import org.odk.tooth_office.DTO.UtilisateurDTO;
 import org.odk.tooth_office.Entity.Utilisateur;
+import org.odk.tooth_office.Mapper.DentisteMapper;
 import org.odk.tooth_office.Repository.UtilisateurRepository;
 import org.odk.tooth_office.Services.Interfaces.UtilisateurService;
 import org.odk.tooth_office.security.PasswordService;

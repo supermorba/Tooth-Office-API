@@ -77,7 +77,6 @@ public class CabinetServiceImplementation implements CabinetService {
             return cabinetRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + id));
 
-        // Conversion de l'entité vers CabinetResponseDTO
         CabinetResponseDTO response = new CabinetResponseDTO();
         response.setIdCabinet(cabinetSauvegarde.getIdCabinet());
         response.setNomCabinet(cabinetSauvegarde.getNomCabinet());
@@ -85,7 +84,6 @@ public class CabinetServiceImplementation implements CabinetService {
         response.setAdresse(cabinetSauvegarde.getAdresse());
         response.setLogo(cabinetSauvegarde.getLogo());
         response.setDescription(cabinetSauvegarde.getDescription());
-        // Ajoutez ici les autres champs de CabinetResponseDTO si nécessaire (listes, etc.)
 
         return response;
     }
@@ -100,13 +98,7 @@ public class CabinetServiceImplementation implements CabinetService {
         cabinetRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public List<DentisteResponseDTO> afficherDentistesParCabinet(Integer idCabinet) {
-        return cabinetRepository.findById(idCabinet)
-                .map(c->c.getDentistes().stream().map(dentisteMapper::toResponseDTO))
-                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
-    }
+
 
     @Override
     @Transactional
@@ -147,8 +139,6 @@ public class CabinetServiceImplementation implements CabinetService {
             Integer idCabinet,
             Long idAvis
     ) {
-
-
         Cabinet cabinet = cabinetRepository.findById(idCabinet)
                 .orElseThrow(() ->
                         new RuntimeException(

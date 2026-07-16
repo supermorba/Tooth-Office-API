@@ -21,6 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/cabinets")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CabinetController {
 
     private final CabinetService cabinetService;
@@ -62,10 +63,6 @@ public class CabinetController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/dentistes")
-    public ResponseEntity<List<DentisteResponseDTO>> afficherDentistesParCabinet(@PathVariable Integer id) {
-        return ResponseEntity.ok(cabinetService.afficherDentistesParCabinet(id));
-    }
 
     @GetMapping("/{id}/secretaires")
     public ResponseEntity<List<SecretaireResponseDTO>> afficherSecretairesParCabinet(@PathVariable Integer id) {
