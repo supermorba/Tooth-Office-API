@@ -10,7 +10,9 @@ import org.odk.tooth_office.Enum.EtatRdv;
 import org.odk.tooth_office.Enum.RoleEnum;
 import org.odk.tooth_office.Enum.TypeRdv;
 import org.odk.tooth_office.Repository.*;
+import org.odk.tooth_office.Services.Interfaces.CreneauService;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
+import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.odk.tooth_office.utils.Response;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +32,11 @@ public class RendezVousServiceImpl implements RendezVousService {
     private final PatientRepository patientRepository;
     private final DentisteRepository dentisteRepository;
     private final CreneauRepository creneauRepository;
-    private CreneauServiceImpl creneauService;
+    private final CreneauService creneauService;
     private final SecretaireRepository secretaireRepository;
     private final ConsultationRepository consultationRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final SecretaireService  secretaireService;
 
     /**
      * Prendre un rendez-vous
@@ -42,7 +45,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     @Transactional
     public RendezVousResponseDTO prendreRendezVous(RendezVousRequestDTO dto) {
 
-
+        System.out.println("Le service va enregistrer");
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient introuvable avec l'ID : " + dto.getPatientId()));
 
@@ -62,14 +65,15 @@ public class RendezVousServiceImpl implements RendezVousService {
                     false,
                     dto.getDentisteId()
             );
-            if(creneauRepository.existsCreneauAtDateTimeForDentiste(creneauDto.dentisteId(), creneauDto.date(), creneauDto.heureDebut())){
-                throw new RuntimeException("Ce creneau est deja reservé !!!!");
-            }
+//            if(creneauRepository.existsCreneauAtDateTimeForDentiste(creneauDto.dentisteId(), creneauDto.date(), creneauDto.heureDebut())){
+//                throw new RuntimeException("Ce creneau est deja reservé !!!!");
+//            }
 
             creneau = creneauService.creerCreneauSurplace(creneauDto);
+            System.out.println("creneau creer");
 
         } else {
-
+            System.out.println("rdv par patient");
             // Cas classique : réservation d'un créneau existant
             creneau = creneauRepository.findById(dto.getCreneauId())
                     .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + dto.getCreneauId()));
@@ -202,9 +206,10 @@ public class RendezVousServiceImpl implements RendezVousService {
         if(secretaireOpt.isEmpty()){
             throw new RuntimeException("Cet secretaire n'existe pas !!!!");
         }
-        Secretaire secretaire = secretaireOpt.get();
+        Long idCabinet= secretaireService.getCabinetIdBySecretaireId(utilisateur.getId_utilisateur());
 
-        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet((long) secretaire.getCabinet().getIdCabinet());
+        System.out.println("id du cabinet niveau rdv "+ idCabinet);
+        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet(idCabinet);
 
         return rendezVous.stream()
                 .map(this::mapToResponseDTO)

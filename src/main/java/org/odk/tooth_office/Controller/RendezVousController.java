@@ -29,7 +29,7 @@ public class RendezVousController {
     /**
      * Prendre un rendez-vous
      */
-    @PostMapping
+    @PostMapping("/prendre")
     @Operation(summary = "Prendre un rendez-vous", description = "Permet au patient ou à la secrétaire de prendre un rendez-vous")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Rendez-vous créé avec succès"),
@@ -45,7 +45,7 @@ public class RendezVousController {
     /**
      * Annuler un rendez-vous
      */
-    @DeleteMapping("/{rdvId}")
+    @PutMapping("/{rdvId}/annuler")
     @Operation(summary = "Annuler un rendez-vous", description = "Permet d'annuler un rendez-vous existant")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Rendez-vous annulé avec succès"),
@@ -122,4 +122,15 @@ public class RendezVousController {
 
 
     }
+
+    @DeleteMapping("/delete/{id}")
+    public Response delRdv(@PathVariable Long id){
+        try{
+            return rendezVousService.deleteRdv(id);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+    }
+
 }

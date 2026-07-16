@@ -67,6 +67,11 @@ public class CabinetController {
         return ResponseEntity.ok(cabinetService.afficherDentistesParCabinet(id));
     }
 
+    @GetMapping("/dentistes/{id}")
+    public ResponseEntity<List<DentisteResponseDTO>> getDentistesParCabinet(@PathVariable Long id) {
+        return ResponseEntity.ok(cabinetService.getDentistesCabinetSecretaire(id));
+    }
+
     @GetMapping("/{id}/secretaires")
     public ResponseEntity<List<SecretaireResponseDTO>> afficherSecretairesParCabinet(@PathVariable Integer id) {
         return ResponseEntity.ok(cabinetService.afficherSecretairesParCabinet(id));
