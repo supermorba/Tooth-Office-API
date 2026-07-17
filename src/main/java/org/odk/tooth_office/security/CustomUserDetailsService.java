@@ -16,7 +16,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Cherche d'abord par email, puis par téléphone si non trouvé
         Utilisateur utilisateur = utilisateurRepository.findByEmail(username)
+                .or(() -> utilisateurRepository.findByTelephone(username))
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable : " + username));
 
         return new CustomUserPrincipal(utilisateur);

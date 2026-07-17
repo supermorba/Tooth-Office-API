@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,11 +14,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     // Intercepte les conflits d'email
     @ExceptionHandler(EmailDejaUtiliseException.class)
     public ResponseEntity<Map<String, Object>> handleEmailDejaUtilise(EmailDejaUtiliseException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "status", 409,
+                "error", "Conflict",
+                "message", ex.getMessage(),
+                "timestamp", LocalDateTime.now().toString()
+        ));
+    }
+
+    // Intercepte les conflits de téléphone
+    @ExceptionHandler(TelephoneDejaUtiliseException.class)
+    public ResponseEntity<Map<String, Object>> handleTelephoneDejaUtilise(TelephoneDejaUtiliseException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
                 "status", 409,
                 "error", "Conflict",
@@ -69,6 +82,7 @@ public class GlobalExceptionHandler {
     // Intercepte toutes les autres exceptions non prévues
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+        log.error("Erreur interne non gérée", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "status", 500,
                 "error", "Internal Server Error",

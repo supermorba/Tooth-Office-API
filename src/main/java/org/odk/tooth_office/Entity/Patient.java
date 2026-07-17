@@ -21,7 +21,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "Patient")
-@PrimaryKeyJoinColumn(name = "id_patient")
+@PrimaryKeyJoinColumn(name = "id_utilisateur")
 public class Patient extends Utilisateur {
 
     @Column(name = "date_naissance")

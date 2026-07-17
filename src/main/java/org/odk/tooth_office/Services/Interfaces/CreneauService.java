@@ -1,6 +1,8 @@
 package org.odk.tooth_office.Services.Interfaces;
 
 import org.odk.tooth_office.DTO.CreneauDTO;
+import org.odk.tooth_office.DTO.CreneauDtoSurplace;
+import org.odk.tooth_office.Entity.Creneau;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,4 +19,7 @@ public interface CreneauService {
 
     // Libérer un créneau suite à une annulation
     void libererCreneau(Long idCreneau);
+    Creneau creerCreneauSurplace(CreneauDtoSurplace dto);
+
+
 }

@@ -78,8 +78,8 @@ public class AdminSystemServiceImplementation implements AdminSystemService {
         adminSystem.setNom(dto.getNom());
         adminSystem.setPrenom(dto.getPrenom());
         adminSystem.setEmail(dto.getEmail());
-        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
-            adminSystem.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            adminSystem.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
         }
         adminSystem.setAdresse(dto.getAdresse());
         adminSystem.setRole(dto.getRole());

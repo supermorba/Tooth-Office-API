@@ -3,6 +3,7 @@ package org.odk.tooth_office.auth.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +23,14 @@ public class RegisterRequestDTO {
     private String prenom;
 
     @Email(message = "L'email doit être valide")
-    @NotBlank(message = "L'email est obligatoire")
     private String email;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
     @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String motDePasse;
 
-    @NotBlank(message = "La confirmation du mot de passe est obligatoire")
-    private String confirmationMotDePasse;
-
+    @NotBlank(message = "Le numéro de téléphone est obligatoire")
+    @Pattern(regexp = "^[+]?[0-9]{8,15}$", message = "Le numéro de téléphone doit être valide")
     private String telephone;
 
     private String adresse;

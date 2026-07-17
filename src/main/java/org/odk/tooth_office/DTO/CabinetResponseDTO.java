@@ -16,4 +16,6 @@ public class CabinetResponseDTO {
     private String adresse;
     private String logo;
     private String description;
+    private Double noteMoyenne;
+    private long nombreAvis;
 }
