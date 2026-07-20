@@ -1,8 +1,11 @@
 package org.odk.tooth_office.Services.Implementations;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.odk.tooth_office.DTO.CreneauDTO;
+import org.odk.tooth_office.DTO.CreneauDtoSurplace;
+import org.odk.tooth_office.DTO.MapperDTO.CreneauMapper;
 import org.odk.tooth_office.Entity.Creneau;
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Repository.CreneauRepository;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class CreneauServiceImpl implements CreneauService {
 
+    private final CreneauMapper creneauMapper;
     private final CreneauRepository creneauRepository;
     private final DentisteRepository dentisteRepository;
 
@@ -134,6 +138,18 @@ public class CreneauServiceImpl implements CreneauService {
         creneau.setDisponible(true);
         creneauRepository.save(creneau);
         log.info("Créneau {} libéré avec succès", idCreneau);
+    }
+
+    @Override
+    public Creneau creerCreneauSurplace(CreneauDtoSurplace dto) {
+        Dentiste dentiste = dentisteRepository.findById(dto.dentisteId())
+                .orElseThrow(() -> new EntityNotFoundException("Dentiste introuvable"));
+
+        Creneau creneau = creneauMapper.toEntity(dto);
+        creneau.setDentiste(dentiste);
+
+        return creneauRepository.save(creneau);
+
     }
 
     /**

@@ -29,9 +29,6 @@ public class RegisterRequestDTO {
     @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String motDePasse;
 
-    @NotBlank(message = "La confirmation du mot de passe est obligatoire")
-    private String confirmationMotDePasse;
-
     @NotBlank(message = "Le numéro de téléphone est obligatoire")
     @Pattern(regexp = "^[+]?[0-9]{8,15}$", message = "Le numéro de téléphone doit être valide")
     private String telephone;
