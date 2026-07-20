@@ -14,10 +14,13 @@ import org.odk.tooth_office.Services.Interfaces.CreneauService;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
 import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.odk.tooth_office.utils.Response;
+import org.odk.tooth_office.utils.SearchParams;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -234,6 +237,59 @@ public class RendezVousServiceImpl implements RendezVousService {
         } catch (Exception e) {
             e.printStackTrace(System.out);
             return Response.error("Erreur lors de la suppression du rendez-vous.");
+        }
+    }
+
+    @Override
+    public Response getRdvByDentiste(Long dentisteId) {
+        try {
+            List<RendezVous> rendezVous= rendezVousRepository.getDentisteRdv(dentisteId);
+            return Response.succes("La liste des rdv du dentiste", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv de ce dentiste.");
+        }
+    }
+
+    @Override
+    public Response getRdvByPatient(SearchParams searchParams) {
+        try {
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            List<RendezVous> rendezVous= rendezVousRepository.getPatientRdv(searchParams.getPatient(), idCabinet);
+            return Response.succes("La liste des rdv du patient", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv de ce patient du cabinet.");
+        }
+    }
+
+    @Override
+    public Response getRdvByEtat(SearchParams searchParams) {
+        try {
+            EtatRdv etat= EtatRdv.valueOf(searchParams.getEtatRdv());
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            List<RendezVous> rendezVous= rendezVousRepository.getRdvByEtatRdv(etat, idCabinet);
+            return Response.succes("La liste des rdv en fonction de cet etat:", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv a cet etat.");
+        }
+    }
+
+    @Override
+    public Response getRdvBydates(SearchParams searchParams) {
+        try {
+
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            LocalDateTime debut = searchParams.getDateDebut().atStartOfDay();
+            LocalDateTime fin = searchParams.getDateFin().atTime(LocalTime.MAX);
+
+
+            List<RendezVous> rendezVous= rendezVousRepository.getRdvBetweenDate(debut, fin, idCabinet);
+            return Response.succes("La liste des rdv dans cette période:", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv dans cette période.");
         }
     }
 
