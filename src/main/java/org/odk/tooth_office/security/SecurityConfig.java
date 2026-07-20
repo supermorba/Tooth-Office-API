@@ -42,6 +42,7 @@ public class SecurityConfig {
                         auth->auth.requestMatchers(
                                 "/api/**"
                         ).permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/cabinets", "/api/cabinets/**").permitAll()
                         .requestMatchers("/api/admins/**", "/api/utilisateurs/**").hasRole("ADMIN_SYSTEM")
                         .requestMatchers("/api/chefs-cabinet/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
@@ -55,6 +56,7 @@ public class SecurityConfig {
                         ).hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "DENTISTE")
                         .requestMatchers("/api/abonnements/**", "/api/plans-abonnement/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
                         .anyRequest().authenticated()
+
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
