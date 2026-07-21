@@ -10,4 +10,5 @@ public class DashboardDTO {
     private long patients;
     private long dentistes;
     private long cabinets;
+    private long nbreAbonnements;
 }
