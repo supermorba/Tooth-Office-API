@@ -112,7 +112,7 @@ Le système d'authentification repose sur les composants suivants répartis dans
 
 | Nom de la classe / Fichier | Emplacement | Rôle Principal |
 | :--- | :--- | :--- |
-| [Utilisateur](src/main/java/org/odk/tooth_office/Entity/Utilisateur.java) | `Entity` | Entité JPA représentant la table mère `Utilisateur` en base de données. Elle contient l'email, le mot de passe (`mpd`), le rôle (`RoleEnum`) et le statut (`StatutCompte`). |
+| [Utilisateur](src/main/java/org/odk/tooth_office/Entity/Utilisateur.java) | `Entity` | Entité JPA représentant la table mère `Utilisateur` en base de données. Elle contient l'email, le mot de passe (`mdp`), le rôle (`RoleEnum`) et le statut (`StatutCompte`). |
 | [CustomUserPrincipal](src/main/java/org/odk/tooth_office/security/CustomUserPrincipal.java) | `security` | Implémentation de l'interface `UserDetails` de Spring Security. Fait le pont entre l'entité JPA `Utilisateur` et le framework de sécurité. Définit les méthodes d'accès (rôles préfixés par `ROLE_`, statut du compte, etc.). |
 | [CustomUserDetailsService](src/main/java/org/odk/tooth_office/security/CustomUserDetailsService.java) | `security` | Implémentation de `UserDetailsService`. Utilisée par Spring Security pour charger l'utilisateur depuis la base de données via son adresse email. |
 | [JwtService](src/main/java/org/odk/tooth_office/security/JwtService.java) | `security` | Service utilitaire pour les opérations liées au JWT : génération de token, extraction des claims (sujet, rôle, identifiant, etc.), et vérification de la date d'expiration. |
@@ -229,7 +229,7 @@ Lors de la phase initiale de développement, la base de données contenait des d
     *   Si ces préfixes ne sont pas détectés, l'application considère que le mot de passe stocké est encore en clair et effectue une comparaison directe de chaînes de caractères (`rawPassword.equals(storedPassword)`).
 2.  **Mise à niveau automatique (Rehash on login)** :
     Dans [AuthServiceImplementation.java](src/main/java/org/odk/tooth_office/auth/AuthServiceImplementation.java), après une connexion réussie d'un compte avec un mot de passe en clair :
-    *   Le système détecte le besoin de hachage à l'aide de `passwordService.needsRehash(utilisateur.getMpd())`.
+    *   Le système détecte le besoin de hachage à l'aide de `passwordService.needsRehash(utilisateur.getmdp())`.
     *   Le mot de passe en clair fourni par l'utilisateur lors de la connexion est haché à la volée avec BCrypt.
     *   Le mot de passe haché remplace le mot de passe en clair et est enregistré de manière persistante en base de données.
     *   Les connexions ultérieures de cet utilisateur s'effectueront via le hachage BCrypt standard.

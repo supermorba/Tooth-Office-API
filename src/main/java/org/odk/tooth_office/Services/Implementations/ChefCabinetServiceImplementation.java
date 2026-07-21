@@ -83,8 +83,8 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
         chefCabinet.setNom(dto.getNom());
         chefCabinet.setPrenom(dto.getPrenom());
         chefCabinet.setEmail(dto.getEmail());
-        if (dto.getMpd() != null && !dto.getMpd().isBlank()) {
-            chefCabinet.setMpd(passwordService.encodeIfNeeded(dto.getMpd()));
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            chefCabinet.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
         }
         chefCabinet.setAdresse(dto.getAdresse());
         chefCabinet.setRole(dto.getRole());
