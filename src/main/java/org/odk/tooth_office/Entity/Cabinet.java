@@ -7,11 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.List;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Entité représentant un cabinet dentaire.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Entity
+@Table(name = "Cabinet")
 public class Cabinet {
 
     @Id

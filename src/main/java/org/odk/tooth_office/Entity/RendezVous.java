@@ -10,7 +10,6 @@ import org.odk.tooth_office.Enum.TypeRdv;
 
 import java.time.LocalDateTime;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter

@@ -20,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/cabinets")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CabinetController {
 
     private final CabinetService cabinetService;
