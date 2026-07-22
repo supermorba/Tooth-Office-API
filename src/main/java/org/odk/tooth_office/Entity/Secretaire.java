@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "Secretaire")
-@PrimaryKeyJoinColumn(name = "id_secretaire")
+@PrimaryKeyJoinColumn(name = "id_utilisateur")
 public class Secretaire extends Utilisateur {
 
     @ManyToOne(fetch = FetchType.LAZY)

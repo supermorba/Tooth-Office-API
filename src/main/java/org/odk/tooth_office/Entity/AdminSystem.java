@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "AdminSystem")
-@PrimaryKeyJoinColumn(name = "id_admin")
+@PrimaryKeyJoinColumn(name = "id_utilisateur")
 public class AdminSystem extends Utilisateur {
 
     @Column(length = 100)

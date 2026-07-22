@@ -44,7 +44,7 @@ public class Utilisateur {
      * Mot de passe (à hacher en production)
      */
     @Column(nullable = false, length = 100)
-    private String mpd;
+    private String mdp;
 
     @Column(length = 255)
     private String adresse;
@@ -70,5 +70,13 @@ public class Utilisateur {
     @Column(length = 100)
     private String updatedBy;
 
+    // JPA compatibility method - some frameworks expect getId()
+    public Long getId() {
+        return id_utilisateur;
+    }
+
+    public void setId(Long id) {
+        this.id_utilisateur = id;
+    }
 
 }

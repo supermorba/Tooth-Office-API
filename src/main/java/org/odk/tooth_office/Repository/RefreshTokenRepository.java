@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.Optional;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
@@ -20,12 +21,12 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
      */
     @Modifying
     @Query("UPDATE RefreshToken rt SET rt.revoked = true WHERE rt.utilisateur = :utilisateur AND rt.revoked = false")
-    void revokeAllByUtilisateur(Utilisateur utilisateur);
+    void revokeAllByUtilisateur(@Param("utilisateur") Utilisateur utilisateur);
 
     /**
      * Supprime les tokens expirés ou révoqués (utile pour une tâche de nettoyage).
      */
     @Modifying
     @Query("DELETE FROM RefreshToken rt WHERE rt.expiresAt < :now OR rt.revoked = true")
-    void deleteExpiredAndRevoked(Instant now);
+    void deleteExpiredAndRevoked(@Param("now") Instant now);
 }
