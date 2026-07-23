@@ -46,16 +46,14 @@ public class RendezVousController {
     /**
      * Annuler un rendez-vous
      */
-    @PutMapping("/{rdvId}/annuler")
+    @GetMapping("/{rdvId}/annuler")
     @Operation(summary = "Annuler un rendez-vous", description = "Permet d'annuler un rendez-vous existant")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Rendez-vous annulé avec succès"),
             @ApiResponse(responseCode = "404", description = "Rendez-vous non trouvé"),
             @ApiResponse(responseCode = "400", description = "Le rendez-vous ne peut pas être annulé")
     })
-    public ResponseEntity<Void> annulerRendezVous(
-            @Parameter(description = "ID du rendez-vous à annuler")
-            @PathVariable Long rdvId) {
+    public ResponseEntity<Void> annulerRendezVous(@Parameter(description = "ID du rendez-vous à annuler") @PathVariable Long rdvId) {
         rendezVousService.annulerRendezVous(rdvId);
         return ResponseEntity.noContent().build();
     }
