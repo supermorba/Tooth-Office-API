@@ -29,10 +29,7 @@ public class PlanAbonnementService implements IPlanAbonnementService {
         p.setMaxCabinet(planAbonnementdto.maxCabinet());
         p.setMaxDentistes(planAbonnementdto.maxDentistes());
         PlanAbonnement plan = repository.save(p);
-        PlanAbonnementDTO dto = PlanAbonnementDTO
-                                    .builder()
-                .nom(plan.getNom())
-                .build();
+        PlanAbonnementDTO dto = PlanAbonnementDTO.builder().nom(plan.getNom()).build();
 
 
         return dto;

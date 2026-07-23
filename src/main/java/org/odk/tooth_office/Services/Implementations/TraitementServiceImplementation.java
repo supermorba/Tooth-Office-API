@@ -17,6 +17,7 @@ public class TraitementServiceImplementation implements TraitementService {
 
     @Override
     public List<Traitement> getAll() {
+
         return repository.findAll();
     }
 
@@ -30,7 +31,6 @@ public class TraitementServiceImplementation implements TraitementService {
     public Traitement save(Traitement traitement) {
         return repository.save(traitement);
     }
-
 
 
     @Override

@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 
 @Getter @Setter
-public class TraitementDTO implements Serializable {
+public class TraitementDTO {
 
     @Schema(description = "Type du traitement", example = "Orthodontie")
     @NotBlank
