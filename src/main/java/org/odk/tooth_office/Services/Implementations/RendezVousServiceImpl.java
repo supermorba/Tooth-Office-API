@@ -5,20 +5,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.odk.tooth_office.DTO.CreneauDtoSurplace;
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
-import org.odk.tooth_office.Entity.Creneau;
-import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Entity.Patient;
-import org.odk.tooth_office.Entity.RendezVous;
+import org.odk.tooth_office.Entity.*;
 import org.odk.tooth_office.Enum.EtatRdv;
+import org.odk.tooth_office.Enum.RoleEnum;
 import org.odk.tooth_office.Enum.TypeRdv;
 import org.odk.tooth_office.Repository.*;
+import org.odk.tooth_office.Services.Interfaces.CreneauService;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
+import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.odk.tooth_office.utils.Response;
+import org.odk.tooth_office.utils.SearchParams;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,9 +35,11 @@ public class RendezVousServiceImpl implements RendezVousService {
     private final PatientRepository patientRepository;
     private final DentisteRepository dentisteRepository;
     private final CreneauRepository creneauRepository;
-    private CreneauServiceImpl creneauService;
+    private final CreneauService creneauService;
     private final SecretaireRepository secretaireRepository;
     private final ConsultationRepository consultationRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final SecretaireService  secretaireService;
 
     /**
      * Prendre un rendez-vous
@@ -42,7 +48,7 @@ public class RendezVousServiceImpl implements RendezVousService {
     @Transactional
     public RendezVousResponseDTO prendreRendezVous(RendezVousRequestDTO dto) {
 
-
+        System.out.println("Le service va enregistrer");
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient introuvable avec l'ID : " + dto.getPatientId()));
 
@@ -62,14 +68,15 @@ public class RendezVousServiceImpl implements RendezVousService {
                     false,
                     dto.getDentisteId()
             );
-            if(creneauRepository.existsCreneauAtDateTimeForDentiste(creneauDto.dentisteId(), creneauDto.date(), creneauDto.heureDebut())){
-                throw new RuntimeException("Ce creneau est deja reservé !!!!");
-            }
+//            if(creneauRepository.existsCreneauAtDateTimeForDentiste(creneauDto.dentisteId(), creneauDto.date(), creneauDto.heureDebut())){
+//                throw new RuntimeException("Ce creneau est deja reservé !!!!");
+//            }
 
             creneau = creneauService.creerCreneauSurplace(creneauDto);
+            System.out.println("creneau creer");
 
         } else {
-
+            System.out.println("rdv par patient");
             // Cas classique : réservation d'un créneau existant
             creneau = creneauRepository.findById(dto.getCreneauId())
                     .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + dto.getCreneauId()));
@@ -189,8 +196,23 @@ public class RendezVousServiceImpl implements RendezVousService {
 
     @Override
     public List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id) {
-        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet(id);
+        Optional<Utilisateur> utilisateurOpt= utilisateurRepository.findById(id);
+        if(utilisateurOpt.isEmpty()){
+            throw new RuntimeException("Cet utilisateur n'existe pas !!!!");
+        }
+        Utilisateur utilisateur = utilisateurOpt.get();
 
+        if(utilisateur.getRole() != RoleEnum.SECRETAIRE){
+            throw new RuntimeException("Vous n'êtes pas autorisé à voir ces infos !!!!");
+        }
+        Optional<Secretaire> secretaireOpt = secretaireRepository.findById(utilisateur.getId_utilisateur());
+        if(secretaireOpt.isEmpty()){
+            throw new RuntimeException("Cet secretaire n'existe pas !!!!");
+        }
+        Long idCabinet= secretaireService.getCabinetIdBySecretaireId(utilisateur.getId_utilisateur());
+
+        System.out.println("id du cabinet niveau rdv "+ idCabinet);
+        List<RendezVous> rendezVous= rendezVousRepository.findRdvByCabinet(idCabinet);
 
         return rendezVous.stream()
                 .map(this::mapToResponseDTO)
@@ -215,6 +237,59 @@ public class RendezVousServiceImpl implements RendezVousService {
         } catch (Exception e) {
             e.printStackTrace(System.out);
             return Response.error("Erreur lors de la suppression du rendez-vous.");
+        }
+    }
+
+    @Override
+    public Response getRdvByDentiste(Long dentisteId) {
+        try {
+            List<RendezVous> rendezVous= rendezVousRepository.getDentisteRdv(dentisteId);
+            return Response.succes("La liste des rdv du dentiste", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv de ce dentiste.");
+        }
+    }
+
+    @Override
+    public Response getRdvByPatient(SearchParams searchParams) {
+        try {
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            List<RendezVous> rendezVous= rendezVousRepository.getPatientRdv(searchParams.getPatient(), idCabinet);
+            return Response.succes("La liste des rdv du patient", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv de ce patient du cabinet.");
+        }
+    }
+
+    @Override
+    public Response getRdvByEtat(SearchParams searchParams) {
+        try {
+            EtatRdv etat= EtatRdv.valueOf(searchParams.getEtatRdv());
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            List<RendezVous> rendezVous= rendezVousRepository.getRdvByEtatRdv(etat, idCabinet);
+            return Response.succes("La liste des rdv en fonction de cet etat:", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv a cet etat.");
+        }
+    }
+
+    @Override
+    public Response getRdvBydates(SearchParams searchParams) {
+        try {
+
+            Long idCabinet= secretaireService.getCabinetIdBySecretaireId(searchParams.getSecretaireId());
+            LocalDateTime debut = searchParams.getDateDebut().atStartOfDay();
+            LocalDateTime fin = searchParams.getDateFin().atTime(LocalTime.MAX);
+
+
+            List<RendezVous> rendezVous= rendezVousRepository.getRdvBetweenDate(debut, fin, idCabinet);
+            return Response.succes("La liste des rdv dans cette période:", rendezVous.stream().map(this::mapToResponseDTO).collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de la recuperation des rdv dans cette période.");
         }
     }
 

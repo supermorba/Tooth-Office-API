@@ -12,6 +12,7 @@ import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
 import org.odk.tooth_office.Services.Interfaces.RendezVousService;
 import org.odk.tooth_office.utils.Response;
+import org.odk.tooth_office.utils.SearchParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class RendezVousController {
     /**
      * Prendre un rendez-vous
      */
-    @PostMapping
+    @PostMapping("/prendre")
     @Operation(summary = "Prendre un rendez-vous", description = "Permet au patient ou à la secrétaire de prendre un rendez-vous")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Rendez-vous créé avec succès"),
@@ -45,7 +46,7 @@ public class RendezVousController {
     /**
      * Annuler un rendez-vous
      */
-    @DeleteMapping("/{rdvId}")
+    @PutMapping("/{rdvId}/annuler")
     @Operation(summary = "Annuler un rendez-vous", description = "Permet d'annuler un rendez-vous existant")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Rendez-vous annulé avec succès"),
@@ -122,4 +123,59 @@ public class RendezVousController {
 
 
     }
+
+    @DeleteMapping("/delete/{id}")
+    public Response delRdv(@PathVariable Long id){
+        try{
+            return rendezVousService.deleteRdv(id);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+    }
+
+    @GetMapping("/get-Rdv-by-dentiste/{id}")
+    public Response getRdvByDentiste(@PathVariable Long id){
+        try {
+            return rendezVousService.getRdvByDentiste(id);
+        }
+        catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+    }
+
+    @PostMapping("/get-rdv-by-state")
+    public Response getRdvByState(@RequestBody SearchParams searchParams){
+        try{
+            return rendezVousService.getRdvByEtat(searchParams);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+
+    }
+
+    @PostMapping("/get-rdv-by-dates")
+    public Response getRdvByDates(@RequestBody SearchParams searchParams){
+        try {
+            return rendezVousService.getRdvBydates(searchParams);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+    }
+
+    @PostMapping("/get-rdv-by-patient")
+    public Response getRdvByPatient(@RequestBody SearchParams searchParams){
+        try {
+            return rendezVousService.getRdvByPatient(searchParams);
+        }
+        catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
+    }
+
+
 }
