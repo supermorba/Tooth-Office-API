@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface DossierMedicalRepository extends JpaRepository<DossierMedical, Long> {
-    @Query("SELECT d FROM DossierMedical d WHERE d.patient.id = :patientId")
+    @Query("SELECT d FROM DossierMedical d WHERE d.patient.id_utilisateur = :patientId")
     Optional<DossierMedical> findByPatientId(@Param("patientId") Long patientId);
 }
