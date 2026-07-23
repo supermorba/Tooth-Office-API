@@ -2,7 +2,6 @@ package org.odk.tooth_office.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.odk.tooth_office.DTO.AbonnementDTO;
-import org.odk.tooth_office.Entity.Abonnement;
 import org.odk.tooth_office.Enum.EtatAbonnement;
 import org.odk.tooth_office.Services.Implementations.AbonnementService;
 import org.springframework.http.HttpStatus;
@@ -23,37 +22,37 @@ public class AbonnementController {
     }
 
     @PostMapping
-    public ResponseEntity<Abonnement> creerAbonnement(@RequestBody AbonnementDTO dto) {
-        Abonnement cree = abonnementService.creerAbonnement(dto);
+    public ResponseEntity<AbonnementDTO> creerAbonnement(@RequestBody AbonnementDTO dto) {
+        AbonnementDTO cree = abonnementService.creerAbonnement(dto);
         return new ResponseEntity<>(cree, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Abonnement>> recupererTous() {
+    public ResponseEntity<List<AbonnementDTO>> recupererTous() {
         return ResponseEntity.ok(abonnementService.recupererTous());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Abonnement> recupererParId(@PathVariable Integer id) {
+    public ResponseEntity<AbonnementDTO> recupererParId(@PathVariable Integer id) {
         return abonnementService.recupererParId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/cabinet/{idCabinet}")
-    public ResponseEntity<List<Abonnement>> recupererParCabinet(@PathVariable int idCabinet) {
+    public ResponseEntity<List<AbonnementDTO>> recupererParCabinet(@PathVariable int idCabinet) {
         return ResponseEntity.ok(abonnementService.recupererParCabinet(idCabinet));
     }
 
     @GetMapping("/plan/{idPlan}")
-    public ResponseEntity<List<Abonnement>> recupererParPlan(@PathVariable Long idPlan) {
+    public ResponseEntity<List<AbonnementDTO>> recupererParPlan(@PathVariable Long idPlan) {
         return ResponseEntity.ok(abonnementService.recupererParPlan(idPlan));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Abonnement> modifierAbonnement(@PathVariable Integer id, @RequestBody AbonnementDTO dto) {
+    public ResponseEntity<AbonnementDTO> modifierAbonnement(@PathVariable Integer id, @RequestBody AbonnementDTO dto) {
         try {
-            Abonnement modifie = abonnementService.modifierAbonnement(id, dto);
+            AbonnementDTO modifie = abonnementService.modifierAbonnement(id, dto);
             return ResponseEntity.ok(modifie);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -61,11 +60,11 @@ public class AbonnementController {
     }
 
     @PatchMapping("/{id}/statut")
-    public ResponseEntity<Abonnement> changerStatut(
+    public ResponseEntity<AbonnementDTO> changerStatut(
             @PathVariable Integer id,
             @RequestParam EtatAbonnement nouveauStatut) {
         try {
-            Abonnement majStatut = abonnementService.changerStatut(id, nouveauStatut);
+            AbonnementDTO majStatut = abonnementService.changerStatut(id, nouveauStatut);
             return ResponseEntity.ok(majStatut);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
