@@ -5,6 +5,7 @@ import org.odk.tooth_office.DTO.UtilisateurDTO;
 import org.odk.tooth_office.Entity.Utilisateur;
 import org.odk.tooth_office.Repository.UtilisateurRepository;
 import org.odk.tooth_office.Services.Interfaces.UtilisateurService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class UtilisateurServiceImplementation implements UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
+    private final PasswordService passwordService;
 
     @Override
     public List<UtilisateurDTO> getAll() {
@@ -59,7 +61,6 @@ public class UtilisateurServiceImplementation implements UtilisateurService {
         dto.setNom(utilisateur.getNom());
         dto.setPrenom(utilisateur.getPrenom());
         dto.setEmail(utilisateur.getEmail());
-        dto.setMpd(utilisateur.getMpd());
         dto.setAdresse(utilisateur.getAdresse());
         dto.setRole(utilisateur.getRole());
         dto.setTelephone(utilisateur.getTelephone());
@@ -75,7 +76,9 @@ public class UtilisateurServiceImplementation implements UtilisateurService {
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
         utilisateur.setEmail(dto.getEmail());
-        utilisateur.setMpd(dto.getMpd());
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            utilisateur.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
+        }
         utilisateur.setAdresse(dto.getAdresse());
         utilisateur.setRole(dto.getRole());
         utilisateur.setTelephone(dto.getTelephone());

@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "Chef_Cabinet")
-@PrimaryKeyJoinColumn(name = "id_chef_cabinet")
+@PrimaryKeyJoinColumn(name = "id_utilisateur")
 public class ChefCabinet extends Utilisateur {
 
     /**

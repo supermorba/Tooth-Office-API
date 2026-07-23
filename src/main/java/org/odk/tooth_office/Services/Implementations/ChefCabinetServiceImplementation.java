@@ -7,6 +7,7 @@ import org.odk.tooth_office.Entity.ChefCabinet;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.ChefCabinetRepository;
 import org.odk.tooth_office.Services.Interfaces.ChefCabinetService;
+import org.odk.tooth_office.security.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
 
     private final ChefCabinetRepository chefCabinetRepository;
     private final CabinetRepository cabinetRepository;
+    private final PasswordService passwordService;
 
     @Override
     public List<ChefCabinetDTO> getAll() {
@@ -61,7 +63,6 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
         dto.setNom(chefCabinet.getNom());
         dto.setPrenom(chefCabinet.getPrenom());
         dto.setEmail(chefCabinet.getEmail());
-        dto.setMpd(chefCabinet.getMpd());
         dto.setAdresse(chefCabinet.getAdresse());
         dto.setRole(chefCabinet.getRole());
         dto.setTelephone(chefCabinet.getTelephone());
@@ -82,7 +83,9 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
         chefCabinet.setNom(dto.getNom());
         chefCabinet.setPrenom(dto.getPrenom());
         chefCabinet.setEmail(dto.getEmail());
-        chefCabinet.setMpd(dto.getMpd());
+        if (dto.getMdp() != null && !dto.getMdp().isBlank()) {
+            chefCabinet.setMdp(passwordService.encodeIfNeeded(dto.getMdp()));
+        }
         chefCabinet.setAdresse(dto.getAdresse());
         chefCabinet.setRole(dto.getRole());
         chefCabinet.setTelephone(dto.getTelephone());
