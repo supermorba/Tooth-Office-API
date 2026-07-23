@@ -89,26 +89,16 @@ public class CabinetController {
     @GetMapping("/{idCabinet}/avis/{idAvis}")
     public ResponseEntity<AvisResponseDTO> afficherUnAvisParCabinet(
             @PathVariable Integer idCabinet,
-            @PathVariable Long idAvis
-    ){
+            @PathVariable Long idAvis){
 
         return cabinetService
                 .afficherUnAvisParCabinet(idCabinet,idAvis)
-
                 .map(ResponseEntity::ok)
-
-                .orElseGet(() ->
-                        ResponseEntity.notFound().build()
-                );
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/avis")
-    public ResponseEntity<List<AvisResponseDTO>> afficherAvisParCabinet(
-            @PathVariable Integer id
-    ){
-
-        return ResponseEntity.ok(
-                cabinetService.afficherLesAvisParCabinet(id)
-        );
+    public ResponseEntity<List<AvisResponseDTO>> afficherAvisParCabinet(@PathVariable Integer id){
+        return ResponseEntity.ok(cabinetService.afficherLesAvisParCabinet(id));
     }
 }

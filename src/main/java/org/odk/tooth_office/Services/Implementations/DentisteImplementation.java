@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.DentisteDTO;
 import org.odk.tooth_office.DTO.DentisteResponseDTO;
+import org.odk.tooth_office.DTO.PatientDTO;
 import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Mapper.DentisteMapper;
 import org.odk.tooth_office.Repository.CabinetRepository;
@@ -65,5 +66,8 @@ public class DentisteImplementation implements DentisteService {
     public void update(Dentiste dentiste) {
         dentisteRepository.save(dentiste);
     }
+
+
+
 }
 

@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DentisteRepository extends JpaRepository<Dentiste, Long> {
-    @Query ("select d from Dentiste d where d.cabinet.idCabinet=:id")
+    @Query ("" +
+            "select d " +
+            "from Dentiste d " +
+            "where d.cabinet.idCabinet=:id" +
+            "")
     List<Dentiste> findById_cabinet(@Param(("id")) Long id);
 }
