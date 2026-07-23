@@ -57,4 +57,21 @@ public class PlanAbonnementService implements IPlanAbonnementService {
     public List<PlanAbonnement> getAllPlanAbonnements() {
         return repository.findAll();
     }
+
+    @Override
+    public List<PlanAbonnementDTO> getPlanAbonnements() {
+        return repository.findAll()
+                .stream()
+                .map(plan -> PlanAbonnementDTO.builder()
+                        .nom(plan.getNom())
+                        .prixMensuel(plan.getPrixMensuel())
+                        .prixAnnuel(plan.getPrixAnnuel())
+                        .maxCabinet(plan.getMaxCabinet())
+                        .maxDentistes(plan.getMaxDentistes())
+                        .maxSecretaires(plan.getMaxSecretaires())
+                        .description(plan.getDescription())
+                        .nbreAbonne(plan.getAbonnements().size())
+                        .build())
+                .toList();
+    }
 }

@@ -17,5 +17,6 @@ public interface IPlanAbonnementService {
     Optional<PlanAbonnement> getPlanAbonnementById(Long id);
 
     List<PlanAbonnement>getAllPlanAbonnements();
+    List<PlanAbonnementDTO> getPlanAbonnements();
 
 }
