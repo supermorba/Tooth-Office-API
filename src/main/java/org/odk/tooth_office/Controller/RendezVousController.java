@@ -16,6 +16,8 @@ import org.odk.tooth_office.utils.SearchParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,9 +40,32 @@ public class RendezVousController {
             @ApiResponse(responseCode = "404", description = "Patient, Dentiste ou Créneau non trouvé")
     })
     public ResponseEntity<RendezVousResponseDTO> prendreRendezVous(
+            Authentication authentication,
             @RequestBody RendezVousRequestDTO dto) {
+        validateTypeForRole(authentication, dto);
         RendezVousResponseDTO response = rendezVousService.prendreRendezVous(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    private void validateTypeForRole(Authentication authentication, RendezVousRequestDTO dto) {
+        if (authentication == null || dto.getTypeRdv() == null) {
+            return;
+        }
+
+        boolean isPatient = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_PATIENT".equals(authority.getAuthority()));
+        boolean isDentiste = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_DENTISTE".equals(authority.getAuthority()));
+        boolean isSecretaire = authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ROLE_SECRETAIRE".equals(authority.getAuthority()));
+
+        if (isPatient && !"ENLIGNE".equalsIgnoreCase(dto.getTypeRdv())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un patient peut uniquement prendre un rendez-vous en ligne.");
+        }
+
+        if ((isDentiste || isSecretaire) && !"SURPLACE".equalsIgnoreCase(dto.getTypeRdv())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un dentiste ou une secrétaire peut uniquement enregistrer un rendez-vous sur place.");
+        }
     }
 
     /**
@@ -96,7 +121,7 @@ public class RendezVousController {
     /**
      * Obtenir le planning du jour d'un dentiste
      */
-    @GetMapping("/dentiste/{dentisteId}")
+    @GetMapping({"/dentiste/{dentisteId}", "/get-Rdv-by-dentiste/{dentisteId}"})
     @Operation(summary = "Consulter le planning d'un dentiste",
             description = "Récupère tous les rendez-vous d'un dentiste pour la journée")
     @ApiResponses(value = {

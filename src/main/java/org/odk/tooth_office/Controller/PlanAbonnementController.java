@@ -46,7 +46,7 @@ public class PlanAbonnementController {
 
     // GET ALL
     @GetMapping("")
-    public List<PlanAbonnement> getAll() {
-        return iPlanAbonnementService.getAllPlanAbonnements();
+    public List<PlanAbonnementDTO> getAll() {
+        return iPlanAbonnementService.getPlanAbonnements();
     }
 }

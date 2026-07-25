@@ -11,6 +11,8 @@ public class RendezVousResponseDTO {
     private Long id;
     @Schema(description = "Date et heure du rendez-vous", example = "2026-06-25T10:00:00")
     private LocalDateTime dateRdv;
+    @Schema(description = "Motif court du rendez-vous", example = "Contrôle annuel")
+    private String motif;
     @Schema(description = "Notes liées au rendez-vous", example = "Arriver 10 minutes à l'avance")
     private String notes;
     @Schema(description = "État courant du rendez-vous", example = "PLANIFIE")

@@ -1,9 +1,11 @@
 package org.odk.tooth_office.Services.Implementations;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.CabinetResponseDTO;
 import org.odk.tooth_office.DTO.ChefCabinetDTO;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.ChefCabinet;
+import org.odk.tooth_office.Mapper.CabinetMapper;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.ChefCabinetRepository;
 import org.odk.tooth_office.Services.Interfaces.ChefCabinetService;
@@ -22,6 +24,8 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
     private final ChefCabinetRepository chefCabinetRepository;
     private final CabinetRepository cabinetRepository;
     private final PasswordService passwordService;
+    private final CabinetMapper cabinetMapper;
+
 
     @Override
     public List<ChefCabinetDTO> getAll() {
@@ -55,6 +59,12 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
         }
         chefCabinetRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public List<CabinetResponseDTO> getCabinetsChefCabinets(Long id) {
+        return chefCabinetRepository.getCabinetsChefCabinets(id).stream()
+                .map(cabinetMapper::toCabinet).toList();
     }
 
     private ChefCabinetDTO toDto(ChefCabinet chefCabinet) {

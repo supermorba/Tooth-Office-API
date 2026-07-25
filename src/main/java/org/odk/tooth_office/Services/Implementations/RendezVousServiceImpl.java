@@ -47,8 +47,9 @@ public class RendezVousServiceImpl implements RendezVousService {
     @Override
     @Transactional
     public RendezVousResponseDTO prendreRendezVous(RendezVousRequestDTO dto) {
+        validateRendezVousRequest(dto);
 
-        System.out.println("Le service va enregistrer");
+
         Patient patient = patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new RuntimeException("Patient introuvable avec l'ID : " + dto.getPatientId()));
 
@@ -73,10 +74,13 @@ public class RendezVousServiceImpl implements RendezVousService {
 //            }
 
             creneau = creneauService.creerCreneauSurplace(creneauDto);
-            System.out.println("creneau creer");
 
         } else {
-            System.out.println("rdv par patient");
+
+            if (dto.getCreneauId() == null) {
+                throw new RuntimeException("Un rendez-vous en ligne nécessite un créneau disponible.");
+            }
+
             // Cas classique : réservation d'un créneau existant
             creneau = creneauRepository.findById(dto.getCreneauId())
                     .orElseThrow(() -> new RuntimeException("Créneau introuvable avec l'ID : " + dto.getCreneauId()));
@@ -92,6 +96,7 @@ public class RendezVousServiceImpl implements RendezVousService {
         // Création du rendez-vous
         RendezVous rdv = new RendezVous();
         rdv.setDateRdv(dto.getDateRdv());
+        rdv.setMotif(dto.getMotif() != null && !dto.getMotif().isBlank() ? dto.getMotif() : "Consultation");
         rdv.setNotes(dto.getNotes());
         rdv.setTypeRdv(TypeRdv.valueOf(dto.getTypeRdv()));
         rdv.setEtatRdv(EtatRdv.EN_ATTENTE);
@@ -301,6 +306,10 @@ public class RendezVousServiceImpl implements RendezVousService {
             throw new RuntimeException("La date du rendez-vous est obligatoire");
         }
 
+        if (dto.getTypeRdv() == null || dto.getTypeRdv().isBlank()) {
+            throw new RuntimeException("Le type du rendez-vous est obligatoire");
+        }
+
         if (dto.getPatientId() == null) {
             throw new RuntimeException("L'ID du patient est obligatoire");
         }
@@ -321,6 +330,7 @@ public class RendezVousServiceImpl implements RendezVousService {
         RendezVousResponseDTO dto = new RendezVousResponseDTO();
         dto.setId(rendezVous.getIdRendezVous());
         dto.setDateRdv(rendezVous.getDateRdv());
+        dto.setMotif(rendezVous.getMotif());
         dto.setNotes(rendezVous.getNotes());
         dto.setEtatRdv(rendezVous.getEtatRdv().toString());
         dto.setTypeRdv(rendezVous.getTypeRdv().toString());

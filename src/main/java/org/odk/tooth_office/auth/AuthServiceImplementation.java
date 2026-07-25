@@ -3,6 +3,7 @@ package org.odk.tooth_office.auth;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.ChefCabinet;
+import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Entity.Patient;
 import org.odk.tooth_office.Entity.Utilisateur;
 import org.odk.tooth_office.Enum.RoleEnum;
@@ -11,6 +12,7 @@ import org.odk.tooth_office.Exception.EmailDejaUtiliseException;
 import org.odk.tooth_office.Exception.TelephoneDejaUtiliseException;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.ChefCabinetRepository;
+import org.odk.tooth_office.Repository.DentisteRepository;
 import org.odk.tooth_office.Repository.PatientRepository;
 import org.odk.tooth_office.Repository.UtilisateurRepository;
 import org.odk.tooth_office.auth.dto.ChangePasswordDTO;
@@ -41,6 +43,7 @@ public class AuthServiceImplementation implements AuthService {
     private final PatientRepository patientRepository;
     private final ChefCabinetRepository chefCabinetRepository;
     private final CabinetRepository cabinetRepository;
+    private final DentisteRepository dentisteRepository;
     private final JwtService jwtService;
     private final PasswordService passwordService;
     private final RefreshTokenService refreshTokenService;
@@ -157,14 +160,27 @@ public class AuthServiceImplementation implements AuthService {
         CustomUserPrincipal principal = extractPrincipal(authentication);
         Utilisateur utilisateur = principal.getUtilisateur();
 
-        return MeResponseDTO.builder()
+        MeResponseDTO.MeResponseDTOBuilder builder = MeResponseDTO.builder()
                 .id(utilisateur.getId_utilisateur())
                 .nom(utilisateur.getNom())
                 .prenom(utilisateur.getPrenom())
                 .email(utilisateur.getEmail())
                 .role(utilisateur.getRole() != null ? utilisateur.getRole().name() : null)
-                .statutCompte(utilisateur.getStatutCompte() != null ? utilisateur.getStatutCompte().name() : null)
-                .build();
+                .statutCompte(utilisateur.getStatutCompte() != null ? utilisateur.getStatutCompte().name() : null);
+
+        // Pour un dentiste, on expose sa spécialité et le cabinet auquel il est rattaché
+        if (utilisateur.getRole() == RoleEnum.DENTISTE) {
+            dentisteRepository.findById(utilisateur.getId_utilisateur()).ifPresent(dentiste -> {
+                builder.specialite(dentiste.getSpecialite());
+                Cabinet cabinet = dentiste.getCabinet();
+                if (cabinet != null) {
+                    builder.idCabinet(cabinet.getIdCabinet());
+                    builder.cabinetNom(cabinet.getNomCabinet());
+                }
+            });
+        }
+
+        return builder.build();
     }
 
     @Override
