@@ -1,4 +1,8 @@
 package org.odk.tooth_office.Entity;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,21 +17,22 @@ public class DossierMedical {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 100)
     private String antecedents;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 100)
     private String allergies;
-
-    @Column(columnDefinition = "TEXT")
+        @Column(columnDefinition = "TEXT")
     private String historiques;
+    
+    @Column(name = "date_creation")
+    private LocalDate dateCreation;
 
+    /** Patient propriétaire de ce dossier (relation 1-1) */
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "id_patient",
-            nullable = false,
-            unique = true,
-            foreignKey = @ForeignKey(name = "fk_DossierMedical")
-    )
+    @JoinColumn(name = "id_patient", nullable = false, unique = true)
     private Patient patient;
+
+    @OneToMany(mappedBy = "dossierMedical", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consultation> consultations = new ArrayList<>();
 }
