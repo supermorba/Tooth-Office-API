@@ -57,6 +57,13 @@ public class PatientServiceImplementation implements PatientService {
         return true;
     }
 
+    @Override
+    public List<PatientDTO> getPatientsParDentiste(Long dentisteId) {
+        return patientRepository.findPatientsByDentisteId(dentisteId).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     private PatientDTO toDto(Patient patient) {
         PatientDTO dto = new PatientDTO();
         dto.setId_utilisateur(patient.getId_utilisateur());

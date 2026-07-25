@@ -75,11 +75,47 @@ ON DUPLICATE KEY UPDATE id_patient = id_patient;
 
 -- 6) Dossier médical et rendez-vous
 INSERT INTO dossier_medical
-(id, antecedents, allergies, historiques, id_patient)
+(id, historiques, id_patient)
 VALUES
-    (1, 'Aucun antécédent majeur', 'Aucune allergie connue', 'Première visite annuelle', 4),
-    (2, 'Hypertension légère', 'Pénicilline', 'Suivi trimestriel', 8),
-    (3, 'Diabète type 2', 'Aspirine', 'Contrôles réguliers', 9)
+    (1, 'Première visite annuelle', 4),
+    (2, 'Suivi trimestriel', 8),
+    (3, 'Contrôles réguliers', 9)
+ON DUPLICATE KEY UPDATE id = id;
+
+INSERT INTO allergie_intolerance
+(id, libelle, type, gravite, description, dossier_medical_id)
+VALUES
+    (1, 'Latex', 'ALLERGIE', 'LEGERE', 'Réaction cutanée légère', 1),
+    (2, 'Pénicilline', 'ALLERGIE', 'SEVERE', 'Choc anaphylactique connu', 2),
+    (3, 'Aspirine', 'INTOLERANCE', 'MODEREE', 'Troubles digestifs', 3)
+ON DUPLICATE KEY UPDATE id = id;
+
+INSERT INTO antecedent
+(id, type, libelle, description, date_survenue, dossier_medical_id)
+VALUES
+    (1, 'MEDICAL', 'Aucun antécédent majeur', NULL, NULL, 1),
+    (2, 'SPORT', 'Course à pied', '3 séances par semaine', NULL, 1),
+    (3, 'MEDICAL', 'Hypertension artérielle', 'Traitement antihypertenseur', '2018-03-15', 2),
+    (4, 'CHIRURGICAL', 'Appendicectomie', NULL, '2010-06-20', 2),
+    (5, 'FAMILIAL', 'Diabète chez le père', NULL, NULL, 2),
+    (6, 'TABAC', 'Non-fumeur', NULL, NULL, 2),
+    (7, 'MEDICAL', 'Diabète type 2', 'Diagnostiqué en 2015', '2015-01-10', 3),
+    (8, 'ALCOOL', 'Consommation occasionnelle', NULL, NULL, 3)
+ON DUPLICATE KEY UPDATE id = id;
+
+INSERT INTO pathologie_chronique
+(id, libelle, est_ald, description, date_diagnostic, dossier_medical_id)
+VALUES
+    (1, 'Hypertension artérielle', true, 'ALD reconnue', '2018-03-15', 2),
+    (2, 'Diabète type 2', true, 'ALD avec suivi endocrinologique', '2015-01-10', 3)
+ON DUPLICATE KEY UPDATE id = id;
+
+INSERT INTO medicament_en_cours
+(id, medicament, posologie, notes, date_debut, date_fin, actif, dossier_medical_id)
+VALUES
+    (1, 'Amlodipine', '5 mg, 1 comprimé le matin', NULL, '2018-04-01', NULL, true, 2),
+    (2, 'Metformine', '500 mg, 2 comprimés par jour', 'À prendre au repas', '2015-02-01', NULL, true, 3),
+    (3, 'Ramipril', '2,5 mg, 1 comprimé le soir', NULL, '2018-04-01', NULL, true, 2)
 ON DUPLICATE KEY UPDATE id = id;
 
 INSERT INTO rendez_vous

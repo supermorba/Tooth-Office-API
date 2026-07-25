@@ -130,7 +130,6 @@ public class CabinetServiceImplementation implements CabinetService {
                 .orElseThrow(() -> new RuntimeException("Dentiste introuvable avec l'ID : " + idDentiste));
 
         return cabinet.getDentistes().stream()
-                .filter(dentiste -> Integer.parseInt(dentiste.getId_utilisateur().toString()) == idDentiste)
                 .filter(dentiste -> Objects.equals(dentiste.getId_utilisateur(), dentiste1.getId_utilisateur()))
                 .map(dentisteMapper::toResponseDTO).findFirst();
     }
@@ -179,5 +178,4 @@ public class CabinetServiceImplementation implements CabinetService {
                 .toList();
     }
 }
-
 

@@ -1,6 +1,7 @@
 package org.odk.tooth_office.security;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.config.CorsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,9 +50,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/admins/**", "/api/utilisateurs/**").hasRole("ADMIN_SYSTEM")
                         .requestMatchers("/api/chefs-cabinet/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
                         .requestMatchers("/api/dentistes/**", "/api/secretaires/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
-                        .requestMatchers("/api/patients/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "SECRETAIRE", "DENTISTE")
+                        .requestMatchers("/api/patients/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "SECRETAIRE", "DENTISTE", "PATIENT")
                         .requestMatchers(
-                                "/api/dossiers-medicaux/**",
+                                "/api/dossiers-medicaux/**"
+                        ).hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "DENTISTE", "PATIENT", "SECRETAIRE")
+                        .requestMatchers(
                                 "/api/consultation/**",
                                 "/api/consultations/**",
                                 "/traitements/**"

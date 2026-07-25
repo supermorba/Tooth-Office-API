@@ -12,4 +12,9 @@ public class MeResponseDTO {
     private String email;
     private String role;
     private String statutCompte;
+
+    // Renseignés uniquement pour les dentistes
+    private String specialite;
+    private Integer idCabinet;
+    private String cabinetNom;
 }

@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 public class RendezVousRequestDTO {
     @Schema(description = "Date et heure prévues du rendez-vous", example = "2026-06-25T10:00:00")
     private LocalDateTime dateRdv;
+    @Schema(description = "Motif court du rendez-vous", example = "Contrôle annuel")
+    private String motif;
     @Schema(description = "Notes additionnelles pour le rendez-vous", example = "Première consultation")
     private String notes;
     @Schema(description = "Type de rendez-vous demandé", example = "CONSULTATION")
