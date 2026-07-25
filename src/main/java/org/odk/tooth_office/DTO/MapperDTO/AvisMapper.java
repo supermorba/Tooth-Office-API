@@ -8,7 +8,6 @@ import org.odk.tooth_office.DTO.AvisResponseDTO;
 import org.odk.tooth_office.Entity.Avis;
 
 import java.util.List;
-z
 
 @Mapper(componentModel = "spring")
 public interface AvisMapper {
