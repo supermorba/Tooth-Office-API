@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
@@ -101,4 +101,28 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
 
     @Query("SELECT r from RendezVous r WHERE r.dentiste.cabinet.idCabinet=:idCabinet")
     List<RendezVous> findRdvByCabinet(@Param("idCabinet") Long idCabinet);
+
+
+    @Query("SELECT r from RendezVous r WHERE r.dentiste.id_utilisateur =:idDentiste ORDER BY r.dateRdv DESC")
+    List<RendezVous> getDentisteRdv(@Param("idDentiste") Long idDentiste);
+
+
+    @Query("SELECT r from RendezVous r WHERE r.patient.id_utilisateur =:idPatient AND r.dentiste.cabinet.idCabinet =:cabinet ORDER BY r.dateRdv DESC")
+    List<RendezVous> getPatientRdv(@Param("idPatient") Long idPatient, @Param("cabinet") Long cabinet);
+
+    @Query("SELECT r from RendezVous r WHERE r.etatRdv=:etat AND r.dentiste.cabinet.idCabinet=:idCabinet ORDER BY r.dateRdv DESC")
+    List<RendezVous> getRdvByEtatRdv(@Param("etat") EtatRdv etat, @Param("idCabinet") Long idCabinet);
+
+    @Query("SELECT r from RendezVous r WHERE r.dateRdv between :dateD AND :dateF AND r.dentiste.cabinet.idCabinet =:cabinet ORDER BY r.dateRdv DESC")
+    List<RendezVous> getRdvBetweenDate(@Param("dateD") LocalDateTime dateD, @Param("dateF") LocalDateTime dateF, @Param("cabinet") Long cabinet);
+
+    @Query("SELECT r from RendezVous r WHERE r.dateRdv =:dateD AND r.dentiste.cabinet.idCabinet =:cabinet ORDER BY r.dateRdv DESC")
+    List<RendezVous> getRdvByDate(@Param("dateD") Date dateD,  @Param("cabinet") Long cabinet);
+
+
+
+
+
+
+
 }

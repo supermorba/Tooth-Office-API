@@ -12,6 +12,7 @@ import org.odk.tooth_office.Mapper.SecretaireMapper;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.DentisteRepository;
 import org.odk.tooth_office.Services.Interfaces.CabinetService;
+import org.odk.tooth_office.Services.Interfaces.SecretaireService;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
@@ -30,6 +31,7 @@ public class CabinetServiceImplementation implements CabinetService {
     private final DentisteMapper dentisteMapper;
     private final DentisteRepository dentisteRepository;
     private final AvisMapper avisMapper;
+    public final SecretaireService secretaireService;
 
 
     @Override
@@ -157,6 +159,14 @@ public class CabinetServiceImplementation implements CabinetService {
                 )
                 .map(avisMapper::toResponseDTO)
                 .findFirst();
+    }
+
+    @Override
+    public List<DentisteResponseDTO> getDentistesCabinetSecretaire(Long idSecretaire) {
+       int idCabinet = secretaireService.getCabinetIdBySecretaireId(idSecretaire).intValue();
+        return cabinetRepository.findById(idCabinet)
+                .map(c->c.getDentistes().stream().map(dentisteMapper::toResponseDTO))
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
     @Override
