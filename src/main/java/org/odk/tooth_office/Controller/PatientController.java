@@ -51,4 +51,9 @@ public class PatientController {
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/dentiste/{idDentiste}")
+    public ResponseEntity<List<PatientDTO>> getPatientsParDentiste(@PathVariable Long idDentiste) {
+        return ResponseEntity.ok(patientService.getPatientsParDentiste(idDentiste));
+    }
 }
