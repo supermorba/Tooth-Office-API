@@ -121,16 +121,23 @@ public class RendezVousController {
     /**
      * Obtenir le planning du jour d'un dentiste
      */
-    @GetMapping({"/dentiste/{dentisteId}", "/get-Rdv-by-dentiste/{dentisteId}"})
+    @GetMapping("/get-Rdv-by-dentiste/{dentisteId}")
     @Operation(summary = "Consulter le planning d'un dentiste",
             description = "Récupère tous les rendez-vous d'un dentiste pour la journée")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Planning du dentiste"),
             @ApiResponse(responseCode = "404", description = "Dentiste non trouvé")
     })
-    public ResponseEntity<List<RendezVousResponseDTO>> obtenirRdvParDentiste(
+    public Response obtenirRdvParDentiste(
             @Parameter(description = "ID du dentiste") @PathVariable Long dentisteId) {
-        List<RendezVousResponseDTO> response = rendezVousService.obtenirRdvParDentiste(dentisteId);
+        return rendezVousService.getRdvByDentiste(dentisteId);
+    }
+
+
+    @GetMapping("/{dentisteId}/dentiste")
+    public ResponseEntity<List<RendezVousResponseDTO>> obtenirplanParDentiste(
+            @Parameter(description = "ID du dentiste") @PathVariable Long dentisteId) {
+        List<RendezVousResponseDTO> response= rendezVousService.obtenirRdvParDentiste(dentisteId);
         return ResponseEntity.ok(response);
     }
 
