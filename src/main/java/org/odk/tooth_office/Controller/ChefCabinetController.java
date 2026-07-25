@@ -2,6 +2,7 @@ package org.odk.tooth_office.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.CabinetResponseDTO;
 import org.odk.tooth_office.DTO.ChefCabinetDTO;
 import org.odk.tooth_office.Services.Interfaces.ChefCabinetService;
 import org.springframework.http.HttpStatus;
@@ -50,5 +51,10 @@ public class ChefCabinetController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/get-cabinets-of-chef/{id}")
+    public ResponseEntity<List<CabinetResponseDTO>> getCabinetsOfChef(@PathVariable Long id) {
+        return ResponseEntity.ok(chefCabinetService.getCabinetsChefCabinets(id));
     }
 }
