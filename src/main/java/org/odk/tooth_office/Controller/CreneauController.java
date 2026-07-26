@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.odk.tooth_office.DTO.CreneauDTO;
 import org.odk.tooth_office.Services.Interfaces.CreneauService;
+import org.odk.tooth_office.utils.FindCreneauForm;
+import org.odk.tooth_office.utils.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +93,15 @@ public class CreneauController {
             @Parameter(description = "ID du créneau à libérer") @PathVariable Long creneauId) {
         creneauService.libererCreneau(creneauId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/find-creneaux-by-dentiste-date")
+    public Response getDentisteCrenauxDate(@RequestBody FindCreneauForm creneauForm){
+        try {
+            return creneauService.getCreneauxByDentisteAndDate(creneauForm);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
+        }
     }
 }

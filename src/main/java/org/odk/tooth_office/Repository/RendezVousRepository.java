@@ -106,6 +106,7 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
     @Query("SELECT r from RendezVous r WHERE r.dentiste.id_utilisateur =:idDentiste ORDER BY r.dateRdv DESC")
     List<RendezVous> getDentisteRdv(@Param("idDentiste") Long idDentiste);
 
+
     @Query("SELECT r from RendezVous r WHERE r.patient.id_utilisateur =:idPatient AND r.dentiste.cabinet.idCabinet =:cabinet ORDER BY r.dateRdv DESC")
     List<RendezVous> getPatientRdv(@Param("idPatient") Long idPatient, @Param("cabinet") Long cabinet);
 
@@ -117,6 +118,8 @@ public interface RendezVousRepository extends JpaRepository<RendezVous, Long> {
 
     @Query("SELECT r from RendezVous r WHERE r.dateRdv =:dateD AND r.dentiste.cabinet.idCabinet =:cabinet ORDER BY r.dateRdv DESC")
     List<RendezVous> getRdvByDate(@Param("dateD") Date dateD,  @Param("cabinet") Long cabinet);
+
+
 
 
 

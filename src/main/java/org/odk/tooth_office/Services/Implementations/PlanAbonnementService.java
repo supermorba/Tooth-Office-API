@@ -29,10 +29,7 @@ public class PlanAbonnementService implements IPlanAbonnementService {
         p.setMaxCabinet(planAbonnementdto.maxCabinet());
         p.setMaxDentistes(planAbonnementdto.maxDentistes());
         PlanAbonnement plan = repository.save(p);
-        PlanAbonnementDTO dto = PlanAbonnementDTO
-                                    .builder()
-                .nom(plan.getNom())
-                .build();
+        PlanAbonnementDTO dto = PlanAbonnementDTO.builder().nom(plan.getNom()).build();
 
 
         return dto;
@@ -59,5 +56,22 @@ public class PlanAbonnementService implements IPlanAbonnementService {
     @Override
     public List<PlanAbonnement> getAllPlanAbonnements() {
         return repository.findAll();
+    }
+
+    @Override
+    public List<PlanAbonnementDTO> getPlanAbonnements() {
+        return repository.findAll()
+                .stream()
+                .map(plan -> PlanAbonnementDTO.builder()
+                        .nom(plan.getNom())
+                        .prixMensuel(plan.getPrixMensuel())
+                        .prixAnnuel(plan.getPrixAnnuel())
+                        .maxCabinet(plan.getMaxCabinet())
+                        .maxDentistes(plan.getMaxDentistes())
+                        .maxSecretaires(plan.getMaxSecretaires())
+                        .description(plan.getDescription())
+                        .nbreAbonne(plan.getAbonnements().size())
+                        .build())
+                .toList();
     }
 }

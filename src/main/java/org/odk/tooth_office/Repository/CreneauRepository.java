@@ -24,7 +24,7 @@ public interface CreneauRepository extends JpaRepository<Creneau, Long> {
     /**
      * Récupère les créneaux d'un dentiste pour une date donnée
      */
-    @Query("SELECT c FROM Creneau c WHERE c.dentiste.id = :dentisteId " +
+    @Query("SELECT c FROM Creneau c WHERE c.dentiste.id_utilisateur = :dentisteId AND c.disponible=true " +
             "AND c.date = :date ORDER BY c.heureDebut ASC")
     List<Creneau> findCreneauxByDentisteAndDate(
             @Param("dentisteId") Long dentisteId,

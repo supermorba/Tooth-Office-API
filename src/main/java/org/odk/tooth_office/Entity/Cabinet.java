@@ -57,6 +57,6 @@ public class Cabinet {
     private List<CabinetPrestation> cab_Ser;
 
     @ManyToMany (mappedBy = "cabinets", fetch = FetchType.LAZY)
-    private List<ChefCabinet> ChefsCabinet;
+    private List<ChefCabinet> chefsCabinet;
 
 }

@@ -5,11 +5,12 @@ import org.odk.tooth_office.Entity.Abonnement;
 import org.odk.tooth_office.Entity.Cabinet;
 import org.odk.tooth_office.Entity.PlanAbonnement;
 import org.odk.tooth_office.Enum.EtatAbonnement;
-import org.odk.tooth_office.Enum.TypePaiement;
 import org.odk.tooth_office.Repository.AbonnementRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AbonnementService {
@@ -20,15 +21,35 @@ public class AbonnementService {
         this.abonnementRepository = abonnementRepository;
     }
 
-    public Abonnement creerAbonnement(AbonnementDTO dto) {
+    // Convertit l'entité JPA en DTO
+    private AbonnementDTO convertToDTO(Abonnement abonnement) {
+        if (abonnement == null) return null;
+
+        AbonnementDTO dto = new AbonnementDTO();
+        dto.setDateDebut(abonnement.getDateDebut());
+        dto.setDateFin(abonnement.getDateFin());
+        dto.setEtatAbonnement(abonnement.getEtatAbonnement());
+        dto.setTypePaiement(abonnement.getTypePaiement());
+        dto.setMontantTotal(abonnement.getMontantTotal());
+
+        if (abonnement.getPlanAbonnement() != null && abonnement.getPlanAbonnement().getIdPlan() != null) {
+            dto.setIdPlan(abonnement.getPlanAbonnement().getIdPlan().intValue());
+        }
+
+        if (abonnement.getCabinet() != null) {
+            dto.setIdCabinet(abonnement.getCabinet().getIdCabinet());
+        }
+
+        return dto;
+    }
+
+    public AbonnementDTO creerAbonnement(AbonnementDTO dto) {
         PlanAbonnement plan = new PlanAbonnement();
-        // Conversion de Integer vers Long
         if (dto.getIdPlan() != null) {
             plan.setIdPlan(dto.getIdPlan().longValue());
         }
 
         Cabinet cabinet = new Cabinet();
-        // Conversion de Integer vers int
         if (dto.getIdCabinet() != null) {
             cabinet.setIdCabinet(dto.getIdCabinet());
         }
@@ -37,26 +58,38 @@ public class AbonnementService {
                 dto.getDateDebut(), dto.getDateFin(), dto.getEtatAbonnement(),
                 dto.getTypePaiement(), dto.getMontantTotal(), plan, cabinet
         );
-        return abonnementRepository.save(abonnement);
+
+        Abonnement sauve = abonnementRepository.save(abonnement);
+        return convertToDTO(sauve);
     }
 
-    public List<Abonnement> recupererTous() {
-        return abonnementRepository.findAll();
+    public List<AbonnementDTO> recupererTous() {
+        return abonnementRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Abonnement> recupererParId(Integer id) {
-        return abonnementRepository.findById(id);
+    public Optional<AbonnementDTO> recupererParId(Integer id) {
+        return abonnementRepository.findById(id)
+                .map(this::convertToDTO);
     }
 
-    public List<Abonnement> recupererParCabinet(int idCabinet) {
-        return abonnementRepository.findByCabinet_IdCabinet(idCabinet);
+    public List<AbonnementDTO> recupererParCabinet(int idCabinet) {
+        return abonnementRepository.findByCabinet_IdCabinet(idCabinet)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public List<Abonnement> recupererParPlan(Long idPlan) {
-        return abonnementRepository.findByPlanAbonnement_IdPlan(idPlan);
+    public List<AbonnementDTO> recupererParPlan(Long idPlan) {
+        return abonnementRepository.findByPlanAbonnement_IdPlan(idPlan)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Abonnement modifierAbonnement(Integer id, AbonnementDTO dto) {
+    public AbonnementDTO modifierAbonnement(Integer id, AbonnementDTO dto) {
         return abonnementRepository.findById(id).map(existing -> {
             existing.setDateDebut(dto.getDateDebut());
             existing.setDateFin(dto.getDateFin());
@@ -76,14 +109,16 @@ public class AbonnementService {
             }
             existing.setCabinet(cabinet);
 
-            return abonnementRepository.save(existing);
+            Abonnement maj = abonnementRepository.save(existing);
+            return convertToDTO(maj);
         }).orElseThrow(() -> new RuntimeException("Abonnement introuvable"));
     }
 
-    public Abonnement changerStatut(Integer id, EtatAbonnement nouveauStatut) {
+    public AbonnementDTO changerStatut(Integer id, EtatAbonnement nouveauStatut) {
         return abonnementRepository.findById(id).map(existing -> {
             existing.setEtatAbonnement(nouveauStatut);
-            return abonnementRepository.save(existing);
+            Abonnement maj = abonnementRepository.save(existing);
+            return convertToDTO(maj);
         }).orElseThrow(() -> new RuntimeException("Abonnement introuvable"));
     }
 

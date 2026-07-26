@@ -11,4 +11,5 @@ public interface PatientService {
     PatientDTO create(PatientDTO dto);
     Optional<PatientDTO> update(Long id, PatientDTO dto);
     boolean delete(Long id);
+    List<PatientDTO> getPatientsParDentiste(Long dentisteId);
 }
