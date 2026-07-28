@@ -121,22 +121,26 @@ public class RendezVousController {
     /**
      * Obtenir le planning du jour d'un dentiste
      */
-    @GetMapping("/get-Rdv-by-dentiste/{dentisteId}")
-    @Operation(summary = "Consulter le planning d'un dentiste",
-            description = "Récupère tous les rendez-vous d'un dentiste pour la journée")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Planning du dentiste"),
-            @ApiResponse(responseCode = "404", description = "Dentiste non trouvé")
-    })
-    public Response obtenirRdvParDentiste(
-            @Parameter(description = "ID du dentiste") @PathVariable Long dentisteId) {
-        return rendezVousService.getRdvByDentiste(dentisteId);
-    }
+//    @GetMapping("/get-Rdv-by-dentiste/{dentisteId}")
+//    @Operation(summary = "Consulter le planning d'un dentiste",
+//            description = "Récupère tous les rendez-vous d'un dentiste pour la journée")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Planning du dentiste"),
+//            @ApiResponse(responseCode = "404", description = "Dentiste non trouvé")
+//    })
+//    public Response obtenirRdvParDentiste(@PathVariable Long dentisteId) {
+//        try{
+//            return rendezVousService.getRdvByDentiste(dentisteId);
+//        } catch (Exception e) {
+//            e.printStackTrace(System.out);
+//            return Response.error("Erreur au niveau du serveur");
+//        }
+//
+//    }
 
 
     @GetMapping("/{dentisteId}/dentiste")
-    public ResponseEntity<List<RendezVousResponseDTO>> obtenirplanParDentiste(
-            @Parameter(description = "ID du dentiste") @PathVariable Long dentisteId) {
+    public ResponseEntity<List<RendezVousResponseDTO>> obtenirplanParDentiste(@PathVariable Long dentisteId) {
         List<RendezVousResponseDTO> response= rendezVousService.obtenirRdvParDentiste(dentisteId);
         return ResponseEntity.ok(response);
     }
