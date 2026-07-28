@@ -1,15 +1,13 @@
 package org.odk.tooth_office.Services.Interfaces;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.odk.tooth_office.DTO.AvisResponseDTO;
 import org.odk.tooth_office.DTO.CabinetDTO;
 import org.odk.tooth_office.DTO.CabinetResponseDTO;
 import org.odk.tooth_office.DTO.DentisteResponseDTO;
 import org.odk.tooth_office.DTO.SecretaireResponseDTO;
-import org.odk.tooth_office.Entity.Cabinet;
-import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.DTO.AvisResponseDTO;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface CabinetService {
     CabinetResponseDTO creerCabinet(CabinetDTO dto);
@@ -28,5 +26,8 @@ public interface CabinetService {
     org.springframework.core.io.Resource getLogoResource(Integer idCabinet);
     String getLogoContentType(Integer idCabinet);
     CabinetResponseDTO supprimerLogo(Integer idCabinet);
+
+    List<DentisteResponseDTO> getDentistesCabinetSecretaire(Long idSecretaire);
+
 }
 

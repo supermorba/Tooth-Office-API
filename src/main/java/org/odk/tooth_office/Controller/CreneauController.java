@@ -1,20 +1,30 @@
 package org.odk.tooth_office.Controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.odk.tooth_office.DTO.CreneauDTO;
+import org.odk.tooth_office.Services.Interfaces.CreneauService;
+import org.odk.tooth_office.utils.FindCreneauForm;
+import org.odk.tooth_office.utils.Response;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.odk.tooth_office.DTO.CreneauDTO;
-import org.odk.tooth_office.Services.Interfaces.CreneauService;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/creneaux")
@@ -93,29 +103,13 @@ public class CreneauController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Rechercher les créneaux par dentiste et date
-     */
-    @PostMapping({"/find-creneaux-by-dentiste-date", "/find-creneau-by-dentiste-date"})
-    @Operation(summary = "Rechercher les créneaux par dentiste et date",
-            description = "Récupère ou génère les créneaux de consultation pour un dentiste à une date donnée")
-    public ResponseEntity<org.odk.tooth_office.utils.Response> findCreneauxByDentisteAndDate(
-            @RequestBody java.util.Map<String, Object> payload) {
+    @PostMapping("/find-creneaux-by-dentiste-date")
+    public Response getDentisteCrenauxDate(@RequestBody FindCreneauForm creneauForm){
         try {
-            Long dentisteId = payload.get("dentisteId") != null ? Long.valueOf(payload.get("dentisteId").toString())
-                    : (payload.get("dentiste") != null ? Long.valueOf(payload.get("dentiste").toString()) : null);
-            String dateStr = payload.get("date") != null ? payload.get("date").toString() : null;
-
-            if (dentisteId == null || dateStr == null) {
-                return ResponseEntity.badRequest().body(org.odk.tooth_office.utils.Response.error("Dentiste et Date sont obligatoires."));
-            }
-
-            LocalDate date = LocalDate.parse(dateStr.split("T")[0]);
-            List<CreneauDTO> creneaux = creneauService.genererCreneauxPourJournee(date, dentisteId);
-            return ResponseEntity.ok(org.odk.tooth_office.utils.Response.succes("Créneaux récupérés avec succès", creneaux));
+            return creneauService.getCreneauxByDentisteAndDate(creneauForm);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(org.odk.tooth_office.utils.Response.error("Erreur lors de la recherche des créneaux: " + e.getMessage()));
+            e.printStackTrace(System.out);
+            return Response.error("Erreur au niveau du serveur");
         }
     }
 }

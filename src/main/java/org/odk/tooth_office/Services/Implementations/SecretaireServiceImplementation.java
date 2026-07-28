@@ -67,6 +67,11 @@ public class SecretaireServiceImplementation implements SecretaireService {
         return true;
     }
 
+    @Override
+    public Long getCabinetIdBySecretaireId(Long secretaireId) {
+        return secretaireRepository.getcabinetId(secretaireId);
+    }
+
     private SecretaireDTO toDto(Secretaire secretaire) {
         SecretaireDTO dto = new SecretaireDTO();
         dto.setId_utilisateur(secretaire.getId_utilisateur());

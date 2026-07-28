@@ -1,35 +1,41 @@
 package org.odk.tooth_office.Services.Implementations;
 
 
-import lombok.RequiredArgsConstructor;
-import org.odk.tooth_office.DTO.*;
-import org.odk.tooth_office.DTO.MapperDTO.AvisMapper;
-import org.odk.tooth_office.Entity.Cabinet;
-import org.odk.tooth_office.Entity.Dentiste;
-import org.odk.tooth_office.Mapper.CabinetMapper;
-import org.odk.tooth_office.Mapper.DentisteMapper;
-import org.odk.tooth_office.Mapper.SecretaireMapper;
-import org.odk.tooth_office.Repository.CabinetRepository;
-import org.odk.tooth_office.Repository.DentisteRepository;
-import org.odk.tooth_office.Services.FileStorageService;
-import org.odk.tooth_office.Services.Interfaces.CabinetService;
-import org.odk.tooth_office.Entity.ChefCabinet;
-import org.odk.tooth_office.Repository.ChefCabinetRepository;
-import org.odk.tooth_office.Entity.Utilisateur;
-import org.odk.tooth_office.Enum.RoleEnum;
-import org.odk.tooth_office.Repository.UtilisateurRepository;
-import org.odk.tooth_office.security.CustomUserPrincipal;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import jakarta.transaction.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import org.odk.tooth_office.DTO.AvisResponseDTO;
+import org.odk.tooth_office.DTO.CabinetDTO;
+import org.odk.tooth_office.DTO.CabinetResponseDTO;
+import org.odk.tooth_office.DTO.DentisteResponseDTO;
+import org.odk.tooth_office.DTO.MapperDTO.AvisMapper;
+import org.odk.tooth_office.DTO.SecretaireResponseDTO;
+import org.odk.tooth_office.Entity.Cabinet;
+import org.odk.tooth_office.Entity.ChefCabinet;
+import org.odk.tooth_office.Entity.Dentiste;
+import org.odk.tooth_office.Entity.Utilisateur;
+import org.odk.tooth_office.Enum.RoleEnum;
+import org.odk.tooth_office.Mapper.CabinetMapper;
+import org.odk.tooth_office.Mapper.DentisteMapper;
+import org.odk.tooth_office.Mapper.SecretaireMapper;
+import org.odk.tooth_office.Repository.CabinetRepository;
+import org.odk.tooth_office.Repository.ChefCabinetRepository;
+import org.odk.tooth_office.Repository.DentisteRepository;
+import org.odk.tooth_office.Repository.UtilisateurRepository;
+import org.odk.tooth_office.Services.FileStorageService;
+import org.odk.tooth_office.Services.Interfaces.CabinetService;
+import org.odk.tooth_office.Services.Interfaces.SecretaireService;
+import org.odk.tooth_office.security.CustomUserPrincipal;
+import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +50,7 @@ public class CabinetServiceImplementation implements CabinetService {
     private final FileStorageService fileStorageService;
     private final ChefCabinetRepository chefCabinetRepository;
     private final UtilisateurRepository utilisateurRepository;
+    public final SecretaireService secretaireService;
 
 
     @Override
@@ -244,6 +251,14 @@ public class CabinetServiceImplementation implements CabinetService {
                 )
                 .map(avisMapper::toResponseDTO)
                 .findFirst();
+    }
+
+    @Override
+    public List<DentisteResponseDTO> getDentistesCabinetSecretaire(Long idSecretaire) {
+       int idCabinet = secretaireService.getCabinetIdBySecretaireId(idSecretaire).intValue();
+        return cabinetRepository.findById(idCabinet)
+                .map(c->c.getDentistes().stream().map(dentisteMapper::toResponseDTO))
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
     }
 
     @Override

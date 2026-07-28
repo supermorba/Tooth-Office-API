@@ -11,6 +11,8 @@ import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Repository.CreneauRepository;
 import org.odk.tooth_office.Repository.DentisteRepository;
 import org.odk.tooth_office.Services.Interfaces.CreneauService;
+import org.odk.tooth_office.utils.FindCreneauForm;
+import org.odk.tooth_office.utils.Response;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -150,6 +152,19 @@ public class CreneauServiceImpl implements CreneauService {
 
         return creneauRepository.save(creneau);
 
+    }
+
+    @Override
+    public Response getCreneauxByDentisteAndDate(FindCreneauForm findCreneauForm) {
+        try{
+            List<Creneau> creneaus= creneauRepository.findCreneauxDisponiblesPourJournee(findCreneauForm.getDentiste(), findCreneauForm.getDate());
+            return Response.succes("La liste des creneaux disponibles pour cette date", creneaus.stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return Response.error("Erreur lors de a recuperation des creneaux de ce dentiste pour cette date");
+        }
     }
 
     /**
