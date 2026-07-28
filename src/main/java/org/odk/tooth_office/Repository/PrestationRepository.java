@@ -4,7 +4,10 @@ import org.odk.tooth_office.Entity.Prestation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PrestationRepository extends JpaRepository<Prestation,Long> {
     boolean existsByNomPrestation(String nomPrestation);
+    Optional<Prestation> findByNomPrestation(String nomPrestation);
 }

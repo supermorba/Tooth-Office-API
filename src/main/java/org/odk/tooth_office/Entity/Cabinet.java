@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,20 +35,23 @@ public class Cabinet {
     @Column(length = 200)
     private String description;
 
-
-
+    @JsonIgnore
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<Secretaire> secretaires;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<Dentiste> dentistes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<Avis> avis;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cabinet", fetch = FetchType.LAZY)
     private List<CabinetPrestation> cab_Ser;
 
+    @JsonIgnore
     @ManyToMany (mappedBy = "cabinets", fetch = FetchType.LAZY)
     private List<ChefCabinet> chefsCabinet;
 

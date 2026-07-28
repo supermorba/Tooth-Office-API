@@ -11,8 +11,19 @@ import org.odk.tooth_office.Mapper.DentisteMapper;
 import org.odk.tooth_office.Mapper.SecretaireMapper;
 import org.odk.tooth_office.Repository.CabinetRepository;
 import org.odk.tooth_office.Repository.DentisteRepository;
+import org.odk.tooth_office.Services.FileStorageService;
 import org.odk.tooth_office.Services.Interfaces.CabinetService;
+import org.odk.tooth_office.Entity.ChefCabinet;
+import org.odk.tooth_office.Repository.ChefCabinetRepository;
+import org.odk.tooth_office.Entity.Utilisateur;
+import org.odk.tooth_office.Enum.RoleEnum;
+import org.odk.tooth_office.Repository.UtilisateurRepository;
+import org.odk.tooth_office.security.CustomUserPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -30,9 +41,13 @@ public class CabinetServiceImplementation implements CabinetService {
     private final DentisteMapper dentisteMapper;
     private final DentisteRepository dentisteRepository;
     private final AvisMapper avisMapper;
+    private final FileStorageService fileStorageService;
+    private final ChefCabinetRepository chefCabinetRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
 
     @Override
+    @Transactional
     public CabinetResponseDTO creerCabinet(CabinetDTO dto) {
         if (cabinetRepository.existsByTel(dto.getTel())) {
             throw new RuntimeException("Un cabinet possède déjà ce numéro de téléphone.");
@@ -43,7 +58,79 @@ public class CabinetServiceImplementation implements CabinetService {
         cabinet.setAdresse(dto.getAdresse());
         cabinet.setLogo(dto.getLogo());
         cabinet.setDescription(dto.getDescription());
-        return cabinetMapper.toCabinet(cabinetRepository.save(cabinet));
+        Cabinet saved = cabinetRepository.save(cabinet);
+
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+                Long userId = null;
+                String username = auth.getName();
+                if (auth.getPrincipal() instanceof CustomUserPrincipal principal) {
+                    userId = principal.getUserId();
+                }
+
+                ChefCabinet chef = null;
+                if (userId != null) {
+                    chef = chefCabinetRepository.findById(userId).orElse(null);
+                }
+                if (chef == null && username != null && !username.isBlank()) {
+                    chef = chefCabinetRepository.findByEmail(username)
+                            .or(() -> chefCabinetRepository.findAll().stream()
+                                    .filter(c -> username.equals(c.getEmail()) || username.equals(c.getTelephone()))
+                                    .findFirst())
+                            .orElse(null);
+                }
+                if (chef == null && userId != null) {
+                    Utilisateur u = utilisateurRepository.findById(userId).orElse(null);
+                    if (u != null && u.getRole() == RoleEnum.CHEF_CABINET) {
+                        chef = new ChefCabinet();
+                        chef.setId_utilisateur(u.getId_utilisateur());
+                        chef.setNom(u.getNom());
+                        chef.setPrenom(u.getPrenom());
+                        chef.setEmail(u.getEmail());
+                        chef.setMdp(u.getMdp());
+                        chef.setTelephone(u.getTelephone());
+                        chef.setAdresse(u.getAdresse());
+                        chef.setRole(RoleEnum.CHEF_CABINET);
+                        chef.setStatutCompte(u.getStatutCompte());
+                        chef = chefCabinetRepository.save(chef);
+                    }
+                }
+                if (chef == null && username != null) {
+                    Utilisateur u = utilisateurRepository.findByEmail(username)
+                            .or(() -> utilisateurRepository.findByTelephone(username))
+                            .orElse(null);
+                    if (u != null && u.getRole() == RoleEnum.CHEF_CABINET) {
+                        chef = new ChefCabinet();
+                        chef.setId_utilisateur(u.getId_utilisateur());
+                        chef.setNom(u.getNom());
+                        chef.setPrenom(u.getPrenom());
+                        chef.setEmail(u.getEmail());
+                        chef.setMdp(u.getMdp());
+                        chef.setTelephone(u.getTelephone());
+                        chef.setAdresse(u.getAdresse());
+                        chef.setRole(RoleEnum.CHEF_CABINET);
+                        chef.setStatutCompte(u.getStatutCompte());
+                        chef = chefCabinetRepository.save(chef);
+                    }
+                }
+
+                if (chef != null) {
+                    if (chef.getCabinets() == null) {
+                        chef.setCabinets(new ArrayList<>());
+                    }
+                    boolean exists = chef.getCabinets().stream()
+                            .anyMatch(c -> Objects.equals(c.getIdCabinet(), saved.getIdCabinet()));
+                    if (!exists) {
+                        chef.getCabinets().add(saved);
+                        chefCabinetRepository.save(chef);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return cabinetMapper.toCabinet(saved);
     }
 
     @Override
@@ -176,6 +263,57 @@ public class CabinetServiceImplementation implements CabinetService {
                 .stream()
                 .map(avisMapper::toResponseDTO)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public CabinetResponseDTO uploadLogo(Integer idCabinet, MultipartFile file) {
+        Cabinet cabinet = cabinetRepository.findById(idCabinet)
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+
+        String logoPath = fileStorageService.storeCabinetLogo(idCabinet, file);
+        cabinet.setLogo(logoPath);
+        Cabinet updatedCabinet = cabinetRepository.save(cabinet);
+        return cabinetMapper.toCabinet(updatedCabinet);
+    }
+
+    @Override
+    public Resource getLogoResource(Integer idCabinet) {
+        Cabinet cabinet = cabinetRepository.findById(idCabinet)
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+
+        if (cabinet.getLogo() == null || cabinet.getLogo().isBlank()) {
+            throw new RuntimeException("Le cabinet d'ID " + idCabinet + " ne possède pas de logo.");
+        }
+
+        return fileStorageService.loadAsResource(cabinet.getLogo());
+    }
+
+    @Override
+    public String getLogoContentType(Integer idCabinet) {
+        Cabinet cabinet = cabinetRepository.findById(idCabinet)
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+
+        if (cabinet.getLogo() == null || cabinet.getLogo().isBlank()) {
+            return "image/png";
+        }
+
+        return fileStorageService.determineContentType(cabinet.getLogo());
+    }
+
+    @Override
+    @Transactional
+    public CabinetResponseDTO supprimerLogo(Integer idCabinet) {
+        Cabinet cabinet = cabinetRepository.findById(idCabinet)
+                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet));
+
+        if (cabinet.getLogo() != null && !cabinet.getLogo().isBlank()) {
+            fileStorageService.deleteFile(cabinet.getLogo());
+            cabinet.setLogo(null);
+            cabinet = cabinetRepository.save(cabinet);
+        }
+
+        return cabinetMapper.toCabinet(cabinet);
     }
 }
 

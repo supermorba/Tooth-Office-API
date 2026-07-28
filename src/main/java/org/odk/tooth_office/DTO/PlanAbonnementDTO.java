@@ -4,9 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+
 @Builder
 public record PlanAbonnementDTO(
 
+        @Schema(description = "Identifiant du plan d'abonnement", example = "1")
+        Long idPlan,
         @Schema(description = "Nom du plan d'abonnement", example = "Premium")
         String nom,
         @Schema(description = "Prix mensuel du plan", example = "15000")

@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class ChefCabinet extends Utilisateur {
      * Relation Many-to-Many car un chef peut gérer plusieurs cabinets
      * et un cabinet peut être co-géré.
      */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "CHEFCABINET_CABINET",

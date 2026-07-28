@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Dentiste extends Utilisateur {
     private String specialite;
 
     /** Cabinet auquel appartient ce dentiste */
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cabinet", nullable = false)
     private Cabinet cabinet;

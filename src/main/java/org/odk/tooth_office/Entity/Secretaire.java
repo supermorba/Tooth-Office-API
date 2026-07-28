@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -20,10 +21,12 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "id_utilisateur")
 public class Secretaire extends Utilisateur {
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cabinet")
     private Cabinet cabinet;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_chef_cabinet")
     private ChefCabinet chefCabinet;

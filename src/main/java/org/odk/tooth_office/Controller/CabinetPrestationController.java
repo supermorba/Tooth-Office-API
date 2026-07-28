@@ -1,12 +1,10 @@
 package org.odk.tooth_office.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.odk.tooth_office.DTO.CabinetPrestationDTO;
 import org.odk.tooth_office.Services.Interfaces.ICabinetPrestation;
 import org.odk.tooth_office.utils.Response;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/cabinetprestation")
@@ -22,5 +20,15 @@ public class CabinetPrestationController {
             e.printStackTrace(System.out);
             return Response.error("Erreur au niveau du serveur");
         }
+    }
+
+    @PostMapping
+    public Response savePrestationCabinet(@RequestBody CabinetPrestationDTO dto) {
+        return iCabinetPrestation.saveCabinetPrestation(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public Response deletePrestationCabinet(@PathVariable Long id) {
+        return iCabinetPrestation.deleteCabinetPrestation(id);
     }
 }

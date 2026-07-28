@@ -24,5 +24,9 @@ public interface CabinetService {
     Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
     List<AvisResponseDTO> afficherLesAvisParCabinet(Integer idCabinet);
     Optional<AvisResponseDTO> afficherUnAvisParCabinet(Integer idCabinet, Long idAvis);
+    CabinetResponseDTO uploadLogo(Integer idCabinet, org.springframework.web.multipart.MultipartFile file);
+    org.springframework.core.io.Resource getLogoResource(Integer idCabinet);
+    String getLogoContentType(Integer idCabinet);
+    CabinetResponseDTO supprimerLogo(Integer idCabinet);
 }
 

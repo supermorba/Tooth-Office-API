@@ -5,6 +5,7 @@
 
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -38,10 +39,12 @@ public class Avis {
     @Column(name="create_at")
     private LocalDateTime createAt;
 
+    @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_cabinet", nullable=false)
     private Cabinet cabinet;
 
+    @JsonIgnore
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_patient", nullable=false)
     private Patient patient;

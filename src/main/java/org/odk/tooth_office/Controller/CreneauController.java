@@ -92,4 +92,30 @@ public class CreneauController {
         creneauService.libererCreneau(creneauId);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Rechercher les créneaux par dentiste et date
+     */
+    @PostMapping({"/find-creneaux-by-dentiste-date", "/find-creneau-by-dentiste-date"})
+    @Operation(summary = "Rechercher les créneaux par dentiste et date",
+            description = "Récupère ou génère les créneaux de consultation pour un dentiste à une date donnée")
+    public ResponseEntity<org.odk.tooth_office.utils.Response> findCreneauxByDentisteAndDate(
+            @RequestBody java.util.Map<String, Object> payload) {
+        try {
+            Long dentisteId = payload.get("dentisteId") != null ? Long.valueOf(payload.get("dentisteId").toString())
+                    : (payload.get("dentiste") != null ? Long.valueOf(payload.get("dentiste").toString()) : null);
+            String dateStr = payload.get("date") != null ? payload.get("date").toString() : null;
+
+            if (dentisteId == null || dateStr == null) {
+                return ResponseEntity.badRequest().body(org.odk.tooth_office.utils.Response.error("Dentiste et Date sont obligatoires."));
+            }
+
+            LocalDate date = LocalDate.parse(dateStr.split("T")[0]);
+            List<CreneauDTO> creneaux = creneauService.genererCreneauxPourJournee(date, dentisteId);
+            return ResponseEntity.ok(org.odk.tooth_office.utils.Response.succes("Créneaux récupérés avec succès", creneaux));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(org.odk.tooth_office.utils.Response.error("Erreur lors de la recherche des créneaux: " + e.getMessage()));
+        }
+    }
 }

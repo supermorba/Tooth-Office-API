@@ -44,11 +44,15 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/uploads/**"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/cabinets", "/api/cabinets/**").permitAll()
-                        .requestMatchers("/api/admins/**", "/api/utilisateurs/**").hasRole("ADMIN_SYSTEM")
+                        .requestMatchers(HttpMethod.POST, "/api/cabinets/*/logo").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
+                        .requestMatchers(HttpMethod.DELETE, "/api/cabinets/*/logo").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
+                        .requestMatchers("/api/admins/**").hasRole("ADMIN_SYSTEM")
+                        .requestMatchers("/api/utilisateurs/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
                         .requestMatchers("/api/chefs-cabinet/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
                         .requestMatchers("/api/dentistes/**", "/api/secretaires/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
                         .requestMatchers("/api/patients/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "SECRETAIRE", "DENTISTE", "PATIENT")
@@ -60,7 +64,9 @@ public class SecurityConfig {
                                 "/api/consultations/**",
                                 "/traitements/**"
                         ).hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "DENTISTE")
-                        .requestMatchers("/api/abonnements/**", "/api/plans-abonnement/**").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
+                        .requestMatchers("/api/prestation/**", "/api/prestation").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "DENTISTE", "PATIENT", "SECRETAIRE")
+                        .requestMatchers("/api/abonnements/**", "/api/plans-abonnement/**", "/api/plan_abonnement/**", "/api/plan_abonnement").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET")
+                        .requestMatchers("/api/dashboard/**", "/api/dashboard").hasAnyRole("ADMIN_SYSTEM", "CHEF_CABINET", "DENTISTE", "SECRETAIRE")
                         .anyRequest().authenticated()
 
                 )

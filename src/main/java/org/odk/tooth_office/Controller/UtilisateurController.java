@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
 @Tag(name = "Utilisateurs", description = "Gestion des utilisateurs de la plateforme")
-@PreAuthorize("hasRole('ADMIN_SYSTEM', 'CHEF_CABINET')")
+@PreAuthorize("hasAnyRole('ADMIN_SYSTEM', 'CHEF_CABINET')")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;

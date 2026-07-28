@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ChefCabinetServiceImplementation implements ChefCabinetService {
 
     private final ChefCabinetRepository chefCabinetRepository;
@@ -38,12 +41,14 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
     }
 
     @Override
+    @Transactional
     public ChefCabinetDTO create(ChefCabinetDTO dto) {
         ChefCabinet saved = chefCabinetRepository.save(toEntity(dto, new ChefCabinet()));
         return toDto(saved);
     }
 
     @Override
+    @Transactional
     public Optional<ChefCabinetDTO> update(Long id, ChefCabinetDTO dto) {
         return chefCabinetRepository.findById(id).map(existing -> {
             ChefCabinet updated = toEntity(dto, existing);
@@ -53,6 +58,7 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
     }
 
     @Override
+    @Transactional
     public boolean delete(Long id) {
         if (!chefCabinetRepository.existsById(id)) {
             return false;
@@ -63,8 +69,18 @@ public class ChefCabinetServiceImplementation implements ChefCabinetService {
 
     @Override
     public List<CabinetResponseDTO> getCabinetsChefCabinets(Long id) {
-        return chefCabinetRepository.getCabinetsChefCabinets(id).stream()
-                .map(cabinetMapper::toCabinet).toList();
+        Optional<ChefCabinet> chefOpt = chefCabinetRepository.findById(id);
+        if (chefOpt.isPresent() && chefOpt.get().getCabinets() != null && !chefOpt.get().getCabinets().isEmpty()) {
+            return chefOpt.get().getCabinets().stream()
+                    .map(cabinetMapper::toCabinet).toList();
+        }
+
+        List<Cabinet> cabinets = chefCabinetRepository.getCabinetsChefCabinets(id);
+        if (cabinets != null && !cabinets.isEmpty()) {
+            return cabinets.stream().filter(java.util.Objects::nonNull).map(cabinetMapper::toCabinet).toList();
+        }
+
+        return Collections.emptyList();
     }
 
     private ChefCabinetDTO toDto(ChefCabinet chefCabinet) {

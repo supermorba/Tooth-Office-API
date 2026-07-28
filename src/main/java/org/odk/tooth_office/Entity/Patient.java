@@ -1,5 +1,6 @@
 package org.odk.tooth_office.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,10 +29,12 @@ public class Patient extends Utilisateur {
     private LocalDate dateNaissance;
 
     /** Cabinets qui suivent ce patient (relation M2M) */
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "PATIENT_CABINET", joinColumns = @JoinColumn(name = "id_patient"), inverseJoinColumns = @JoinColumn(name = "id_cabinet"))
     private List<Cabinet> cabinets = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "patient")
     private List<Avis> avis = new ArrayList<>();
 }

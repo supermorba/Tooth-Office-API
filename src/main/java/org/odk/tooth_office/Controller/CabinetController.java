@@ -10,9 +10,13 @@ import org.odk.tooth_office.Entity.Dentiste;
 import org.odk.tooth_office.Entity.Secretaire;
 import org.odk.tooth_office.Mapper.DentisteMapper;
 import org.odk.tooth_office.Services.Interfaces.CabinetService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.odk.tooth_office.DTO.AvisResponseDTO;
 
 import java.util.List;
@@ -55,6 +59,27 @@ public class CabinetController {
         return ResponseEntity.ok(cabinetService.modifierCabinet(id, dto));
     }
 
+    @PostMapping("/{id}/logo")
+    public ResponseEntity<CabinetResponseDTO> uploadLogo(
+            @PathVariable Integer id,
+            @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(cabinetService.uploadLogo(id, file));
+    }
+
+    @GetMapping("/{id}/logo")
+    public ResponseEntity<Resource> recupererLogo(@PathVariable Integer id) {
+        Resource resource = cabinetService.getLogoResource(id);
+        String contentType = cabinetService.getLogoContentType(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @DeleteMapping("/{id}/logo")
+    public ResponseEntity<CabinetResponseDTO> supprimerLogo(@PathVariable Integer id) {
+        return ResponseEntity.ok(cabinetService.supprimerLogo(id));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimerCabinet(@PathVariable Integer id) {

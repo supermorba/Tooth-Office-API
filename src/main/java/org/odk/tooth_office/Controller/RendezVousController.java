@@ -122,7 +122,7 @@ public class RendezVousController {
     /**
      * Obtenir le planning du jour d'un dentiste
      */
-    @GetMapping({"/dentiste/{dentisteId}", "/get-Rdv-by-dentiste/{dentisteId}"})
+    @GetMapping({"/dentiste/{dentisteId}", "/{dentisteId}/dentiste", "/get-Rdv-by-dentiste/{dentisteId}"})
     @Operation(summary = "Consulter le planning d'un dentiste",
             description = "Récupère tous les rendez-vous d'un dentiste pour la journée")
     @ApiResponses(value = {
