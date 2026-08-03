@@ -30,6 +30,8 @@ public class UtilisateurDTO {
     private String telephone;
     @Schema(description = "Statut du compte utilisateur", example = "ACTIF")
     private StatutCompte statutCompte;
+    @Schema(description = "Indique si l'utilisateur doit obligatoirement changer de mot de passe à la première connexion", example = "true")
+    private Boolean doitChangerMdp;
     @Schema(description = "Date de création du compte", example = "2026-06-24")
     private LocalDate createdAt;
     @Schema(description = "Date et heure de dernière mise à jour du compte", example = "2026-06-24T09:30:00")

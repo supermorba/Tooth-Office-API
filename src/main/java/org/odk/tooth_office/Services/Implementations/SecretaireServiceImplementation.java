@@ -103,6 +103,11 @@ public class SecretaireServiceImplementation implements SecretaireService {
         secretaire.setRole(dto.getRole());
         secretaire.setTelephone(dto.getTelephone());
         secretaire.setStatutCompte(dto.getStatutCompte());
+        if (dto.getDoitChangerMdp() != null) {
+            secretaire.setDoitChangerMdp(dto.getDoitChangerMdp());
+        } else if (secretaire.getId_utilisateur() == null) {
+            secretaire.setDoitChangerMdp(true);
+        }
         secretaire.setCreatedAt(dto.getCreatedAt());
         secretaire.setUpdatedAt(dto.getUpdatedAt());
         secretaire.setCreatedBy(dto.getCreatedBy());

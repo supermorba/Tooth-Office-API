@@ -84,6 +84,11 @@ public class DentisteImplementation implements DentisteService {
         dentiste.setRole(dto.getRole());
         dentiste.setTelephone(dto.getTelephone());
         dentiste.setStatutCompte(dto.getStatutCompte());
+        if (dto.getDoitChangerMdp() != null) {
+            dentiste.setDoitChangerMdp(dto.getDoitChangerMdp());
+        } else if (dentiste.getId_utilisateur() == null) {
+            dentiste.setDoitChangerMdp(true);
+        }
         dentiste.setCreatedAt(dto.getCreatedAt());
         dentiste.setUpdatedAt(dto.getUpdatedAt());
         dentiste.setCreatedBy(dto.getCreatedBy());

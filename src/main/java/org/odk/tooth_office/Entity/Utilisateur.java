@@ -60,6 +60,9 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     private StatutCompte statutCompte;
 
+    @Column(name = "doit_changer_mdp", nullable = false)
+    private Boolean doitChangerMdp = false;
+
     private LocalDate createdAt;
 
     private LocalDateTime updatedAt;

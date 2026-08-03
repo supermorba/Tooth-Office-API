@@ -91,9 +91,9 @@ public class AvisImplementation implements AvisInterface {
     public List<AvisDetailDTO> findByCabinetId(int id) {
         List<Avis> listAvisCabinet = avisRepository.findByCabinetId(id);
         if (listAvisCabinet.isEmpty()){
-            throw new IllegalArgumentException("Aucun avis trouvé pour le cabinet avec l'ID : " + id);
+            return List.of();
         }
-        return avisRepository.findByCabinetId(id).stream()
+        return listAvisCabinet.stream()
                 .map(mapper::toDetailDTO)
                 .toList();
     }

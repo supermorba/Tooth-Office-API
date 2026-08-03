@@ -112,4 +112,25 @@ public class CreneauController {
             return Response.error("Erreur au niveau du serveur");
         }
     }
+
+    @PostMapping("/generer-modele")
+    public ResponseEntity<List<CreneauDTO>> genererModeleCreneaux(@RequestBody @jakarta.validation.Valid org.odk.tooth_office.DTO.ModeleCreneauxRequestDTO dto) {
+        List<CreneauDTO> creneaux = creneauService.genererModeleCreneaux(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creneaux);
+    }
+
+    @PatchMapping("/bloquer-plage")
+    public ResponseEntity<Void> bloquerPlage(@RequestBody @jakarta.validation.Valid org.odk.tooth_office.DTO.BloquerPlageRequestDTO dto) {
+        creneauService.bloquerPlage(dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/dentiste/{dentisteId}/periode")
+    public ResponseEntity<List<CreneauDTO>> getCreneauxDentistePeriode(
+            @PathVariable Long dentisteId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFin) {
+        List<CreneauDTO> response = creneauService.getCreneauxDentistePeriode(dentisteId, dateDebut, dateFin);
+        return ResponseEntity.ok(response);
+    }
 }

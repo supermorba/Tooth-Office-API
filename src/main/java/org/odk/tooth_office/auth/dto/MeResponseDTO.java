@@ -12,6 +12,7 @@ public class MeResponseDTO {
     private String email;
     private String role;
     private String statutCompte;
+    private Boolean mustChangePassword;
 
     // Renseignés uniquement pour les dentistes
     private String specialite;

@@ -13,4 +13,5 @@ public class LoginResponseDTO {
     private String email;
     private String nomComplet;
     private String role;
+    private Boolean mustChangePassword;
 }

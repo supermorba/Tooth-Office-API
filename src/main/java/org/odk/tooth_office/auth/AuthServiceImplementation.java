@@ -94,6 +94,7 @@ public class AuthServiceImplementation implements AuthService {
                 .email(utilisateur.getEmail())
                 .nomComplet(principal.getNomComplet())
                 .role(utilisateur.getRole() != null ? utilisateur.getRole().name() : null)
+                .mustChangePassword(utilisateur.getDoitChangerMdp() != null && utilisateur.getDoitChangerMdp())
                 .build();
     }
 
@@ -152,6 +153,7 @@ public class AuthServiceImplementation implements AuthService {
                 .email(savedUtilisateur.getEmail())
                 .nomComplet(principal.getNomComplet())
                 .role(savedUtilisateur.getRole() != null ? savedUtilisateur.getRole().name() : null)
+                .mustChangePassword(savedUtilisateur.getDoitChangerMdp() != null && savedUtilisateur.getDoitChangerMdp())
                 .build();
     }
 
@@ -166,7 +168,8 @@ public class AuthServiceImplementation implements AuthService {
                 .prenom(utilisateur.getPrenom())
                 .email(utilisateur.getEmail())
                 .role(utilisateur.getRole() != null ? utilisateur.getRole().name() : null)
-                .statutCompte(utilisateur.getStatutCompte() != null ? utilisateur.getStatutCompte().name() : null);
+                .statutCompte(utilisateur.getStatutCompte() != null ? utilisateur.getStatutCompte().name() : null)
+                .mustChangePassword(utilisateur.getDoitChangerMdp() != null && utilisateur.getDoitChangerMdp());
 
         // Pour un dentiste, on expose sa spécialité et le cabinet auquel il est rattaché
         if (utilisateur.getRole() == RoleEnum.DENTISTE) {
@@ -197,6 +200,7 @@ public class AuthServiceImplementation implements AuthService {
         }
 
         utilisateur.setMdp(passwordService.encodeIfNeeded(request.getNouveauMotDePasse()));
+        utilisateur.setDoitChangerMdp(false);
         utilisateurRepository.save(utilisateur);
     }
 

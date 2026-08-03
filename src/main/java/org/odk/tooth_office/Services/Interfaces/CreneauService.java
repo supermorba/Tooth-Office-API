@@ -22,8 +22,11 @@ public interface CreneauService {
     // Libérer un créneau suite à une annulation
     void libererCreneau(Long idCreneau);
     Creneau creerCreneauSurplace(CreneauDtoSurplace dto);
-
     Response getCreneauxByDentisteAndDate(FindCreneauForm findCreneauForm);
 
+    List<CreneauDTO> genererModeleCreneaux(org.odk.tooth_office.DTO.ModeleCreneauxRequestDTO dto);
 
+    void bloquerPlage(org.odk.tooth_office.DTO.BloquerPlageRequestDTO dto);
+
+    List<CreneauDTO> getCreneauxDentistePeriode(Long dentisteId, LocalDate dateDebut, LocalDate dateFin);
 }

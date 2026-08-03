@@ -25,18 +25,18 @@ ON DUPLICATE KEY UPDATE id_cabinet = id_cabinet;
 
 -- 3) Utilisateurs (table mère)
 INSERT INTO utilisateur
-(id_utilisateur, nom, prenom, email, mdp, adresse, role, telephone, statut_compte, created_at, updated_at, created_by, updated_by)
+(id_utilisateur, nom, prenom, email, mdp, adresse, role, telephone, statut_compte, doit_changer_mdp, created_at, updated_at, created_by, updated_by)
 VALUES
-    (1, 'Mukendi', 'Sarah', 'chef@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000001', 'VALIDE', '2026-01-01', '2026-01-01 09:00:00', 'seed', 'seed'),
-    (2, 'Kabasele', 'Jean', 'dentiste@toothoffice.cd', 'pass123', 'Kinshasa', 'DENTISTE', '243970000002', 'VALIDE', '2026-01-01', '2026-01-01 09:05:00', 'seed', 'seed'),
-    (3, 'Ilunga', 'Nadia', 'secretaire@toothoffice.cd', 'pass123', 'Kinshasa', 'SECRETAIRE', '243970000003', 'VALIDE', '2026-01-01', '2026-01-01 09:10:00', 'seed', 'seed'),
-    (4, 'Mwamba', 'David', 'patient@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000004', 'VALIDE', '2026-01-01', '2026-01-01 09:15:00', 'seed', 'seed'),
-    (5, 'Kasongo', 'Aline', 'chef2@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000005', 'VALIDE', '2026-01-02', '2026-01-02 10:00:00', 'seed', 'seed'),
-    (6, 'Tshibanda', 'Patrick', 'dentiste2@toothoffice.cd', 'pass123', 'Kinshasa', 'DENTISTE', '243970000006', 'VALIDE', '2026-01-02', '2026-01-02 10:05:00', 'seed', 'seed'),
-    (7, 'Banza', 'Ruth', 'secretaire2@toothoffice.cd', 'pass123', 'Kinshasa', 'SECRETAIRE', '243970000007', 'VALIDE', '2026-01-02', '2026-01-02 10:10:00', 'seed', 'seed'),
-    (8, 'Mpiana', 'Grace', 'patient2@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000008', 'VALIDE', '2026-01-02', '2026-01-02 10:15:00', 'seed', 'seed'),
-    (9, 'Kimpa', 'Roger', 'patient3@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000009', 'VALIDE', '2026-01-02', '2026-01-02 10:20:00', 'seed', 'seed'),
-    (10, 'Admin', 'Systeme', 'admin@toothoffice.cd', 'pass123', 'Kinshasa', 'ADMIN_SYSTEM', '243970000010', 'VALIDE', '2026-01-02', '2026-01-02 10:25:00', 'seed', 'seed')
+    (1, 'Mukendi', 'Sarah', 'chef@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000001', 'VALIDE', false, '2026-01-01', '2026-01-01 09:00:00', 'seed', 'seed'),
+    (2, 'Kabasele', 'Jean', 'dentiste@toothoffice.cd', 'pass123', 'Kinshasa', 'DENTISTE', '243970000002', 'VALIDE', false, '2026-01-01', '2026-01-01 09:05:00', 'seed', 'seed'),
+    (3, 'Ilunga', 'Nadia', 'secretaire@toothoffice.cd', 'pass123', 'Kinshasa', 'SECRETAIRE', '243970000003', 'VALIDE', false, '2026-01-01', '2026-01-01 09:10:00', 'seed', 'seed'),
+    (4, 'Mwamba', 'David', 'patient@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000004', 'VALIDE', false, '2026-01-01', '2026-01-01 09:15:00', 'seed', 'seed'),
+    (5, 'Kasongo', 'Aline', 'chef2@toothoffice.cd', 'pass123', 'Kinshasa', 'CHEF_CABINET', '243970000005', 'VALIDE', false, '2026-01-02', '2026-01-02 10:00:00', 'seed', 'seed'),
+    (6, 'Tshibanda', 'Patrick', 'dentiste2@toothoffice.cd', 'pass123', 'Kinshasa', 'DENTISTE', '243970000006', 'VALIDE', true, '2026-01-02', '2026-01-02 10:05:00', 'seed', 'seed'),
+    (7, 'Banza', 'Ruth', 'secretaire2@toothoffice.cd', 'pass123', 'Kinshasa', 'SECRETAIRE', '243970000007', 'VALIDE', true, '2026-01-02', '2026-01-02 10:10:00', 'seed', 'seed'),
+    (8, 'Mpiana', 'Grace', 'patient2@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000008', 'VALIDE', false, '2026-01-02', '2026-01-02 10:15:00', 'seed', 'seed'),
+    (9, 'Kimpa', 'Roger', 'patient3@toothoffice.cd', 'pass123', 'Kinshasa', 'PATIENT', '243970000009', 'VALIDE', false, '2026-01-02', '2026-01-02 10:20:00', 'seed', 'seed'),
+    (10, 'Admin', 'Systeme', 'admin@toothoffice.cd', 'pass123', 'Kinshasa', 'ADMIN_SYSTEM', '243970000010', 'VALIDE', false, '2026-01-02', '2026-01-02 10:25:00', 'seed', 'seed')
 ON DUPLICATE KEY UPDATE id_utilisateur = id_utilisateur;
 
 -- 4) Tables d'héritage JOINED
