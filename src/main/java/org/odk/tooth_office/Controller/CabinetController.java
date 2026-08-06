@@ -64,6 +64,11 @@ public class CabinetController {
     }
 
 
+    @GetMapping("/dentistes/{id}")
+    public ResponseEntity<List<DentisteResponseDTO>> getDentistesParCabinet(@PathVariable Long id) {
+        return ResponseEntity.ok(cabinetService.getDentistesCabinetSecretaire(id));
+    }
+
     @GetMapping("/{id}/secretaires")
     public ResponseEntity<List<SecretaireResponseDTO>> afficherSecretairesParCabinet(@PathVariable Integer id) {
         return ResponseEntity.ok(cabinetService.afficherSecretairesParCabinet(id));
@@ -79,11 +84,12 @@ public class CabinetController {
     }
 
     @GetMapping("/{idCabinet}/dentistes/{idDentiste}")
-    public ResponseEntity<Optional<DentisteResponseDTO>> afficherUnDentisteParCabinet(
+    public ResponseEntity<DentisteResponseDTO> afficherUnDentisteParCabinet(
             @PathVariable Integer idCabinet,
             @PathVariable Long idDentiste) {
-        return ResponseEntity.ok( cabinetService.afficherUnDentisteParCabinet(idCabinet,idDentiste));
-
+        return cabinetService.afficherUnDentisteParCabinet(idCabinet, idDentiste)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{idCabinet}/avis/{idAvis}")

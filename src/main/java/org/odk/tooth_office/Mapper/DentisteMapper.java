@@ -14,7 +14,6 @@ public class DentisteMapper {
         DentisteResponseDTO dentisteDTO = new DentisteResponseDTO();
 
         dentisteDTO.setIdDentiste(dentiste.getId_utilisateur());
-        dentisteDTO.setIdCabinet(dentiste.getCabinet().getIdCabinet());
         dentisteDTO.setPrenom(dentiste.getPrenom());
         dentisteDTO.setNom(dentiste.getNom());
         dentisteDTO.setAdresse(dentiste.getAdresse());
@@ -24,7 +23,6 @@ public class DentisteMapper {
         dentisteDTO.setStatutCompte(dentiste.getStatutCompte());
         dentisteDTO.setSpecialite(dentiste.getSpecialite());
         dentisteDTO.setCreatedAt(dentiste.getCreatedAt());
-        dentisteDTO.setIdCabinet(dentiste.getCabinet().getIdCabinet());
 
         if (dentiste.getCabinet() != null) {
             dentisteDTO.setIdCabinet(dentiste.getCabinet().getIdCabinet());

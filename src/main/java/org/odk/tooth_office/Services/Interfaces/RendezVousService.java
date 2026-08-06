@@ -3,7 +3,9 @@ package org.odk.tooth_office.Services.Interfaces;
 import org.odk.tooth_office.DTO.RendezVousRequestDTO;
 import org.odk.tooth_office.DTO.RendezVousResponseDTO;
 import org.odk.tooth_office.utils.Response;
+import org.odk.tooth_office.utils.SearchParams;
 
+import java.util.Date;
 import java.util.List;
 
 public interface RendezVousService {
@@ -23,4 +25,11 @@ public interface RendezVousService {
     List<RendezVousResponseDTO> obtenirRdvParDentiste(Long dentisteId);
     List<RendezVousResponseDTO> findAllRdvOfCabinet(Long id);
     Response deleteRdv(Long idRdv);
+
+    Response getRdvByDentiste(Long dentisteId);
+    Response getRdvByPatient(SearchParams searchParams);
+    Response getRdvByEtat(SearchParams searchParams);
+    Response getRdvBydates(SearchParams searchParams);
+
+
 }

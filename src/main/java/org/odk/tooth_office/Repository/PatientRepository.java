@@ -11,10 +11,6 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
 
-    @Query("""
-        SELECT DISTINCT r.patient
-        FROM RendezVous r
-        WHERE r.dentiste.id_utilisateur = :idDentiste
-    """)
-    List<Patient> findPatientsByDentiste(@Param("idDentiste") Long idDentiste);
+    @Query("SELECT DISTINCT r.patient FROM RendezVous r WHERE r.dentiste.id = :dentisteId")
+    List<Patient> findPatientsByDentisteId(@Param("dentisteId") Long dentisteId);
 }

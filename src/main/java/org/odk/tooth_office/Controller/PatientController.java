@@ -53,9 +53,7 @@ public class PatientController {
     }
 
     @GetMapping("/dentiste/{idDentiste}")
-    public ResponseEntity<List<PatientDTO>> getPatientsByDentiste(@PathVariable Long idDentiste){
-        return ResponseEntity.ok(
-                patientService.getPatientsByDentiste(idDentiste)
-        );
+    public ResponseEntity<List<PatientDTO>> getPatientsParDentiste(@PathVariable Long idDentiste) {
+        return ResponseEntity.ok(patientService.getPatientsParDentiste(idDentiste));
     }
 }

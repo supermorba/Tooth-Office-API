@@ -12,4 +12,5 @@ public interface SecretaireService {
     SecretaireResponseDTO create(SecretaireDTO dto);
     Optional<SecretaireResponseDTO> update(Long id, SecretaireDTO dto);
     boolean delete(Long id);
+    Long getCabinetIdBySecretaireId(Long secretaireId);
 }

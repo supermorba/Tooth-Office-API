@@ -58,8 +58,10 @@ public class PatientServiceImplementation implements PatientService {
     }
 
     @Override
-    public List<PatientDTO> getPatientsByDentiste(Long idDentiste){
-        return patientRepository.findPatientsByDentiste(idDentiste).stream().map(this::toDto).toList();
+    public List<PatientDTO> getPatientsParDentiste(Long dentisteId) {
+        return patientRepository.findPatientsByDentisteId(dentisteId).stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     private PatientDTO toDto(Patient patient) {

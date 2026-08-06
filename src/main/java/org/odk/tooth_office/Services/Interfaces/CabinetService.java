@@ -23,5 +23,8 @@ public interface CabinetService {
     Optional<DentisteResponseDTO> afficherUnDentisteParCabinet(Integer idCabinet, Long idDentiste);
     List<AvisResponseDTO> afficherLesAvisParCabinet(Integer idCabinet);
     Optional<AvisResponseDTO> afficherUnAvisParCabinet(Integer idCabinet, Long idAvis);
+
+    List<DentisteResponseDTO> getDentistesCabinetSecretaire(Long idSecretaire);
+
 }
 

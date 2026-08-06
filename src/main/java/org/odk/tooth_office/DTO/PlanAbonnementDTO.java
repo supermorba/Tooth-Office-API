@@ -20,5 +20,6 @@ public record PlanAbonnementDTO(
         @Schema(description = "Nombre maximal de secrétaires autorisées", example = "5")
         int maxSecretaires,
         @Schema(description = "Description fonctionnelle du plan", example = "Plan premium avec gestion multi-cabinets")
-        String description
+        String description,
+        long nbreAbonne
 ) {}
