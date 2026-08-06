@@ -21,6 +21,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/cabinets")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class CabinetController {
 
     private final CabinetService cabinetService;
@@ -62,10 +63,6 @@ public class CabinetController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/dentistes")
-    public ResponseEntity<List<DentisteResponseDTO>> afficherDentistesParCabinet(@PathVariable Integer id) {
-        return ResponseEntity.ok(cabinetService.afficherDentistesParCabinet(id));
-    }
 
     @GetMapping("/dentistes/{id}")
     public ResponseEntity<List<DentisteResponseDTO>> getDentistesParCabinet(@PathVariable Long id) {
@@ -98,26 +95,16 @@ public class CabinetController {
     @GetMapping("/{idCabinet}/avis/{idAvis}")
     public ResponseEntity<AvisResponseDTO> afficherUnAvisParCabinet(
             @PathVariable Integer idCabinet,
-            @PathVariable Long idAvis
-    ){
+            @PathVariable Long idAvis){
 
         return cabinetService
                 .afficherUnAvisParCabinet(idCabinet,idAvis)
-
                 .map(ResponseEntity::ok)
-
-                .orElseGet(() ->
-                        ResponseEntity.notFound().build()
-                );
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/avis")
-    public ResponseEntity<List<AvisResponseDTO>> afficherAvisParCabinet(
-            @PathVariable Integer id
-    ){
-
-        return ResponseEntity.ok(
-                cabinetService.afficherLesAvisParCabinet(id)
-        );
+    public ResponseEntity<List<AvisResponseDTO>> afficherAvisParCabinet(@PathVariable Integer id){
+        return ResponseEntity.ok(cabinetService.afficherLesAvisParCabinet(id));
     }
 }

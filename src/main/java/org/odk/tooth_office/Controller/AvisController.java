@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/avis")
+@CrossOrigin(origins = "*")
 public class AvisController {
     private final AvisInterface avisInterface;
 

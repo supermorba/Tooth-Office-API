@@ -39,12 +39,9 @@ public class SecurityConfig {
                         .authenticationEntryPoint(securityExceptionHandler)
                         .accessDeniedHandler(securityExceptionHandler)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
+                .authorizeHttpRequests(
+                        auth->auth.requestMatchers(
+                                "/api/**"
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/cabinets", "/api/cabinets/**").permitAll()

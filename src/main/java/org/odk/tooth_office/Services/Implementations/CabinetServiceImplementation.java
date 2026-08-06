@@ -96,13 +96,7 @@ public class CabinetServiceImplementation implements CabinetService {
         cabinetRepository.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public List<DentisteResponseDTO> afficherDentistesParCabinet(Integer idCabinet) {
-        return cabinetRepository.findById(idCabinet)
-                .map(c->c.getDentistes().stream().map(dentisteMapper::toResponseDTO))
-                .orElseThrow(() -> new RuntimeException("Cabinet introuvable avec l'ID : " + idCabinet)).toList();
-    }
+
 
     @Override
     @Transactional
@@ -142,8 +136,6 @@ public class CabinetServiceImplementation implements CabinetService {
             Integer idCabinet,
             Long idAvis
     ) {
-
-
         Cabinet cabinet = cabinetRepository.findById(idCabinet)
                 .orElseThrow(() ->
                         new RuntimeException(
